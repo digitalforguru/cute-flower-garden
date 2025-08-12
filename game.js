@@ -47,8 +47,12 @@ let gardenState = {
   waterCount: 0,
   stage: 0,
 };
+let ownedSeeds = ['rose']; // default unlocked seed
 
-let ownedSeeds = ['rose']; // starts with rose unlocked
+// Reset ownedSeeds only if empty (new user)
+if (!localStorage.getItem('gardenState')) {
+  ownedSeeds = ['rose'];
+}
 let seedInventoryCount = {}; // tracks counts of seeds in inventory
 let harvestedFlowers = {}; // tracks harvested flower counts
 let lotusPoints = 0;
