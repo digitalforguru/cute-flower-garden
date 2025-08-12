@@ -309,23 +309,35 @@ function alertPopup(message) {
   }, 2200);
 }
 
-// === Theme Switching ===
+document.addEventListener('DOMContentLoaded', () => {
+  const themeDots = document.querySelectorAll('.theme-dot');
+  const gardenWidget = document.getElementById('garden-widget');
 
-function setTheme(themeClass) {
-  gardenWidget.classList.remove(...[...themeDots].map(d => d.dataset.theme));
-  gardenWidget.classList.add(themeClass);
-  currentTheme = themeClass;
-  localStorage.setItem('gardenTheme', currentTheme);
+  // Load saved or default theme
+  const savedTheme = localStorage.getItem('gardenTheme') || 'pink';
+  setTheme(savedTheme);
 
   themeDots.forEach(dot => {
-    dot.classList.toggle('active', dot.dataset.theme === themeClass);
+    dot.addEventListener('click', () => {
+      setTheme(dot.dataset.theme);
+    });
   });
-}
 
-themeDots.forEach(dot => {
-  dot.addEventListener('click', () => {
-    setTheme(dot.dataset.theme);
-  });
+  function setTheme(theme) {
+    // Remove all theme classes
+    gardenWidget.classList.remove('pink', 'beige', 'lavender', 'blue', 'green');
+
+    // Add new theme class
+    gardenWidget.classList.add(theme);
+
+    // Save theme
+    localStorage.setItem('gardenTheme', theme);
+
+    // Update active button styles
+    themeDots.forEach(dot => {
+      dot.classList.toggle('active', dot.dataset.theme === theme);
+    });
+  }
 });
 
 // === Daily Challenge (Water 10 times) ===
