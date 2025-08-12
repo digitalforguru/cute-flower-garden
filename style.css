@@ -1,304 +1,298 @@
-/* base resets */
+/* Reset */
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  margin: 0;
-  background: transparent;
   font-family: 'Roboto Condensed', sans-serif;
-  font-weight: 300;
-  font-size: 14px;
-  color: #4a4a4a;
+  background: transparent;
+  color: #3b3a36;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-transform: lowercase;
 }
 
-#garden-widget {
+/* Widget container */
+#widget-container {
   width: 320px;
-  background: #fffaf0;
-  border-radius: 16px;
-  padding: 16px 20px;
-  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  background: var(--bg);
+  border-radius: 14px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+  padding: 16px;
   user-select: none;
+  position: relative;
+  font-weight: 300;
+  font-size: 14px;
 }
 
+/* Colors for themes */
+:root {
+  --pink: #f9e4e4;
+  --beige: #f9f3e7;
+  --lavender: #eae4f9;
+  --blue: #e4f0f9;
+  --green: #e4f9e8;
+  
+  --text-pink: #d4668f;
+  --text-beige: #b99979;
+  --text-lavender: #7d62b1;
+  --text-blue: #4a79c8;
+  --text-green: #4c9b65;
+}
+
+.pink { --bg: var(--pink); --text-color: var(--text-pink); }
+.beige { --bg: var(--beige); --text-color: var(--text-beige); }
+.lavender { --bg: var(--lavender); --text-color: var(--text-lavender); }
+.blue { --bg: var(--blue); --text-color: var(--text-blue); }
+.green { --bg: var(--green); --text-color: var(--text-green); }
+
+#widget-container {
+  background: var(--bg);
+  color: var(--text-color);
+}
+
+/* Header */
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
+  font-size: 16px;
+  font-weight: 400;
 }
 
-header h1 {
-  font-size: 18px;
+#streak-container, #points-container {
+  display: flex;
+  align-items: center;
+}
+
+#lotusIcon {
+  width: 28px;
+  height: 28px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* Sections */
+section {
+  margin: 12px 0;
+}
+
+h1, h2, h3 {
   font-weight: 300;
-  letter-spacing: 1px;
-  margin: 0;
+  text-transform: lowercase;
+  margin-bottom: 6px;
 }
 
+#garden-section img {
+  width: 100%;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* Seed Inventory */
+#seedInventory {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  max-height: 140px;
+  overflow-y: auto;
+}
+
+#seedInventory img {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+#seedInventory img:hover {
+  border-color: var(--text-color);
+}
+
+/* Seed Journal */
+#seedJournal {
+  background: white;
+  color: #3b3a36;
+  padding: 14px;
+  border-radius: 14px;
+  box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+  max-width: 280px;
+  max-height: 320px;
+  overflow-x: auto;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  position: relative;
+  margin-top: 8px;
+}
+
+#seedJournal img {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  user-select: none;
+  cursor: default;
+}
+
+#seedJournalBtn {
+  background: transparent;
+  border: 2px solid var(--text-color);
+  padding: 6px 12px;
+  border-radius: 16px;
+  color: var(--text-color);
+  cursor: pointer;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+#closeJournalBtn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #333;
+}
+
+/* Buttons Section */
+#buttons-section {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+}
+
+button {
+  background: transparent;
+  border: 2px solid var(--text-color);
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-weight: 400;
+  color: var(--text-color);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--text-color);
+  color: white;
+}
+
+.btn-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* Vase Shelf */
+#vaseShelf {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  max-height: 110px;
+  overflow-x: auto;
+  padding: 6px 0;
+}
+
+#vaseShelf img {
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  user-select: none;
+}
+
+/* Theme selector */
 #theme-selector {
   display: flex;
-  gap: 8px;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 14px;
 }
 
 .theme-dot {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 2px solid transparent;
+  border: 2px solid var(--text-color);
   cursor: pointer;
-  transition: border-color 0.3s ease;
-}
-
-.theme-dot:hover {
-  border-color: #999;
-}
-
-.theme-dot.active {
-  border-color: #555;
-}
-
-/* theme colors */
-.theme-pink {
-  --primary-bg: #fbe8eb;
-  --primary-text: #9c5a73;
-  --button-bg: #f4c3cc;
-  --button-text: #6e3645;
-}
-
-.theme-beige {
-  --primary-bg: #f5f1e9;
-  --primary-text: #8d7e6d;
-  --button-bg: #ddd2b7;
-  --button-text: #5a4e3d;
-}
-
-.theme-lavender {
-  --primary-bg: #f3ecfa;
-  --primary-text: #6a5f8c;
-  --button-bg: #c8c1ea;
-  --button-text: #423b6b;
-}
-
-.theme-blue {
-  --primary-bg: #e7f1fb;
-  --primary-text: #4a6fa5;
-  --button-bg: #a8c8ea;
-  --button-text: #2e4772;
-}
-
-.theme-green {
-  --primary-bg: #e7f5ef;
-  --primary-text: #4a7a57;
-  --button-bg: #a9d0b3;
-  --button-text: #2f5137;
-}
-
-#garden-widget {
-  background-color: var(--primary-bg);
-  color: var(--primary-text);
-}
-
-/* daily login */
-#daily-login-section {
-  margin-bottom: 14px;
-  font-size: 13px;
-}
-
-#daily-login-section p {
-  margin: 4px 0;
-}
-
-.streak-bonus {
-  color: #f28ab2;
-  font-weight: 500;
-  font-size: 13px;
-}
-
-.hidden {
-  display: none;
-}
-
-/* garden area */
-#garden-area {
-  text-align: center;
-  margin-bottom: 14px;
-}
-
-#garden-image {
-  width: 150px;
-  height: 150px;
-  border-radius: 12px;
-  cursor: pointer;
-  border: 2px solid var(--button-bg);
-  box-shadow: 0 0 10px var(--button-bg);
-  transition: box-shadow 0.3s ease;
-}
-
-#garden-image:hover,
-#garden-image:focus {
-  box-shadow: 0 0 14px var(--button-text);
-  outline: none;
-}
-
-/* seed inventory */
-#inventory-section {
-  margin-bottom: 14px;
-}
-
-#inventory-section h2 {
-  margin: 8px 0 6px;
-  font-weight: 500;
-  font-size: 15px;
-  letter-spacing: 1px;
-}
-
-#seed-inventory {
-  display: grid;
-  grid-template-columns: repeat(6, 36px);
-  grid-gap: 8px;
-  justify-content: center;
-}
-
-.seed-bag {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  border: 2px solid var(--button-bg);
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.seed-bag:hover {
-  transform: scale(1.1);
-  border-color: var(--button-text);
-}
-
-/* buttons */
-#actions {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 16px;
-}
-
-#actions button {
-  flex: 1;
-  margin: 0 6px;
-  background-color: var(--button-bg);
-  border: none;
-  border-radius: 12px;
-  padding: 8px 0;
-  font-size: 16px;
-  color: var(--button-text);
-  cursor: pointer;
+  background: transparent;
   transition: background-color 0.3s ease;
-  user-select: none;
 }
 
-#actions button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.theme-dot:hover,
+.theme-dot.active {
+  background-color: var(--text-color);
 }
 
-#actions button:hover:not(:disabled) {
-  background-color: var(--button-text);
-  color: var(--button-bg);
-}
-
-/* points display */
-#points-display {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 600;
-  font-size: 16px;
-  justify-content: center;
-}
-
-#points-display img {
-  width: 26px;
-  height: 26px;
-}
-
-/* vase shelf */
-#vase-shelf-section {
-  margin-top: 10px;
-}
-
-#vase-shelf-section h2 {
-  font-weight: 500;
-  font-size: 15px;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-  text-align: center;
-}
-
-#vase-shelf {
-  display: grid;
-  grid-template-columns: repeat(6, 38px);
-  grid-gap: 10px;
-  justify-content: center;
-}
-
-.vase {
-  width: 38px;
-  height: 38px;
-  border-radius: 8px;
-  box-shadow: 0 0 6px rgba(0,0,0,0.08);
-  cursor: default;
-}
-
-/* flower card popup */
-.popup {
+/* Popups */
+.popup-message {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 260px;
-  max-width: 90vw;
-  background: var(--primary-bg);
-  border-radius: 18px;
-  padding: 20px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
   transform: translate(-50%, -50%);
-  z-index: 1000;
-  user-select: none;
-  color: var(--primary-text);
-  font-size: 14px;
+  background: white;
+  padding: 14px 20px;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 300;
+  color: #3b3a36;
+  max-width: 280px;
   text-align: center;
-}
-
-.popup.hidden {
+  z-index: 100;
   display: none;
 }
 
-#flower-card-popup img {
-  width: 120px;
-  height: 120px;
-  margin-bottom: 10px;
-  border-radius: 14px;
-  box-shadow: 0 0 12px var(--button-bg);
+.popup-message.visible {
+  display: block;
 }
 
-#close-flower-card {
+#flowerCard {
+  max-width: 280px;
+  max-height: 380px;
+  overflow-y: auto;
+}
+
+#flowerCardContent img {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+/* Close buttons */
+#closeFlowerCardBtn,
+#closeJournalBtn {
   position: absolute;
   top: 8px;
-  right: 12px;
-  border: none;
+  right: 8px;
   background: transparent;
-  font-size: 22px;
-  color: var(--button-text);
+  border: none;
+  font-size: 18px;
   cursor: pointer;
+  color: #444;
+  font-weight: 700;
   user-select: none;
 }
 
-/* Accessibility focus */
-#close-flower-card:focus,
-#garden-image:focus,
-.theme-dot:focus,
-.seed-bag:focus,
-#water-btn:focus,
-#harvest-btn:focus,
-#buy-water-btn:focus {
-  outline: 2px solid var(--button-text);
-  outline-offset: 2px;
+/* Scrollbar for seed journal and vase shelf */
+#seedJournal::-webkit-scrollbar,
+#vaseShelf::-webkit-scrollbar,
+#seedInventory::-webkit-scrollbar {
+  height: 6px;
+}
+
+#seedJournal::-webkit-scrollbar-thumb,
+#vaseShelf::-webkit-scrollbar-thumb,
+#seedInventory::-webkit-scrollbar-thumb {
+  background-color: var(--text-color);
+  border-radius: 4px;
 }
