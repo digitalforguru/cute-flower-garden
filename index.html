@@ -1,73 +1,80 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Mini Pixel Flower Garden</title>
-<link rel="stylesheet" href="style.css" />
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap" rel="stylesheet" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>pixel garden widget</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div id="widget-container" class="pink">
-    <header>
-      <h1>my lil garden</h1>
-      <div id="streak-container">
-        daily streak: <span id="streakCount">0</span> 🌱
+    <header class="widget-header">
+      <div class="left-hdr">
+        <img id="lotus-icon" src="assets/ui/lotus-flower-icon.png" alt="lotus" />
+        <div id="points-wrap"> <span id="lotus-points">0</span> lotus</div>
       </div>
-      <div id="points-container">
-        lotus points: <span id="lotusPoints">0</span>
-        <img src="https://spaces-cdn.clipsafari.com/cnhul66rcm4tiea3ng9oeiseuh0b" alt="lotus points" id="lotusIcon" />
+
+      <div class="center-hdr">
+        <h1 class="title">my lil garden</h1>
+      </div>
+
+      <div class="right-hdr">
+        <div id="streak-wrap">streak: <span id="streak-count">0</span></div>
       </div>
     </header>
 
-    <section id="garden-section">
-      <h2>garden</h2>
-      <img src="assets/garden/vacant.png" alt="garden" id="gardenImage" />
-    </section>
+    <main class="widget-body">
+      <section id="garden-section">
+        <img id="garden-image" src="assets/garden/vacant.png" alt="garden plot" />
+      </section>
 
-    <section id="seed-inventory-section">
-      <h2>seed inventory</h2>
-      <div id="seedInventory" aria-label="owned seed bags"></div>
-    </section>
+      <section id="controls">
+        <button id="water-btn" class="control-btn" title="water">
+          <img src="assets/ui/watercan.png" alt="water" class="icon" />
+        </button>
 
-    <section id="seed-journal-section">
-      <button id="seedJournalBtn" aria-label="open seed journal">open seed journal 🌸</button>
-      <div id="seedJournal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="seedJournalTitle">
-        <h3 id="seedJournalTitle">seed journal</h3>
-        <div id="seedCardsContainer"></div>
-        <button id="closeJournalBtn" aria-label="close seed journal">close ✕</button>
-      </div>
-    </section>
+        <button id="harvest-btn" class="control-btn" title="harvest">
+          <img src="assets/ui/harvestbasket.png" alt="harvest" class="icon" />
+        </button>
 
-    <section id="buttons-section">
-      <button id="waterBtn" aria-label="water flower">
-        <img src="assets/ui/watercan.png" alt="water can" class="btn-icon" />
-      </button>
-      <button id="harvestBtn" aria-label="harvest flower">
-        <img src="assets/ui/harvestbasket.png" alt="harvest basket" class="btn-icon" />
-      </button>
-      <button id="buyWaterBtn" aria-label="buy water">buy water (5 points)</button>
-    </section>
+        <button id="buy-water-btn" class="control-btn small">buy water</button>
 
-    <section id="vase-shelf-section">
-      <h2>harvested vase shelf</h2>
-      <div id="vaseShelf"></div>
-    </section>
+        <button id="open-journal-btn" class="control-btn small">seed journal</button>
+      </section>
 
-    <section id="theme-selector" aria-label="choose theme">
-      <button class="theme-dot" data-theme="pink" aria-label="pink theme" title="pink theme"></button>
-      <button class="theme-dot" data-theme="beige" aria-label="beige theme" title="beige theme"></button>
-      <button class="theme-dot" data-theme="lavender" aria-label="lavender theme" title="lavender theme"></button>
-      <button class="theme-dot" data-theme="blue" aria-label="blue theme" title="blue theme"></button>
-      <button class="theme-dot" data-theme="green" aria-label="green theme" title="green theme"></button>
-    </section>
+      <section id="inventory-section">
+        <h2>seed inventory</h2>
+        <div id="inventory-grid" class="grid-6"></div>
+      </section>
 
-    <!-- Popups -->
-    <div id="popupMessage" class="popup-message hidden" role="alert" aria-live="assertive"></div>
+      <section id="journal-section" class="hidden">
+        <div id="journal-modal" class="modal">
+          <button id="close-journal" class="close">✕</button>
+          <h3>seed journal</h3>
+          <div id="journal-cards" class="journal-cards"></div>
+        </div>
+      </section>
 
-    <div id="flowerCard" class="popup-message hidden" role="dialog" aria-modal="true" aria-labelledby="flowerCardTitle">
-      <button id="closeFlowerCardBtn" aria-label="close flower info">close ✕</button>
-      <div id="flowerCardContent"></div>
+      <section id="vase-section">
+        <h2>harvested vase shelf</h2>
+        <div id="vase-grid" class="grid-6"></div>
+      </section>
+
+      <section id="theme-section" aria-label="themes">
+        <div class="theme-dot" data-theme="pink" title="pink"></div>
+        <div class="theme-dot" data-theme="beige" title="beige"></div>
+        <div class="theme-dot" data-theme="lavender" title="lavender"></div>
+        <div class="theme-dot" data-theme="blue" title="baby blue"></div>
+        <div class="theme-dot" data-theme="green" title="mint green"></div>
+      </section>
+    </main>
+
+    <!-- centered popups inside widget -->
+    <div id="popup" class="popup"></div>
+
+    <div id="flower-card" class="popup">
+      <button id="close-flower-card" class="close">✕</button>
+      <div id="flower-card-content"></div>
     </div>
   </div>
 
