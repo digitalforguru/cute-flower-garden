@@ -1,100 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mini Pixel Garden</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>cute garden widget</title>
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="garden-widget" class="theme-pink">
-    <header>
-      <h1>my lil garden</h1>
-    </header>
 
-    <!-- Theme Selector -->
-    <div id="theme-selector" aria-label="choose theme">
-      <button class="theme-dot active" data-theme="pink" aria-label="pink theme" title="pink theme"></button>
-      <button class="theme-dot" data-theme="beige" aria-label="beige theme" title="beige theme"></button>
-      <button class="theme-dot" data-theme="lavender" aria-label="lavender theme" title="lavender theme"></button>
-      <button class="theme-dot" data-theme="blue" aria-label="blue theme" title="blue theme"></button>
-      <button class="theme-dot" data-theme="green" aria-label="green theme" title="green theme"></button>
+<div id="garden-widget" class="theme-pink" role="application" aria-label="Cute garden widget">
+
+  <header class="widget-header">
+    <h1>my lil garden 🌸</h1>
+    <div id="lotus-points" aria-live="polite" aria-atomic="true" class="points-display">
+      <img src="assets/UI/lotus-points-icon.png" alt="lotus points" class="icon-large" /> 
+      <span id="lotus-points-value">0</span>
     </div>
+  </header>
 
-    <!-- Garden area -->
-    <div id="garden-section">
-      <img id="garden-image" src="assets/garden/vacant.png" alt="garden plot" tabindex="0" aria-label="current planted flower, click for details"/>
-    </div>
+  <main class="widget-main">
 
-    <!-- Seed Inventory with message -->
-    <section id="seed-inventory-section">
-      <h2>seed inventory</h2>
-      <small class="inventory-msg">click on a seed to plant</small>
-      <div id="seed-inventory"></div>
+    <section id="garden-section" aria-label="garden area">
+      <img id="garden-image" src="assets/garden/vacant.png" alt="empty garden" tabindex="0" role="button" aria-describedby="garden-info" />
+      <div id="garden-info" class="sr-only">click to see flower details or plant a seed</div>
     </section>
 
-    <!-- Seed Journal Button -->
-    <button id="seed-journal-btn" aria-label="open seed journal" title="open seed journal">
-      <img src="assets/ui/seed-journal.png" alt="seed journal icon" class="icon-xl" />
-    </button>
+    <section id="seed-inventory-section" aria-label="seed inventory">
+      <h2>seed inventory</h2>
+      <small class="info-text">click a seed to plant</small>
+      <div id="seed-inventory" tabindex="0" role="list"></div>
+    </section>
 
-    <!-- Seed Journal Popup -->
-    <div id="seed-journal-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-journal-title">
-      <button id="close-journal-btn" aria-label="close seed journal">&times;</button>
-      <h2 id="seed-journal-title">seed journal</h2>
-      <div id="seed-journal-card"></div>
-      <div id="seed-journal-controls">
-        <button id="prev-seed-btn" aria-label="previous seed">&lt;</button>
-        <button id="buy-seed-list-btn" aria-label="buy seeds">buy with lotus points</button>
-        <button id="next-seed-btn" aria-label="next seed">&gt;</button>
-      </div>
-    </div>
+    <section id="seed-journal-section" aria-label="seed journal and seed shop">
+      <button id="seed-journal-btn" aria-haspopup="dialog" aria-controls="seed-journal-popup" aria-expanded="false" title="Open seed journal">
+        📖 seed journal
+      </button>
+      <button id="buy-seed-list-btn" aria-haspopup="dialog" aria-controls="buy-seeds-popup" aria-expanded="false" title="Buy new seeds">
+        🛒 buy seeds
+      </button>
+    </section>
 
-    <!-- Buy Seeds List Popup -->
-    <div id="buy-seeds-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="buy-seeds-title">
-      <button id="close-buy-seeds-btn" aria-label="close buy seeds">&times;</button>
-      <h2 id="buy-seeds-title">buy seeds</h2>
-      <ul id="buy-seeds-list"></ul>
-    </div>
-
-    <!-- Controls: Water, Harvest, Buy Water -->
-    <div id="controls">
-      <button id="water-btn" aria-label="water the plant" class="control-btn">
-        <img src="assets/UI/watercan.png" alt="water icon" class="icon-xl" />
+    <section id="actions-section" aria-label="garden actions">
+      <button id="water-btn" aria-label="water flower">
+        <img src="assets/UI/watercan.png" alt="water can" class="icon-xl" />
         <span>water</span>
       </button>
-      <button id="harvest-btn" aria-label="harvest flower" class="control-btn">
-        <img src="assets/UI/harvestbasket.png" alt="harvest icon" class="icon-xl" />
+
+      <button id="harvest-btn" aria-label="harvest flower">
+        <img src="assets/UI/harvestbasket.png" alt="harvest basket" class="icon-xl" />
         <span>harvest</span>
       </button>
-      <button id="buy-water-btn" aria-label="buy waters" class="control-btn">
-        <img src="https://i.pinimg.com/originals/e7/72/b3/e772b3d571574c918163db7650bf5f3f.gif" alt="shopping cart" class="icon-xl" />
+
+      <button id="buy-water-btn" aria-label="buy water">
+        <img src="https://i.pinimg.com/originals/22/36/cb/2236cb9f7ef3ac8a87b4f9af0680c83e.gif" alt="shopping cart" class="icon-xl" />
         <span>buy water</span>
       </button>
-    </div>
-
-    <!-- Popups for messages (watered, errors, etc) -->
-    <div id="popup-message" class="popup-message hidden" role="alert"></div>
-
-    <!-- Vase Widget -->
-    <section id="vase-widget">
-      <h3>harvested flowers</h3>
-      <div id="vase-shelf">
-        <img src="assets/vase/flower-vase-widget.png" alt="vase shelf background" />
-        <div id="vase-collection"></div>
-      </div>
     </section>
 
-    <!-- Daily Login Streak -->
-    <footer>
-      <div id="login-streak">daily login streak: <span id="streak-count">0</span></div>
-      <div id="lotus-points-display">
-        <img src="assets/UI/lotus-flower-icon.png" alt="lotus points icon" class="icon-xl" /> 
-        <span id="lotus-points">0</span> lotus points
-      </div>
-    </footer>
+    <section id="vase-shelf-section" aria-label="harvested flower vase shelf">
+      <h2>harvested vase shelf</h2>
+      <div id="vase-collection" role="list"></div>
+    </section>
+
+    <section id="daily-streak-section" aria-label="daily login streak">
+      <p>daily login streak: <span id="streak-count">0</span> https://i.pinimg.com/originals/cb/a9/fa/cba9fa3707c3af2da4585eb372f71f99.gif</p>
+    </section>
+
+  </main>
+
+  <!-- Seed Journal Popup -->
+  <div id="seed-journal-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-journal-title">
+    <h3 id="seed-journal-title">seed journal</h3>
+    <button id="close-journal-btn" aria-label="close seed journal">✕</button>
+    <div id="seed-journal-card" tabindex="0"></div>
+    <nav class="popup-nav">
+      <button id="prev-seed-btn" aria-label="previous seed">←</button>
+      <button id="next-seed-btn" aria-label="next seed">→</button>
+    </nav>
   </div>
 
-  <script src="game.js"></script>
+  <!-- Buy Seeds Popup -->
+  <div id="buy-seeds-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="buy-seeds-title">
+    <h3 id="buy-seeds-title">buy seeds</h3>
+    <button id="close-buy-seeds-btn" aria-label="close buy seeds list">✕</button>
+    <ul id="buy-seeds-list" role="listbox" tabindex="0"></ul>
+  </div>
+
+  <!-- Popup Message -->
+  <div id="popup-message" class="popup-message hidden" role="alert" aria-live="assertive"></div>
+
+  <!-- Theme selector -->
+  <div id="theme-selector" aria-label="choose theme" role="radiogroup">
+    <button class="theme-dot" data-theme="pink" aria-label="pink theme" role="radio" aria-checked="true" tabindex="0" title="pink theme"></button>
+    <button class="theme-dot" data-theme="beige" aria-label="beige theme" role="radio" aria-checked="false" tabindex="-1" title="beige theme"></button>
+    <button class="theme-dot" data-theme="lavender" aria-label="lavender theme" role="radio" aria-checked="false" tabindex="-1" title="lavender theme"></button>
+    <button class="theme-dot" data-theme="blue" aria-label="blue theme" role="radio" aria-checked="false" tabindex="-1" title="blue theme"></button>
+    <button class="theme-dot" data-theme="green" aria-label="green theme" role="radio" aria-checked="false" tabindex="-1" title="green theme"></button>
+  </div>
+
+</div>
+
+<script src="game.js"></script>
 </body>
 </html>
