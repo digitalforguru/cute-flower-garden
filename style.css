@@ -1,0 +1,304 @@
+/* base resets */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: transparent;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  color: #4a4a4a;
+  text-transform: lowercase;
+}
+
+#garden-widget {
+  width: 320px;
+  background: #fffaf0;
+  border-radius: 16px;
+  padding: 16px 20px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  user-select: none;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+header h1 {
+  font-size: 18px;
+  font-weight: 300;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+#theme-selector {
+  display: flex;
+  gap: 8px;
+}
+
+.theme-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.theme-dot:hover {
+  border-color: #999;
+}
+
+.theme-dot.active {
+  border-color: #555;
+}
+
+/* theme colors */
+.theme-pink {
+  --primary-bg: #fbe8eb;
+  --primary-text: #9c5a73;
+  --button-bg: #f4c3cc;
+  --button-text: #6e3645;
+}
+
+.theme-beige {
+  --primary-bg: #f5f1e9;
+  --primary-text: #8d7e6d;
+  --button-bg: #ddd2b7;
+  --button-text: #5a4e3d;
+}
+
+.theme-lavender {
+  --primary-bg: #f3ecfa;
+  --primary-text: #6a5f8c;
+  --button-bg: #c8c1ea;
+  --button-text: #423b6b;
+}
+
+.theme-blue {
+  --primary-bg: #e7f1fb;
+  --primary-text: #4a6fa5;
+  --button-bg: #a8c8ea;
+  --button-text: #2e4772;
+}
+
+.theme-green {
+  --primary-bg: #e7f5ef;
+  --primary-text: #4a7a57;
+  --button-bg: #a9d0b3;
+  --button-text: #2f5137;
+}
+
+#garden-widget {
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
+}
+
+/* daily login */
+#daily-login-section {
+  margin-bottom: 14px;
+  font-size: 13px;
+}
+
+#daily-login-section p {
+  margin: 4px 0;
+}
+
+.streak-bonus {
+  color: #f28ab2;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.hidden {
+  display: none;
+}
+
+/* garden area */
+#garden-area {
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+#garden-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 12px;
+  cursor: pointer;
+  border: 2px solid var(--button-bg);
+  box-shadow: 0 0 10px var(--button-bg);
+  transition: box-shadow 0.3s ease;
+}
+
+#garden-image:hover,
+#garden-image:focus {
+  box-shadow: 0 0 14px var(--button-text);
+  outline: none;
+}
+
+/* seed inventory */
+#inventory-section {
+  margin-bottom: 14px;
+}
+
+#inventory-section h2 {
+  margin: 8px 0 6px;
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: 1px;
+}
+
+#seed-inventory {
+  display: grid;
+  grid-template-columns: repeat(6, 36px);
+  grid-gap: 8px;
+  justify-content: center;
+}
+
+.seed-bag {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 2px solid var(--button-bg);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.seed-bag:hover {
+  transform: scale(1.1);
+  border-color: var(--button-text);
+}
+
+/* buttons */
+#actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+#actions button {
+  flex: 1;
+  margin: 0 6px;
+  background-color: var(--button-bg);
+  border: none;
+  border-radius: 12px;
+  padding: 8px 0;
+  font-size: 16px;
+  color: var(--button-text);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  user-select: none;
+}
+
+#actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#actions button:hover:not(:disabled) {
+  background-color: var(--button-text);
+  color: var(--button-bg);
+}
+
+/* points display */
+#points-display {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 16px;
+  justify-content: center;
+}
+
+#points-display img {
+  width: 26px;
+  height: 26px;
+}
+
+/* vase shelf */
+#vase-shelf-section {
+  margin-top: 10px;
+}
+
+#vase-shelf-section h2 {
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+#vase-shelf {
+  display: grid;
+  grid-template-columns: repeat(6, 38px);
+  grid-gap: 10px;
+  justify-content: center;
+}
+
+.vase {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.08);
+  cursor: default;
+}
+
+/* flower card popup */
+.popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 260px;
+  max-width: 90vw;
+  background: var(--primary-bg);
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  user-select: none;
+  color: var(--primary-text);
+  font-size: 14px;
+  text-align: center;
+}
+
+.popup.hidden {
+  display: none;
+}
+
+#flower-card-popup img {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 10px;
+  border-radius: 14px;
+  box-shadow: 0 0 12px var(--button-bg);
+}
+
+#close-flower-card {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  border: none;
+  background: transparent;
+  font-size: 22px;
+  color: var(--button-text);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Accessibility focus */
+#close-flower-card:focus,
+#garden-image:focus,
+.theme-dot:focus,
+.seed-bag:focus,
+#water-btn:focus,
+#harvest-btn:focus,
+#buy-water-btn:focus {
+  outline: 2px solid var(--button-text);
+  outline-offset: 2px;
+}
