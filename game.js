@@ -1,136 +1,103 @@
-// game.js
-
-// Constants & initial state
-const STORAGE_KEY = 'mini-garden-state';
-
-const flowers = [
-  { id: 'bluebells', name: 'bluebells', watersNeeded: 7 },
-  { id: 'marigold', name: 'marigold', watersNeeded: 8 },
-  { id: 'lily', name: 'lily', watersNeeded: 6 },
-  { id: 'sunflower', name: 'sunflower', watersNeeded: 9 },
-  { id: 'peonies', name: 'peonies', watersNeeded: 7 },
-  { id: 'pansies', name: 'pansies', watersNeeded: 5 },
-  { id: 'rose', name: 'rose', watersNeeded: 6 },
-  { id: 'cherryblossom', name: 'cherry blossom', watersNeeded: 8 },
-  { id: 'snapdragons', name: 'snapdragons', watersNeeded: 7 },
-  { id: 'tulip', name: 'tulip', watersNeeded: 6 },
-  { id: 'lavender', name: 'lavender', watersNeeded: 5 },
-  { id: 'daisy', name: 'daisy', watersNeeded: 5 }
-];
-
-// Initial garden state structure
-let gardenState = {
-  lotusPoints: 50,          // Starting points, enough to buy rose seed initially
-  dailyStreak: 0,
-  lastLoginDate: null,
-  inventory: {              // flowerId => quantity
-    rose: 1                 // rose unlocked by default
-  },
-  plantedFlower: null,      // flowerId
-  waterCount: 0,            // waters on planted flower
-  harvestedVases: [],       // list of flowerIds harvested
-  theme: 'pink'
-};
-
+// DOM elements
 const gardenWidget = document.getElementById('garden-widget');
-const lotusPointsSpan = document.getElementById('lotus-points-value');
 const gardenImage = document.getElementById('garden-image');
 const seedInventory = document.getElementById('seed-inventory');
 const vaseCollection = document.getElementById('vase-collection');
-const dailyStreakSpan = document.getElementById('streak-count');
+const lotusPointsDisplay = document.getElementById('lotus-points-value');
+const dailyStreakDisplay = document.getElementById('streak-count');
+const popupMessage = document.getElementById('popup-message');
 
-const seedJournalBtn = document.getElementById('seed-journal-btn');
 const seedJournalPopup = document.getElementById('seed-journal-popup');
+const seedJournalBtn = document.getElementById('seed-journal-btn');
 const closeJournalBtn = document.getElementById('close-journal-btn');
 const seedJournalCard = document.getElementById('seed-journal-card');
 const prevSeedBtn = document.getElementById('prev-seed-btn');
 const nextSeedBtn = document.getElementById('next-seed-btn');
 
-const buySeedListBtn = document.getElementById('buy-seed-list-btn');
 const buySeedsPopup = document.getElementById('buy-seeds-popup');
+const buySeedListBtn = document.getElementById('buy-seed-list-btn');
 const closeBuySeedsBtn = document.getElementById('close-buy-seeds-btn');
 const buySeedsList = document.getElementById('buy-seeds-list');
-
-const popupMessage = document.getElementById('popup-message');
 
 const waterBtn = document.getElementById('water-btn');
 const harvestBtn = document.getElementById('harvest-btn');
 const buyWaterBtn = document.getElementById('buy-water-btn');
 
-const themeDots = document.querySelectorAll('.theme-dot');
+const themeDots = [...document.querySelectorAll('.theme-dot')];
 
 let currentJournalIndex = 0;
+let popupTimeoutId = null;
 
-// Utility Functions
+// Sample flowers data (make sure to update or load your own data)
+const flowers = [
+  { id: 'bluebells', name: 'bluebells', watersNeeded: 3 },
+  { id: 'roses', name: 'roses', watersNeeded: 5 },
+  { id: 'daisies', name: 'daisies', watersNeeded: 4 },
+  // add more flowers as needed
+];
+
+// Initial garden state, loaded from localStorage or defaults
+let gardenState = {
+  inventory: {},         // flowerId => quantity (seeds owned)
+  plantedFlower: null,   // flowerId currently planted
+  waterCount: 0,         // how many times watered current plant
+  harvestedVases: [],    // array of flowerIds harvested (for vases)
+  lotusPoints: 0,        // currency points
+  dailyStreak: 0,
+  lastLoginDate: null,
+  theme: 'pink'
+};
+
+// --- STORAGE FUNCTIONS ---
 function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(gardenState));
+  localStorage.setItem('gardenState', JSON.stringify(gardenState));
 }
 
 function loadState() {
-  const saved = localStorage.getItem(STORAGE_KEY);
+  const saved = localStorage.getItem('gardenState');
   if (saved) {
-    gardenState = JSON.parse(saved);
-  } else {
-    saveState();
+    try {
+      gardenState = JSON.parse(saved);
+    } catch (e) {
+      console.error('Failed to parse garden state:', e);
+    }
   }
 }
 
-// Update UI functions
+// --- UI UPDATE FUNCTIONS ---
 function updateLotusPoints() {
-  lotusPointsSpan.textContent = gardenState.lotusPoints;
+  lotusPointsDisplay.textContent = gardenState.lotusPoints;
 }
 
 function updateDailyStreak() {
-  dailyStreakSpan.textContent = gardenState.dailyStreak;
+  dailyStreakDisplay.textContent = gardenState.dailyStreak;
 }
 
 function updateSeedInventory() {
   seedInventory.innerHTML = '';
-
-  const flowerIds = Object.keys(gardenState.inventory);
-  if (flowerIds.length === 0) {
-    seedInventory.textContent = 'no seeds yet';
-    return;
-  }
-
-  flowerIds.forEach(fid => {
-    const qty = gardenState.inventory[fid];
+  Object.entries(gardenState.inventory).forEach(([flowerId, qty]) => {
     if (qty < 1) return;
-
-    const flower = flowers.find(f => f.id === fid);
+    const flower = flowers.find(f => f.id === flowerId);
     if (!flower) return;
 
-    const seedDiv = document.createElement('div');
-    seedDiv.className = 'seed-item';
-    seedDiv.setAttribute('tabindex', '0');
-    seedDiv.setAttribute('role', 'button');
-    seedDiv.setAttribute('aria-label', `plant ${flower.name} seed`);
+    const div = document.createElement('div');
+    div.className = 'seed-item';
+    div.tabIndex = 0;
+    div.setAttribute('role', 'listitem');
+    div.title = `plant ${flower.name} seed`;
 
-    const img = document.createElement('img');
-    img.src = `assets/seeds/${fid}-seedbag.png`;
-    img.alt = `${flower.name} seed bag`;
+    div.innerHTML = `
+      <img src="assets/seedbags/${flowerId}-seedbag.png" alt="${flower.name} seed bag" draggable="false" />
+      <div class="seed-name">${flower.name}</div>
+      <div class="seed-qty">${qty}</div>
+    `;
 
-    const nameSpan = document.createElement('span');
-    nameSpan.className = 'seed-name';
-    nameSpan.textContent = flower.name;
-
-    const qtySpan = document.createElement('span');
-    qtySpan.className = 'seed-qty';
-    qtySpan.textContent = `${qty}x`;
-
-    seedDiv.appendChild(img);
-    seedDiv.appendChild(nameSpan);
-    seedDiv.appendChild(qtySpan);
-
-    seedDiv.addEventListener('click', () => {
-      plantSeed(fid);
+    div.addEventListener('click', () => plantSeed(flowerId));
+    div.addEventListener('keypress', e => {
+      if (e.key === 'Enter') plantSeed(flowerId);
     });
 
-    seedDiv.addEventListener('keypress', e => {
-      if (e.key === 'Enter') plantSeed(fid);
-    });
-
-    seedInventory.appendChild(seedDiv);
+    seedInventory.appendChild(div);
   });
 }
 
@@ -138,37 +105,35 @@ function updateGardenImage() {
   if (!gardenState.plantedFlower) {
     gardenImage.src = 'assets/garden/vacant.png';
     gardenImage.alt = 'empty garden';
-  } else {
-    const flower = flowers.find(f => f.id === gardenState.plantedFlower);
-    if (!flower) {
-      gardenImage.src = 'assets/garden/vacant.png';
-      gardenImage.alt = 'empty garden';
-      return;
-    }
-
-    const growthPercent = Math.min(1, gardenState.waterCount / flower.watersNeeded);
-    let stage = 'seedstage';
-    if (growthPercent > 0.75) stage = 'sproutstage';
-    else if (growthPercent > 0.4) stage = 'midgrowth';
-
-    gardenImage.src = `assets/flowers/${flowerId}-${stage}.png`;
-    gardenImage.alt = `${flower.name} flower at ${stage} stage`;
+    return;
   }
+  const flower = flowers.find(f => f.id === gardenState.plantedFlower);
+  if (!flower) {
+    gardenImage.src = 'assets/garden/vacant.png';
+    gardenImage.alt = 'empty garden';
+    return;
+  }
+
+  // Determine stage based on waterCount
+  const w = gardenState.waterCount;
+  let stage = 'seedstage';
+
+  if (w >= flower.watersNeeded) stage = 'matureflower';
+  else if (w >= flower.watersNeeded * 0.66) stage = 'midgrowth';
+  else if (w >= flower.watersNeeded * 0.33) stage = 'sproutstage';
+
+  gardenImage.src = `assets/flowers/${flower.id}-${stage}.png`;
+  gardenImage.alt = `${flower.name} at ${stage.replace('stage', '')}`;
 }
 
 function updateVaseCollection() {
   vaseCollection.innerHTML = '';
-  if (gardenState.harvestedVases.length === 0) {
-    vaseCollection.textContent = 'no harvested vases yet';
-    return;
-  }
-  gardenState.harvestedVases.forEach(fid => {
-    const flower = flowers.find(f => f.id === fid);
-    if (!flower) return;
+  gardenState.harvestedVases.forEach(flowerId => {
+    // Use your naming: vase-flowerid.png
     const img = document.createElement('img');
     img.className = 'vase-item';
-    img.src = `assets/vase/${fid}-vase.png`;
-    img.alt = `${flower.name} harvested vase`;
+    img.src = `assets/vase/vase-${flowerId}.png`;
+    img.alt = `${flowerId} harvested vase`;
     vaseCollection.appendChild(img);
   });
 }
@@ -176,7 +141,10 @@ function updateVaseCollection() {
 function showPopupMessage(msg) {
   popupMessage.textContent = msg;
   popupMessage.classList.remove('hidden');
-  setTimeout(() => {
+
+  // Clear previous timeout if any
+  if (popupTimeoutId) clearTimeout(popupTimeoutId);
+  popupTimeoutId = setTimeout(() => {
     popupMessage.classList.add('hidden');
   }, 2500);
 }
@@ -186,13 +154,16 @@ function updateTheme(theme) {
   gardenWidget.classList.add(`theme-${theme}`);
   gardenState.theme = theme;
   saveState();
+
   themeDots.forEach(dot => {
-    dot.classList.toggle('active', dot.dataset.theme === theme);
-    dot.setAttribute('aria-checked', dot.dataset.theme === theme ? 'true' : 'false');
+    const isActive = dot.dataset.theme === theme;
+    dot.classList.toggle('active', isActive);
+    dot.setAttribute('aria-checked', isActive ? 'true' : 'false');
+    dot.tabIndex = isActive ? 0 : -1;
   });
 }
 
-// Game logic functions
+// --- GAME LOGIC ---
 function plantSeed(flowerId) {
   if (!gardenState.inventory[flowerId] || gardenState.inventory[flowerId] < 1) {
     showPopupMessage("you don't have this seed");
@@ -245,7 +216,6 @@ function harvestFlower() {
   updateLotusPoints();
 }
 
-// Buying water: costs 10 lotus points and adds 3 waters (max 15)
 function buyWater() {
   if (gardenState.lotusPoints < 10) {
     showPopupMessage("not enough lotus points to buy water");
@@ -259,13 +229,13 @@ function buyWater() {
   updateGardenImage();
 }
 
-// Seed Journal popup controls
+// --- SEED JOURNAL POPUP ---
 function openSeedJournal() {
   seedJournalPopup.classList.remove('hidden');
   seedJournalBtn.setAttribute('aria-expanded', 'true');
   currentJournalIndex = 0;
 
-  // Show first unlocked seed or rose by default
+  // Show first unlocked seed or default to first flower
   const firstUnlockedIndex = flowers.findIndex(f => gardenState.inventory[f.id] && gardenState.inventory[f.id] > 0);
   if (firstUnlockedIndex !== -1) currentJournalIndex = firstUnlockedIndex;
 
@@ -282,8 +252,9 @@ function renderSeedJournalCard() {
   if (!flower) return;
 
   const owned = gardenState.inventory[flower.id] && gardenState.inventory[flower.id] > 0;
+
   seedJournalCard.innerHTML = `
-    <img src="assets/seedjournal/${flower.id}-seed.png" alt="${flower.name} seed" />
+    <img src="assets/seedjournal/${flower.id}-seed.png" alt="${flower.name} seed" draggable="false" />
     <h4>${flower.name}</h4>
     <p>${owned ? 'unlocked' : 'locked'}</p>
   `;
@@ -299,7 +270,7 @@ function prevSeedCard() {
   renderSeedJournalCard();
 }
 
-// Buy seeds popup
+// --- BUY SEEDS POPUP ---
 function openBuySeedsPopup() {
   buySeedsPopup.classList.remove('hidden');
   buySeedListBtn.setAttribute('aria-expanded', 'true');
@@ -315,15 +286,13 @@ function renderBuySeedsList() {
   buySeedsList.innerHTML = '';
   flowers.forEach(flower => {
     const owned = gardenState.inventory[flower.id] && gardenState.inventory[flower.id] > 0;
-    if (owned) return; // don't show owned seeds for buying
+    if (owned) return; // skip owned seeds
 
     const li = document.createElement('li');
     li.textContent = flower.name;
     li.tabIndex = 0;
     li.setAttribute('role', 'option');
-    li.addEventListener('click', () => {
-      buySeed(flower.id);
-    });
+    li.addEventListener('click', () => buySeed(flower.id));
     li.addEventListener('keypress', e => {
       if (e.key === 'Enter') buySeed(flower.id);
     });
@@ -346,7 +315,7 @@ function buySeed(flowerId) {
   closeBuySeedsPopup();
 }
 
-// Daily login streak logic (call once on load)
+// --- DAILY LOGIN STREAK ---
 function updateLoginStreak() {
   const today = new Date().toDateString();
   if (gardenState.lastLoginDate === today) return; // already counted today
@@ -366,14 +335,13 @@ function updateLoginStreak() {
   showPopupMessage(`daily streak: ${gardenState.dailyStreak}`);
 }
 
-// Theme switching event
+// --- EVENT LISTENERS ---
 themeDots.forEach(dot => {
   dot.addEventListener('click', () => {
     updateTheme(dot.dataset.theme);
   });
 });
 
-// Event listeners
 seedJournalBtn.addEventListener('click', openSeedJournal);
 closeJournalBtn.addEventListener('click', closeSeedJournal);
 prevSeedBtn.addEventListener('click', prevSeedCard);
@@ -398,7 +366,7 @@ gardenImage.addEventListener('click', () => {
   showPopupMessage(`${flower.name}: ${waters}/${needed} waters`);
 });
 
-// Initialization
+// --- INITIALIZATION ---
 function init() {
   loadState();
   updateTheme(gardenState.theme);
