@@ -167,7 +167,7 @@ function updateVaseCollection() {
     if (!flower) return;
     const img = document.createElement('img');
     img.className = 'vase-item';
-    img.src = `assets/vases/${fid}-vase.png`;
+    img.src = `assets/vase/${fid}-vase.png`;
     img.alt = `${flower.name} harvested vase`;
     vaseCollection.appendChild(img);
   });
@@ -283,7 +283,7 @@ function renderSeedJournalCard() {
 
   const owned = gardenState.inventory[flower.id] && gardenState.inventory[flower.id] > 0;
   seedJournalCard.innerHTML = `
-    <img src="assets/seeds/${flower.id}-seed.png" alt="${flower.name} seed" />
+    <img src="assets/seedjournal/${flower.id}-seed.png" alt="${flower.name} seed" />
     <h4>${flower.name}</h4>
     <p>${owned ? 'unlocked' : 'locked'}</p>
   `;
