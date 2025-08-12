@@ -1,65 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>cottagecore garden game widget</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap" rel="stylesheet" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mini Pixel Flower Garden</title>
+<link rel="stylesheet" href="style.css" />
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <div id="garden-widget" class="theme-pink">
+  <div id="widget-container" class="pink">
     <header>
-      <h1>🌱 your cottagecore garden</h1>
-      <div id="theme-selector" aria-label="choose theme">
-        <button class="theme-dot" data-theme="pink" aria-label="pink theme" title="pink theme"></button>
-        <button class="theme-dot" data-theme="beige" aria-label="beige theme" title="beige theme"></button>
-        <button class="theme-dot" data-theme="lavender" aria-label="lavender theme" title="lavender theme"></button>
-        <button class="theme-dot" data-theme="blue" aria-label="blue theme" title="blue theme"></button>
-        <button class="theme-dot" data-theme="green" aria-label="green theme" title="green theme"></button>
+      <h1>my lil garden</h1>
+      <div id="streak-container">
+        daily streak: <span id="streakCount">0</span> 🌱
+      </div>
+      <div id="points-container">
+        lotus points: <span id="lotusPoints">0</span>
+        <img src="https://cdn-icons-png.flaticon.com/512/4211/4211217.png" alt="lotus points" id="lotusIcon" />
       </div>
     </header>
 
-    <section id="daily-login-section">
-      <p>daily login streak: <span id="login-streak">0</span> 🌸</p>
-      <p class="streak-bonus hidden" id="streak-bonus-msg">you earned +50 lotus points! 🌟</p>
+    <section id="garden-section">
+      <h2>garden</h2>
+      <img src="assets/garden/vacant.png" alt="garden" id="gardenImage" />
     </section>
 
-    <section id="game-section">
-      <div id="garden-area">
-        <img id="garden-image" src="assets/garden/vacant.png" alt="garden plot" tabindex="0" />
-      </div>
+    <section id="seed-inventory-section">
+      <h2>seed inventory</h2>
+      <div id="seedInventory" aria-label="owned seed bags"></div>
+    </section>
 
-      <div id="inventory-section">
-        <h2>seed inventory</h2>
-        <div id="seed-inventory"></div>
+    <section id="seed-journal-section">
+      <button id="seedJournalBtn" aria-label="open seed journal">open seed journal 🌸</button>
+      <div id="seedJournal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="seedJournalTitle">
+        <h3 id="seedJournalTitle">seed journal</h3>
+        <div id="seedCardsContainer"></div>
+        <button id="closeJournalBtn" aria-label="close seed journal">close ✕</button>
       </div>
+    </section>
 
-      <div id="actions">
-        <button id="water-btn" title="water your plant">💧 water</button>
-        <button id="harvest-btn" title="harvest mature flower" disabled>🧺 harvest</button>
-        <button id="buy-water-btn" title="buy +10 waters for 20 lotus points">💦 buy water</button>
-      </div>
-
-      <div id="points-display" title="lotus points balance">
-        <img src="https://spaces-cdn.clipsafari.com/cnhul66rcm4tiea3ng9oeiseuh0b" alt="lotus points icon" />
-        <span id="lotus-points">0</span>
-      </div>
+    <section id="buttons-section">
+      <button id="waterBtn" aria-label="water flower">
+        <img src="assets/ui/watercan.png" alt="water can" class="btn-icon" />
+      </button>
+      <button id="harvestBtn" aria-label="harvest flower">
+        <img src="assets/ui/harvestbasket.png" alt="harvest basket" class="btn-icon" />
+      </button>
+      <button id="buyWaterBtn" aria-label="buy water">buy water (5 points)</button>
     </section>
 
     <section id="vase-shelf-section">
       <h2>harvested vase shelf</h2>
-      <div id="vase-shelf"></div>
+      <div id="vaseShelf"></div>
     </section>
 
-    <!-- Flower info popup -->
-    <div id="flower-card-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="flower-card-title" tabindex="-1">
-      <button id="close-flower-card" aria-label="close flower info">✕</button>
-      <h3 id="flower-card-title"></h3>
-      <img id="flower-card-image" src="" alt="" />
-      <p id="flower-card-info"></p>
-    </div>
+    <section id="theme-selector" aria-label="choose theme">
+      <button class="theme-dot" data-theme="pink" aria-label="pink theme" title="pink theme"></button>
+      <button class="theme-dot" data-theme="beige" aria-label="beige theme" title="beige theme"></button>
+      <button class="theme-dot" data-theme="lavender" aria-label="lavender theme" title="lavender theme"></button>
+      <button class="theme-dot" data-theme="blue" aria-label="blue theme" title="blue theme"></button>
+      <button class="theme-dot" data-theme="green" aria-label="green theme" title="green theme"></button>
+    </section>
 
+    <!-- Popups -->
+    <div id="popupMessage" class="popup-message hidden" role="alert" aria-live="assertive"></div>
+
+    <div id="flowerCard" class="popup-message hidden" role="dialog" aria-modal="true" aria-labelledby="flowerCardTitle">
+      <button id="closeFlowerCardBtn" aria-label="close flower info">close ✕</button>
+      <div id="flowerCardContent"></div>
+    </div>
   </div>
 
   <script src="game.js"></script>
