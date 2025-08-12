@@ -147,11 +147,11 @@ function updateGardenImage() {
     }
 
     const growthPercent = Math.min(1, gardenState.waterCount / flower.watersNeeded);
-    let stage = 'seedling';
-    if (growthPercent > 0.75) stage = 'blooming';
-    else if (growthPercent > 0.4) stage = 'growing';
+    let stage = 'seedstage';
+    if (growthPercent > 0.75) stage = 'sproutstage';
+    else if (growthPercent > 0.4) stage = 'midgrowth';
 
-    gardenImage.src = `assets/flowers/${flower.id}-${stage}.png`;
+    gardenImage.src = `assets/flowers/${flowerId}-${stage}.png`;
     gardenImage.alt = `${flower.name} flower at ${stage} stage`;
   }
 }
