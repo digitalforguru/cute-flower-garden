@@ -1,81 +1,76 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" class="pink">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>pixel garden widget</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Garden Mini Pixel Game</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="widget-container" class="pink">
-    <header class="widget-header">
-      <div class="left-hdr">
-        <img id="lotus-icon" src="assets/ui/lotus-flower-icon.png" alt="lotus" />
-        <div id="points-wrap"> <span id="lotus-points">0</span> lotus</div>
-      </div>
+  <div id="game-widget" role="main" aria-label="Garden Mini Pixel Game Widget">
 
-      <div class="center-hdr">
-        <h1 class="title">my lil garden</h1>
-      </div>
-
-      <div class="right-hdr">
-        <div id="streak-wrap">streak: <span id="streak-count">0</span></div>
+    <header>
+      <h1>🌸 garden mini pixel game 🌸</h1>
+      <div id="theme-selector" aria-label="choose theme">
+        <button class="theme-dot" data-theme="pink" aria-label="pink theme" title="pink theme"></button>
+        <button class="theme-dot" data-theme="beige" aria-label="beige theme" title="beige theme"></button>
+        <button class="theme-dot" data-theme="lavender" aria-label="lavender theme" title="lavender theme"></button>
+        <button class="theme-dot" data-theme="blue" aria-label="blue theme" title="blue theme"></button>
+        <button class="theme-dot" data-theme="green" aria-label="green theme" title="green theme"></button>
       </div>
     </header>
 
-    <main class="widget-body">
-      <section id="garden-section">
-        <img id="garden-image" src="assets/garden/vacant.png" alt="garden plot" />
-      </section>
+    <section id="stats">
+      <div><img src="assets/ui/lotus-flower-icon.png" alt="lotus points" class="icon-small" /> <span id="lotus-points">0</span> lotus points</div>
+      <div><img src="assets/ui/watercan.png" alt="daily waters left" class="icon-small" /> <span id="daily-waters-left">30</span> waters left today</div>
+      <div>daily login streak: <span id="daily-login-streak">0</span> days</div>
+    </section>
 
-      <section id="controls">
-        <button id="water-btn" class="control-btn" title="water">
-          <img src="assets/ui/watercan.png" alt="water" class="icon" />
-        </button>
+    <section id="garden-section" aria-label="garden">
+      <h2>garden</h2>
+      <div id="garden" tabindex="0" role="button" aria-pressed="false" aria-label="garden plot, click for info"></div>
+    </section>
 
-        <button id="harvest-btn" class="control-btn" title="harvest">
-          <img src="assets/ui/harvestbasket.png" alt="harvest" class="icon" />
-        </button>
+    <section id="inventory-section" aria-label="seed inventory">
+      <h2>seed inventory</h2>
+      <div id="seed-inventory" role="list" aria-label="your seed inventory"></div>
+    </section>
 
-        <button id="buy-water-btn" class="control-btn small">buy water</button>
+    <section id="seed-journal-section" aria-label="seed journal">
+      <h2>seed journal</h2>
+      <button id="open-seed-journal-btn" aria-haspopup="dialog" aria-controls="seed-journal-popup">open seed journal</button>
+    </section>
 
-        <button id="open-journal-btn" class="control-btn small">seed journal</button>
-      </section>
+    <section id="actions">
+      <button id="water-btn" aria-label="water the plant"><img src="assets/ui/watercan.png" alt="" class="icon-large" /> water</button>
+      <button id="harvest-btn" aria-label="harvest flower"><img src="assets/ui/harvestbasket.png" alt="" class="icon-large" /> harvest</button>
+      <button id="buy-water-btn" aria-label="buy 10 waters for 10 lotus points">buy 10 waters (10 lotus points)</button>
+    </section>
 
-      <section id="inventory-section">
-        <h2>seed inventory</h2>
-        <div id="inventory-grid" class="grid-6"></div>
-      </section>
-
-      <section id="journal-section" class="hidden">
-        <div id="journal-modal" class="modal">
-          <button id="close-journal" class="close">✕</button>
-          <h3>seed journal</h3>
-          <div id="journal-cards" class="journal-cards"></div>
-        </div>
-      </section>
-
-      <section id="vase-section">
-        <h2>harvested vase shelf</h2>
-        <div id="vase-grid" class="grid-6"></div>
-      </section>
-
-      <section id="theme-section" aria-label="themes">
-        <div class="theme-dot" data-theme="pink" title="pink"></div>
-        <div class="theme-dot" data-theme="beige" title="beige"></div>
-        <div class="theme-dot" data-theme="lavender" title="lavender"></div>
-        <div class="theme-dot" data-theme="blue" title="baby blue"></div>
-        <div class="theme-dot" data-theme="green" title="mint green"></div>
-      </section>
-    </main>
-
-    <!-- centered popups inside widget -->
-    <div id="popup" class="popup"></div>
-
-    <div id="flower-card" class="popup">
-      <button id="close-flower-card" class="close">✕</button>
-      <div id="flower-card-content"></div>
+    <!-- Seed Journal Popup -->
+    <div id="seed-journal-popup" role="dialog" aria-modal="true" aria-labelledby="seed-journal-title" class="popup hidden">
+      <h3 id="seed-journal-title">seed journal</h3>
+      <div id="seed-journal" role="list" aria-label="all seeds, click to buy or plant"></div>
+      <button id="close-seed-journal" aria-label="close seed journal popup">close</button>
     </div>
+
+    <!-- Garden Popup -->
+    <div id="garden-popup" role="dialog" aria-modal="true" aria-labelledby="garden-popup-title" class="popup hidden">
+      <h3 id="garden-popup-title">flower info</h3>
+      <div id="garden-popup-content"></div>
+      <button id="close-garden-popup" aria-label="close garden info popup">close</button>
+    </div>
+
+    <!-- Popup Message -->
+    <div id="popup-message" role="alert" class="popup-message hidden"></div>
+
+    <!-- Rainy Day Popup (customized, but hidden by default) -->
+    <div id="rainyday-popup" role="alertdialog" aria-modal="true" aria-labelledby="rainyday-popup-title" class="popup rainy-popup hidden">
+      <h3 id="rainyday-popup-title">rainy day bonus!</h3>
+      <p>you got an extra water and 50 lotus points 🌧️🌸</p>
+      <button id="rainy-popup-close" aria-label="close rainy day popup">ok</button>
+    </div>
+
   </div>
 
   <script src="game.js"></script>
