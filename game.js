@@ -66,7 +66,7 @@ function updateStreak() {
       header.appendChild(streakDisplay);
     }
   }
-  streakDisplay.textContent = `daily login streak: ${state.streak} ⟢`;
+  streakDisplay.textContent = `daily login streak: ${state.streak} 𖤣.𖥧.𖡼.⚘`;
 }function updateLotusPoints() {
   lotusPointsEl.textContent = state.lotusPoints;
   saveState();
@@ -488,8 +488,6 @@ function updateStreak() {
       container.appendChild(streakDisplay);
       header.appendChild(container);
     }
-  }
-  streakDisplay.textContent = `daily login streak: ${state.streak} ⟢`;
 }
 
 // Call updateStreak once here to initialize streak display in header
