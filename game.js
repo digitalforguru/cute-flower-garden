@@ -28,7 +28,80 @@ const themeDots = document.querySelectorAll(".theme-dot");
 const gardenWidget = document.getElementById("garden-widget");
 const vaseWidget = document.getElementById("vase-widget");
 const STORAGE_KEY = "cuteGardenState";
-
+const flowerFacts = {
+  bluebells: [
+    { fact: "Bluebells signal that spring is here!", quote: "Even the tiniest bell can make a sweet sound." },
+    { fact: "Bluebells attract bees to your garden.", quote: "Buzzing friends make life sweeter." },
+    { fact: "Bluebells can thrive in shady areas.", quote: "Even in the shade, bloom bright." },
+    { fact: "They bloom every April in forests.", quote: "Patience brings beauty." },
+  ],
+  lily: [
+    { fact: "Lilies symbolize purity and renewal.", quote: "Bloom with grace, even in small spaces." },
+    { fact: "Lilies come in many colors.", quote: "Variety is the spice of life." },
+    { fact: "Some lilies are fragrant and attract butterflies.", quote: "Spread your sweetness wherever you go." },
+    { fact: "Lilies can grow from bulbs.", quote: "Good things take root before they rise." },
+  ],
+  marigold: [
+    { fact: "Marigolds are known to protect gardens from pests.", quote: "Shine bright, just like a golden sun." },
+    { fact: "Marigolds bloom all summer long.", quote: "Keep shining, even in heat." },
+    { fact: "They can repel certain insects naturally.", quote: "A little defense goes a long way." },
+    { fact: "Marigolds are easy to grow.", quote: "Simple things can be magnificent." },
+  ],
+  daisy: [
+    { fact: "Daisies open their petals during the day and close at night.", quote: "Keep your face to the sunshine." },
+    { fact: "Daisies symbolize innocence.", quote: "Stay pure, stay bright." },
+    { fact: "They can grow in almost any soil.", quote: "Adapt and flourish." },
+    { fact: "Daisies are edible!", quote: "Delightful surprises await." },
+  ],
+  sunflower: [
+    { fact: "Sunflowers can grow over 10 feet tall!", quote: "Stand tall, follow the light." },
+    { fact: "They turn to face the sun.", quote: "Seek the bright side." },
+    { fact: "Sunflower seeds are nutritious.", quote: "Power comes in small packages." },
+    { fact: "Sunflowers attract birds.", quote: "Share your beauty with the world." },
+  ],
+  rose: [
+    { fact: "Roses come in over 300 species worldwide.", quote: "A little love blooms in every heart." },
+    { fact: "They symbolize love and passion.", quote: "Bloom with feeling." },
+    { fact: "Roses have thorns to protect themselves.", quote: "Stand strong and beautiful." },
+    { fact: "Some roses can live for decades.", quote: "Longevity comes to those who nurture." },
+  ],
+  snapdragons: [
+    { fact: "Snapdragons can “snap” open when squeezed gently.", quote: "Life’s little surprises are magical." },
+    { fact: "They come in vibrant colors.", quote: "Be bold and bright." },
+    { fact: "Snapdragons attract hummingbirds.", quote: "Share your sweetness." },
+    { fact: "They can bloom in cooler weather.", quote: "Brave the chill, shine anyway." },
+  ],
+  peonies: [
+    { fact: "Peonies can live for over 100 years.", quote: "Take your time to blossom beautifully." },
+    { fact: "They have a lovely fragrance.", quote: "Sweetness fills the air around you." },
+    { fact: "Peonies are often used in wedding bouquets.", quote: "Celebrate life with blooms." },
+    { fact: "They bloom in late spring.", quote: "Timing is everything." },
+  ],
+  pansies: [
+    { fact: "Pansies’ petals resemble a human face!", quote: "Smile, even at the smallest things." },
+    { fact: "They come in a rainbow of colors.", quote: "Embrace your true colors." },
+    { fact: "Pansies are hardy flowers.", quote: "Stay resilient through changes." },
+    { fact: "They bloom in cool seasons.", quote: "Cool days can still be beautiful." },
+  ],
+  cherryblossom: [
+    { fact: "Cherry blossoms only bloom for a few weeks each spring.", quote: "Cherish every fleeting moment." },
+    { fact: "They symbolize renewal and beauty.", quote: "Fresh starts are magical." },
+    { fact: "Their petals fall like snow.", quote: "Even endings can be beautiful." },
+    { fact: "They attract pollinators.", quote: "Life is better shared." },
+  ],
+  lavender: [
+    { fact: "Lavender is used to calm and relax the mind.", quote: "Breathe in peace, exhale joy." },
+    { fact: "It can be made into essential oils.", quote: "Small drops bring big comfort." },
+    { fact: "Lavender blooms in summer.", quote: "Warm days, cool scents." },
+    { fact: "It attracts bees and butterflies.", quote: "Friendship blooms in nature." },
+  ],
+  tulip: [
+    { fact: "Tulips were once more valuable than gold in Holland!", quote: "Even simple things can hold great value." },
+    { fact: "They come in many vibrant colors.", quote: "Be bright and unapologetic." },
+    { fact: "Tulips grow from bulbs.", quote: "Strong roots bring strong growth." },
+    { fact: "They bloom in spring.", quote: "Fresh starts bring beauty." },
+  ],
+};
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
@@ -500,9 +573,38 @@ updateStreak();
 gardenSection.addEventListener("click", () => {
   if (!state.currentFlower) {
     showPopupMessage("plant seed first!");
-  } else {
-    openSeedJournal(); // Opens flower info (seed journal) on garden click
+    return;
   }
+
+  const factData = getStageFact(state.currentFlower, state.flowerStage);
+
+  if (!factData) return;
+
+  seedJournalCard.innerHTML = `
+    <div class="flower-fact-card">
+      <h3>${state.currentFlower}</h3>
+      <p>⋆˚✿˖° ${factData.fact}</p>
+      <p>-`✮´- "${factData.quote}"</p>
+      <p>💧 Waters until harvest: ${3 - ["seedstage","sproutstage","midgrowth"].indexOf(state.flowerStage)}</p>
+    </div>                         
+  `;
+function getStageFact(flower, stage) {
+  if (!flower || !flowerFacts[flower]) return null;
+
+  const stageMap = {
+    seedstage: 0,
+    sproutstage: 1,
+    midgrowth: 2,
+    matureflower: 3
+  };
+  
+  const index = stageMap[stage] ?? 0;
+  return flowerFacts[flower][index];
+}
+  seedJournalPopup.classList.remove("hidden");
+  seedJournalBtn.setAttribute("aria-expanded", "true");
+  seedJournalPopup.focus();
+});
 });
 
 // Water flower handler update: add daily water limit check and reset logic
