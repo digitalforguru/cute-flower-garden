@@ -50,6 +50,24 @@ function loadState() {
     }
   }
 }
+function updateStreak() {
+  streakCountEl.textContent = state.streak;
+
+  // Also update streak display near lotus points in header
+  let streakDisplay = document.querySelector(".streak-display");
+  if (!streakDisplay) {
+    streakDisplay = document.createElement("span");
+    streakDisplay.className = "streak-display";
+    streakDisplay.style.marginLeft = "0.6rem";
+    streakDisplay.style.fontSize = "0.8rem";
+    streakDisplay.style.color = "var(--primary-color)";
+    
+    const header = document.querySelector(".widget-header");
+    if (header) {
+      header.appendChild(streakDisplay);
+    }
+  }
+  streakDisplay.textContent = `daily login streak: ${state.streak} 𖤣.𖥧.𖡼.⚘`;
 }function updateLotusPoints() {
   lotusPointsEl.textContent = state.lotusPoints;
   saveState();
@@ -428,13 +446,6 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-// Initialize UI with default state
-updateLotusPoints();
-updateStreak();
-updateGardenImage();
-updateSeedInventory();
-updateVaseCollection();
-
 // --- ADDITIONS & UPDATES ONLY ---
 // Variables & DOM (add this for garden click text handler and streak display container)
 const gardenSection = document.getElementById("garden-section");
@@ -452,31 +463,6 @@ function resetDailyWaterIfNeeded() {
     lastWaterDate = today;
   }
 }
-
-// Update streak: add function to update display, move streak count near lotus points
-function updateStreak() {
-  streakCountEl.textContent = state.streak;
-  // Also update streak display near lotus points in header (create/update span if missing)
-  let streakDisplay = document.querySelector(".streak-display");
-  if (!streakDisplay) {
-    streakDisplay = document.createElement("span");
-    streakDisplay.className = "streak-display";
-    // Insert streak display after lotus points in header
-    const header = document.querySelector(".widget-header");
-    const lotusPointsDiv = document.getElementById("lotus-points");
-    if (header && lotusPointsDiv) {
-      const container = document.createElement("div");
-      container.className = "header-right";
-      container.appendChild(lotusPointsDiv);
-      container.appendChild(streakDisplay);
-      header.appendChild(container);
-    }
-  }
-  streakDisplay.textContent = `daily login streak: ${state.streak} 𖤣.𖥧.𖡼.⚘`;
-}
-
-// Call updateStreak once here to initialize streak display in header
-updateStreak();
 
 // Garden section click handler for flower info or alert
 gardenSection.addEventListener("click", () => {
