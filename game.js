@@ -127,10 +127,8 @@ function updateVaseCollection() {
 function showPopupMessage(message) {
   popupMessage.textContent = message;
   popupMessage.classList.add("visible");
-  popupMessage.classList.remove("hidden");
   setTimeout(() => {
     popupMessage.classList.remove("visible");
-    popupMessage.classList.add("hidden");
   }, 2500);
 }
 
@@ -249,90 +247,81 @@ themeDots.forEach(dot => {
 // Seed journal navigation variables
 let currentJournalIndex = 0;
 
-// Function to open seed journal popup
 function openSeedJournal() {
-  if (Object.values(state.seedInventory).every(count => count === 0)) {
-    showPopupMessage("no seeds in inventory to view");
-    return;
-  }
-  currentJournalIndex = 0;
-  renderSeedJournalCard(currentJournalIndex);
   seedJournalPopup.classList.remove("hidden");
-  seedJournalPopup.setAttribute("aria-expanded", "true");
   seedJournalBtn.setAttribute("aria-expanded", "true");
+  currentJournalIndex = 0;
+  updateSeedJournalCard();
   seedJournalPopup.focus();
 }
 
-// Function to close seed journal popup
 function closeSeedJournal() {
   seedJournalPopup.classList.add("hidden");
-  seedJournalPopup.setAttribute("aria-expanded", "false");
   seedJournalBtn.setAttribute("aria-expanded", "false");
   seedJournalBtn.focus();
 }
 
-// Render seed journal card info
-function renderSeedJournalCard(index) {
-  const seedNames = Object.keys(state.seedInventory).filter(seed => state.seedInventory[seed] > 0);
-  if (seedNames.length === 0) {
-    seedJournalCard.innerHTML = "<p>no seeds in journal</p>";
-    return;
-  }
-  const seed = seedNames[index];
-  const count = state.seedInventory[seed];
-
+function updateSeedJournalCard() {
+  const flower = seeds[currentJournalIndex];
+  const imgSrc = `assets/seedjournal/${flower}-seed.png`;
+  const isLocked = state.seedInventory[flower] === 0 && !state.harvestedFlowers.includes(flower);
   seedJournalCard.innerHTML = `
-    <img src="assets/seedbags/${seed}-seedbag.png" alt="${seed} seed bag" />
-    <p><strong>${seed}</strong></p>
-    <p>Quantity: ${count}</p>
-    <p>Click a seed in inventory to plant it in the garden.</p>
+    <img src="${isLocked ? "assets/seedjournal/locked-seed.png" : imgSrc}" alt="${flower} seed journal card" />
+    <p>${flower}</p>
+    <p>${isLocked ? "locked" : "unlocked"}</p>
+    <p>cost: 5 lotus points</p>
   `;
 }
 
-// Navigate to previous seed in journal
-function prevSeed() {
-  const seedNames = Object.keys(state.seedInventory).filter(seed => state.seedInventory[seed] > 0);
-  if (seedNames.length === 0) return;
-
-  currentJournalIndex = (currentJournalIndex - 1 + seedNames.length) % seedNames.length;
-  renderSeedJournalCard(currentJournalIndex);
+function prevSeedJournal() {
+  if (currentJournalIndex > 0) {
+    currentJournalIndex--;
+    updateSeedJournalCard();
+  }
 }
 
-// Navigate to next seed in journal
-function nextSeed() {
-  const seedNames = Object.keys(state.seedInventory).filter(seed => state.seedInventory[seed] > 0);
-  if (seedNames.length === 0) return;
-
-  currentJournalIndex = (currentJournalIndex + 1) % seedNames.length;
-  renderSeedJournalCard(currentJournalIndex);
+function nextSeedJournal() {
+  if (currentJournalIndex < seeds.length - 1) {
+    currentJournalIndex++;
+    updateSeedJournalCard();
+  }
 }
 
-// Buy seeds popup controls
-const buySeedsList = document.getElementById("buy-seeds-list");
+// Buy seeds popup (simplified example)
+function openBuySeedsPopup() {
+  buySeedsPopup.classList.remove("hidden");
+  buySeedListBtn.setAttribute("aria-expanded", "true");
+  buySeedsPopup.focus();
+  renderBuySeedsList();
+}
 
-// Populate buy seeds list
-function populateBuySeedsList() {
-  buySeedsList.innerHTML = "";
+function closeBuySeedsPopup() {
+  buySeedsPopup.classList.add("hidden");
+  buySeedListBtn.setAttribute("aria-expanded", "false");
+  buySeedListBtn.focus();
+}
+
+const buySeedsListEl = document.getElementById("buy-seeds-list");
+
+function renderBuySeedsList() {
+  buySeedsListEl.innerHTML = "";
   seeds.forEach(seed => {
     const li = document.createElement("li");
-    li.setAttribute("tabindex", "0");
-    li.setAttribute("role", "option");
-    li.textContent = `${seed} seed - 5 points`;
+    li.textContent = `${seed} - 5 lotus points`;
+    li.tabIndex = 0;
     li.dataset.seed = seed;
-    buySeedsList.appendChild(li);
+    buySeedsListEl.appendChild(li);
   });
 }
 
-// Buy seed handler when clicking in buy seeds popup
-buySeedsList.addEventListener("click", (e) => {
-  const li = e.target.closest("li");
-  if (!li) return;
-  const seed = li.dataset.seed;
-  buySeed(seed);
+// Buy seeds click handler
+buySeedsListEl.addEventListener("click", e => {
+  if (e.target.tagName === "LI") {
+    const seed = e.target.dataset.seed;
+    buySeed(seed);
+  }
 });
-
-// Keyboard support for buying seeds (Enter or Space)
-buySeedsList.addEventListener("keydown", (e) => {
+buySeedsListEl.addEventListener("keydown", e => {
   if ((e.key === "Enter" || e.key === " ") && e.target.tagName === "LI") {
     e.preventDefault();
     const seed = e.target.dataset.seed;
@@ -340,10 +329,9 @@ buySeedsList.addEventListener("keydown", (e) => {
   }
 });
 
-// Buy a seed if enough lotus points
 function buySeed(seedName) {
   if (state.lotusPoints < 5) {
-    showPopupMessage("need 5 points to buy seed 🌱");
+    showPopupMessage("need 5 lotus points to buy seed");
     return;
   }
   state.lotusPoints -= 5;
@@ -351,84 +339,159 @@ function buySeed(seedName) {
   updateLotusPoints();
   updateSeedInventory();
   showPopupMessage(`bought 1 ${seedName} seed 🌱`);
+  closeBuySeedsPopup();
 }
 
-// Open buy seeds popup
-function openBuySeedsPopup() {
-  populateBuySeedsList();
-  buySeedsPopup.classList.remove("hidden");
-  buySeedsPopup.setAttribute("aria-expanded", "true");
-  buySeedListBtn.setAttribute("aria-expanded", "true");
-  buySeedsPopup.focus();
-}
-
-// Close buy seeds popup
-function closeBuySeedsPopup() {
-  buySeedsPopup.classList.add("hidden");
-  buySeedsPopup.setAttribute("aria-expanded", "false");
-  buySeedListBtn.setAttribute("aria-expanded", "false");
-  buySeedListBtn.focus();
-}
-
-// Event listeners for popup buttons
-seedJournalBtn.addEventListener("click", () => {
-  if (seedJournalPopup.classList.contains("hidden")) {
-    openSeedJournal();
-  } else {
-    closeSeedJournal();
-  }
-});
-
-buySeedListBtn.addEventListener("click", () => {
-  if (buySeedsPopup.classList.contains("hidden")) {
-    openBuySeedsPopup();
-  } else {
-    closeBuySeedsPopup();
-  }
-});
-
+// Event listeners for popups close buttons
 closeJournalBtn.addEventListener("click", closeSeedJournal);
 closeBuySeedsBtn.addEventListener("click", closeBuySeedsPopup);
 
-// Keyboard accessibility: close popups on Escape key
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") {
-    if (!seedJournalPopup.classList.contains("hidden")) {
-      closeSeedJournal();
-    }
-    if (!buySeedsPopup.classList.contains("hidden")) {
-      closeBuySeedsPopup();
-    }
-  }
+// Open popups buttons
+seedJournalBtn.addEventListener("click", () => {
+  if (seedJournalPopup.classList.contains("hidden")) openSeedJournal();
+  else closeSeedJournal();
+});
+buySeedListBtn.addEventListener("click", () => {
+  if (buySeedsPopup.classList.contains("hidden")) openBuySeedsPopup();
+  else closeBuySeedsPopup();
 });
 
 // Seed journal navigation buttons
-prevSeedBtn.addEventListener("click", prevSeed);
-nextSeedBtn.addEventListener("click", nextSeed);
+prevSeedBtn.addEventListener("click", prevSeedJournal);
+nextSeedBtn.addEventListener("click", nextSeedJournal);
 
-// Keyboard support for prev/next buttons (Enter or Space)
-prevSeedBtn.addEventListener("keydown", (e) => {
-  if (e.key === "Enter" || e.key === " ") {
-    e.preventDefault();
-    prevSeed();
-  }
-});
-nextSeedBtn.addEventListener("keydown", (e) => {
-  if (e.key === "Enter" || e.key === " ") {
-    e.preventDefault();
-    nextSeed();
+// Keyboard navigation for popups ESC to close
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    if (!seedJournalPopup.classList.contains("hidden")) closeSeedJournal();
+    if (!buySeedsPopup.classList.contains("hidden")) closeBuySeedsPopup();
   }
 });
 
-// Initial setup
+// Initialize UI with default state
 updateLotusPoints();
 updateStreak();
 updateGardenImage();
 updateSeedInventory();
 updateVaseCollection();
 
-// Set initial theme aria states properly
-themeDots.forEach(dot => {
-  dot.setAttribute("aria-checked", dot.classList.contains("active") ? "true" : "false");
-  dot.tabIndex = dot.classList.contains("active") ? 0 : -1;
+// --- ADDITIONS & UPDATES ONLY ---
+// Variables & DOM (add this for garden click text handler and streak display container)
+const gardenSection = document.getElementById("garden-section");
+const gardenClickText = document.createElement("div");
+gardenClickText.id = "garden-click-text";
+gardenClickText.textContent = "click to see flower details";
+gardenSection.insertAdjacentElement("afterend", gardenClickText);
+
+// Track daily water usage & last water date for reset
+let dailyWaterCount = 0;
+let lastWaterDate = null;
+
+// Helper: reset daily water count if date changed
+function resetDailyWaterIfNeeded() {
+  const today = new Date().toDateString();
+  if (lastWaterDate !== today) {
+    dailyWaterCount = 0;
+    lastWaterDate = today;
+  }
+}
+
+// Update streak: add function to update display, move streak count near lotus points
+function updateStreak() {
+  streakCountEl.textContent = state.streak;
+  // Also update streak display near lotus points in header (create/update span if missing)
+  let streakDisplay = document.querySelector(".streak-display");
+  if (!streakDisplay) {
+    streakDisplay = document.createElement("span");
+    streakDisplay.className = "streak-display";
+    // Insert streak display after lotus points in header
+    const header = document.querySelector(".widget-header");
+    const lotusPointsDiv = document.getElementById("lotus-points");
+    if (header && lotusPointsDiv) {
+      const container = document.createElement("div");
+      container.className = "header-right";
+      container.appendChild(lotusPointsDiv);
+      container.appendChild(streakDisplay);
+      header.appendChild(container);
+    }
+  }
+  streakDisplay.textContent = `daily login streak: ${state.streak} ⟢`;
+}
+
+// Call updateStreak once here to initialize streak display in header
+updateStreak();
+
+// Garden section click handler for flower info or alert
+gardenSection.addEventListener("click", () => {
+  if (!state.currentFlower) {
+    showPopupMessage("plant seed first!");
+  } else {
+    openSeedJournal(); // Opens flower info (seed journal) on garden click
+  }
 });
+
+// Water flower handler update: add daily water limit check and reset logic
+function waterFlower() {
+  resetDailyWaterIfNeeded();
+  if (!state.currentFlower) {
+    showPopupMessage("plant a seed first 🌱");
+    return;
+  }
+  if (dailyWaterCount >= 25) {
+    showPopupMessage("daily watering limit reached 💧");
+    return;
+  }
+  const stages = ["seedstage", "sproutstage", "midgrowth", "matureflower"];
+  let currentIndex = stages.indexOf(state.flowerStage);
+  if (currentIndex < stages.length - 1) {
+    state.flowerStage = stages[currentIndex + 1];
+    updateGardenImage();
+    showPopupMessage(`your ${state.currentFlower} grew! 🌸`);
+    dailyWaterCount++;
+  } else {
+    showPopupMessage("flower is already mature 🌼");
+  }
+}
+
+// Buy seed cost increases by seed index (easy to hard flowers cost more)
+function getSeedCost(seedName) {
+  const index = seeds.indexOf(seedName);
+  if (index === -1) return 5; // fallback
+  return 5 + index * 2; // base 5 + 2 points per seed index step
+}
+
+// Update buy seeds popup rendering with dynamic costs
+function renderBuySeedsList() {
+  buySeedsListEl.innerHTML = "";
+  seeds.forEach(seed => {
+    const cost = getSeedCost(seed);
+    const li = document.createElement("li");
+    li.textContent = `${seed} - ${cost} lotus points`;
+    li.tabIndex = 0;
+    li.dataset.seed = seed;
+    buySeedsListEl.appendChild(li);
+  });
+}
+
+// Buy seed handler update to use dynamic cost
+function buySeed(seedName) {
+  const cost = getSeedCost(seedName);
+  if (state.lotusPoints < cost) {
+    showPopupMessage(`need ${cost} lotus points to buy seed`);
+    return;
+  }
+  state.lotusPoints -= cost;
+  state.seedInventory[seedName]++;
+  updateLotusPoints();
+  updateSeedInventory();
+  showPopupMessage(`bought 1 ${seedName} seed 🌱`);
+  closeBuySeedsPopup();
+}
+
+// Initialize UI and streak on page load
+resetDailyWaterIfNeeded();
+updateLotusPoints();
+updateStreak();
+updateGardenImage();
+updateSeedInventory();
+updateVaseCollection();
