@@ -39,11 +39,12 @@
       <div id="garden-info" class="info-text" style="position:absolute; bottom:6px; left:6px; font-size:10px; user-select:none; pointer-events:none;">
         click to see flower details
       </div>
-    </section>
-    <div id="flower-fact-card" class="hidden">
-  <p id="flower-fact-text"></p>
-  <p id="flower-waters-text"></p>
-  <p id="flower-quote-text"></p>
+<!-- Seed Journal / Flower Fact Popup -->
+<div id="seed-journal-popup" class="hidden" tabindex="-1" aria-hidden="true">
+  <button id="close-journal-btn" aria-label="Close">✕</button>
+  <div id="seed-journal-card">
+    <!-- Flower fact content will be injected here by JS -->
+  </div>
 </div>
     <!-- Buttons column on the right -->
     <div style="display: flex; flex-direction: column; justify-content: flex-start; gap: 1rem;">
