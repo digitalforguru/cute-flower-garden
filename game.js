@@ -378,10 +378,7 @@ updateVaseCollection();
 // --- ADDITIONS & UPDATES ONLY ---
 // Variables & DOM (add this for garden click text handler and streak display container)
 const gardenSection = document.getElementById("garden-section");
-const gardenClickText = document.createElement("div");
-gardenClickText.id = "garden-click-text";
-gardenClickText.textContent = "click to see flower details";
-gardenSection.insertAdjacentElement("afterend", gardenClickText);
+
 
 // Track daily water usage & last water date for reset
 let dailyWaterCount = 0;
