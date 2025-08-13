@@ -1,6 +1,3 @@
-yes combine
-fully functionally version 
-
 // Variables
 const lotusPointsEl = document.getElementById("lotus-points-value");
 const gardenImage = document.getElementById("garden-image");
@@ -30,51 +27,7 @@ const vaseCollectionEl = document.getElementById("vase-collection");
 const themeDots = document.querySelectorAll(".theme-dot");
 const gardenWidget = document.getElementById("garden-widget");
 const vaseWidget = document.getElementById("vase-widget");
-const STORAGE_KEY = "cuteGardenState";
 
-function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-function loadState() {
-  const savedState = localStorage.getItem(STORAGE_KEY);
-  if (savedState) {
-    const parsed = JSON.parse(savedState);
-
-    // Copy stored properties back into the state object
-    Object.assign(state, parsed);
-
-    // For nested objects like seedInventory, deep copy might be needed if mutated
-    if (parsed.seedInventory) {
-      state.seedInventory = {...parsed.seedInventory};
-    }
-    if (parsed.harvestedFlowers) {
-      state.harvestedFlowers = [...parsed.harvestedFlowers];
-    }
-  }
-}
-function updateStreak() {
-  streakCountEl.textContent = state.streak;
-
-  // Also update streak display near lotus points in header
-  let streakDisplay = document.querySelector(".streak-display");
-  if (!streakDisplay) {
-    streakDisplay = document.createElement("span");
-    streakDisplay.className = "streak-display";
-    streakDisplay.style.marginLeft = "0.6rem";
-    streakDisplay.style.fontSize = "0.8rem";
-    streakDisplay.style.color = "var(--primary-color)";
-    
-    const header = document.querySelector(".widget-header");
-    if (header) {
-      header.appendChild(streakDisplay);
-    }
-  }
-  streakDisplay.textContent = `daily login streak: ${state.streak} ⟢`;
-}function updateLotusPoints() {
-  lotusPointsEl.textContent = state.lotusPoints;
-  saveState();
-}
 // Asset & Data Setup
 const seeds = [
   "bluebells", "lily", "marigold", "daisy", "sunflower", "rose",
@@ -85,51 +38,17 @@ const seeds = [
 const state = {
   lotusPoints: 20,
   streak: 0,
-  currentFlower: null,
-  flowerStage: "seedstage",
+  currentFlower: null, // string of flower name
+  flowerStage: "seedstage", // seedstage, sproutstage, midgrowth, matureflower
   harvestedFlowers: [],
   seedInventory: {},
   seedJournalIndex: 0,
-  theme: "pink",
-
-  lastLoginDate: null  // <-- add this here
+  theme: "pink"
 };
 
 // Initialize seed inventory with 0 seeds
 seeds.forEach(seed => state.seedInventory[seed] = 0);
-function updateDailyStreak() {
-  const today = new Date().toDateString();
 
-  // First-time login or no previous date saved
-  if (!state.lastLoginDate) {
-    state.streak = 1;
-    state.lastLoginDate = today;
-    saveState();
-    updateStreak();
-    return;
-  }
-
-  if (state.lastLoginDate === today) {
-    // Already logged in today, do nothing
-    return;
-  }
-
-  const lastDate = new Date(state.lastLoginDate);
-  const diffTime = new Date(today) - lastDate;
-  const diffDays = diffTime / (1000 * 60 * 60 * 24);
-
-  if (diffDays === 1) {
-    // Consecutive day: increment streak
-    state.streak++;
-  } else {
-    // Missed day(s): reset streak
-    state.streak = 1;
-  }
-
-  state.lastLoginDate = today;
-  saveState();
-  updateStreak();
-}
 // Utility function: update lotus points display
 function updateLotusPoints() {
   lotusPointsEl.textContent = state.lotusPoints;
@@ -459,7 +378,10 @@ updateVaseCollection();
 // --- ADDITIONS & UPDATES ONLY ---
 // Variables & DOM (add this for garden click text handler and streak display container)
 const gardenSection = document.getElementById("garden-section");
-
+const gardenClickText = document.createElement("div");
+gardenClickText.id = "garden-click-text";
+gardenClickText.textContent = "click to see flower details";
+gardenSection.insertAdjacentElement("afterend", gardenClickText);
 
 // Track daily water usage & last water date for reset
 let dailyWaterCount = 0;
@@ -566,10 +488,8 @@ function buySeed(seedName) {
   closeBuySeedsPopup();
 }
 
-loadState();       // Load saved state first
-updateDailyStreak();  // Update streak based on last login date
-
-// Then update UI
+// Initialize UI and streak on page load
+resetDailyWaterIfNeeded();
 updateLotusPoints();
 updateStreak();
 updateGardenImage();
