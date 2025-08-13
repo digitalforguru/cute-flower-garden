@@ -30,19 +30,19 @@ body, html {
 
 /* Garden Widget */
 #garden-widget {
-  width: 300px;
-  height: 300px;
+  width: 320px;
+  padding: 1rem;
   border-radius: 12px;
   background: var(--background-color, #fff8f9);
   box-shadow: 0 0 10px rgba(231, 84, 128, 0.4);
   border: 2px solid var(--primary-color, #e75480);
   display: flex;
   flex-direction: column;
-  padding: 0rem;
   color: var(--primary-color, #e75480);
   font-weight: 300;
   letter-spacing: 0.02em;
   position: relative;
+  user-select: none;
 }
 
 /* Vase widget on right side, vertical height = garden height */
@@ -59,7 +59,6 @@ body, html {
   letter-spacing: 0.02em;
   display: flex;
   flex-direction: column;
-  user-select: none;
   overflow-y: auto;
 }
 
@@ -68,7 +67,6 @@ body, html {
   font-size: 0.5rem;
   margin-bottom: 0.4rem;
   text-align: center;
-  user-select: none;
 }
 
 /* Vase collection row */
@@ -78,7 +76,6 @@ body, html {
   gap: 6px;
   justify-content: center;
   overflow-y: auto;
-  user-select: none;
 }
 
 /* Vase items */
@@ -87,17 +84,14 @@ body, html {
   height: 64px;
   object-fit: contain;
   border-radius: 6px;
-  user-select: none;
 }
 
 /* Widget header */
 .widget-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   font-weight: 200;
   font-size: 0.75rem;
   user-select: none;
+  margin-bottom: 0.2rem;
 }
 
 /* Points display */
@@ -113,132 +107,68 @@ body, html {
   pointer-events: none;
 }
 
-/* Main area inside garden widget */
+/* Main area inside garden widget: vertical stack */
 .widget-main {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 1rem;
   user-select: none;
 }
 
-/* Garden area square */
+/* Container for garden and buttons side by side */
+#garden-buttons-wrapper {
+  display: flex;
+  gap: 1rem;
+  user-select: none;
+  align-items: flex-start;
+}
+
+/* Garden section (dotted box) */
 #garden-section {
-  width: 55%;
-  aspect-ratio: 1 / 1;
+  width: 180px;
+  height: 180px;
   border: 2px dashed var(--primary-color, #e75480);
   border-radius: 10px;
   background: #fff0f3;
   cursor: pointer;
-  position: relative;
   overflow: hidden;
-  user-select: none;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
+/* Garden image fills garden section */
 #garden-image {
-  width: 55%;
-  height: 55%;
+  width: 90%;
+  height: 90%;
   object-fit: contain;
-  user-select: none;
   pointer-events: none;
+  user-select: none;
 }
 
-/* Seed inventory */
-#seed-inventory-section {
-  background: #fff0f3;
-  border-radius: 10px;
-  padding: 0.4rem 0.6rem;
-  color: var(--primary-color, #e75480);
-  font-weight: 300;
-  font-size: 11px;
-  min-height: 75px;
+/* Buttons column to the right of garden */
+.button-col {
   display: flex;
   flex-direction: column;
-  user-select: none;
-}
-
-#seed-inventory-section h2 {
-  font-size: 0.5rem;
-  margin-bottom: 0.2rem;
-  user-select: none;
-}
-
-.info-text {
-  font-size: 10px;
-  opacity: 0.7;
-  margin-bottom: 0.4rem;
-  user-select: none;
-}
-
-/* Seeds container */
-#seed-inventory {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  user-select: none;
-  min-height: 36px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-}
-
-.seed-item {
-  width: 44px;
-  cursor: pointer;
-  border-radius: 6px;
-  background: #f9d9e1;
-  box-shadow: inset 0 0 3px #d16b81;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2px 2px 6px 2px;
-  transition: background 0.3s ease;
-  user-select: none;
-  font-weight: 700;
-  font-size: 9px;
-  color: var(--primary-color, #e75480);
-}
-
-.seed-item:hover,
-.seed-item:focus {
-  background: var(--primary-color, #e75480);
-  color: white;
-  outline: none;
-}
-
-.seed-item img {
-  width: 50px;
-  height: 50px;
-  user-select: none;
-  pointer-events: none;
-  margin-bottom: 2px;
-}
-
-.seed-name {
-  white-space: nowrap;
-  text-align: center;
-  user-select: none;
-}
-
-/* No seeds yet text */
-.no-seeds {
-  margin-top: 4px;
-  font-weight: 300;
-  font-size: 11px;
-  color: var(--primary-color, #e75480);
-  text-align: center;
-  white-space: nowrap;
-  user-select: none;
-}
-
-/* Buttons row container */
-.button-row {
-  display: flex;
-  justify-content: space-around;
   gap: 0.6rem;
+  width: 80px;
   user-select: none;
+}
+
+/* Main buttons stacked vertically */
+.main-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+/* Smaller buttons (seed journal, buy seeds) */
+.small-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto; /* push to bottom */
+  gap: 0.3rem;
 }
 
 /* Buttons styling */
@@ -266,18 +196,98 @@ button:focus {
   outline: none;
 }
 
-.button-label {
-  font-size: 10px;
-  user-select: none;
-  margin-top: 4px;
+/* Smaller buttons style */
+button.small-btn {
+  width: 38px;
+  font-size: 9px;
+  padding: 0.3rem 0.4rem;
 }
 
-/* Action icons bigger */
-button img.icon-large {
-  width: 36px;
-  height: 36px;
+/* Seed inventory section full width at bottom */
+#seed-inventory-section {
+  width: 100%;
+  height: 70px;
+  background: #fff0f3;
+  border-radius: 10px;
+  padding: 0.3rem 0.6rem;
+  color: var(--primary-color, #e75480);
+  font-weight: 300;
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  overflow-x: auto;
+  box-sizing: border-box;
+  margin-top: 1rem;
+}
+
+/* Seed inventory container: horizontal scroll */
+#seed-inventory {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  min-height: 50px;
+}
+
+/* Seed items styling */
+.seed-item {
+  width: 44px;
+  cursor: pointer;
+  border-radius: 6px;
+  background: #f9d9e1;
+  box-shadow: inset 0 0 3px #d16b81;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2px 2px 4px 2px;
+  transition: background 0.3s ease;
+  font-weight: 700;
+  font-size: 8px;
+  color: var(--primary-color, #e75480);
+  user-select: none;
+}
+
+.seed-item:hover,
+.seed-item:focus {
+  background: var(--primary-color, #e75480);
+  color: white;
+  outline: none;
+}
+
+.seed-item img {
+  width: 40px;
+  height: 40px;
   user-select: none;
   pointer-events: none;
+  margin-bottom: 2px;
+}
+
+/* Seed item text */
+.seed-name {
+  white-space: nowrap;
+  text-align: center;
+  user-select: none;
+}
+
+/* No seeds yet text */
+.no-seeds {
+  margin-top: 4px;
+  font-weight: 300;
+  font-size: 11px;
+  color: var(--primary-color, #e75480);
+  text-align: center;
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Buttons row container (if used elsewhere) */
+.button-row {
+  display: flex;
+  justify-content: space-around;
+  gap: 0.6rem;
+  user-select: none;
 }
 
 /* Daily streak */
@@ -303,7 +313,6 @@ button img.icon-large {
   box-shadow: 0 0 15px rgba(231, 84, 128, 0.8);
   transform: translate(-50%, -50%);
   z-index: 1100;
-  user-select: none;
   color: var(--primary-color, #e75480);
   font-weight: 300;
   font-size: 12px;
@@ -311,6 +320,7 @@ button img.icon-large {
   flex-direction: column;
   align-items: center;
   outline: none;
+  user-select: none;
 }
 
 .popup.hidden {
@@ -407,7 +417,7 @@ button img.icon-large {
   border-radius: 12px;
   box-shadow: 0 0 12px rgba(231, 84, 128, 0.9);
   transform: translate(-50%, -50%);
-    user-select: none;
+  user-select: none;
   z-index: 1200;
   pointer-events: none;
   opacity: 0;
@@ -461,7 +471,6 @@ button img.icon-large {
 }
 
 /* Theme colors applied to garden and vase widgets using CSS variables */
-
 .theme-pink {
   --primary-color: #e75480;
   --background-color: #fff8f9;
@@ -514,183 +523,4 @@ button:focus-visible,
 #vase-collection::-webkit-scrollbar-track,
 #buy-seeds-list::-webkit-scrollbar-track {
   background: transparent;
-}
-/* Move content closer to the header inside garden widget */
-
-#garden-widget {
-  padding-top: 0.5rem; /* reduce top padding from 1rem to 0.5rem */
-}
-
-.widget-header {
-  margin-bottom: 0.2rem; /* reduce spacing below header */
-}
-
-.widget-main {
-  gap: 0.4rem; /* reduce gap between main sections */
-}
-
-/* Optional: Reduce margin-bottom on seed inventory section title */
-#seed-inventory-section h2 {
-  margin-bottom: 0.1rem;
-}
-
-/* Optional: Reduce vertical padding in seed inventory section */
-#seed-inventory-section {
-  padding-top: 0.3rem;
-  padding-bottom: 0.3rem;
-}
-/* === Layout updates to move contents up, align seed inventory right of garden section, and reposition theme selector === */
-
-/* Make garden widget main area vertical (default column) */
-.widget-main {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 0.8rem !important;
-  user-select: none;
-}
-
-/* Garden section (dotted box) stays as a square */
-#garden-section {
-  width: 65% !important;
-  aspect-ratio: 1 / 1 !important; /* keeps square shape */
-  border: 2px dashed var(--primary-color, #e75480) !important;
-  border-radius: 10px !important;
-  background: #fff0f3 !important;
-  cursor: pointer !important;
-  overflow: hidden !important;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-}
-
-/* Garden image fills garden section */
-#garden-image {
-  width: 55% !important;
-  height: 55% !important;
-  object-fit: contain !important;
-  user-select: none !important;
-  pointer-events: none !important;
-}
-
-/* Seed inventory section placed below garden section */
-#seed-inventory-section {
-  width: 100% !important;
-  background: #fff0f3 !important;
-  border-radius: 10px !important;
-  padding: 0.4rem 0.6rem !important;
-  color: var(--primary-color, #e75480) !important;
-  font-weight: 300 !important;
-  font-size: 11px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  user-select: none !important;
-}
-
-/* Seed inventory container */
-#seed-inventory {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 8px !important;
-  overflow-x: auto !important;
-  padding-bottom: 4px !important;
-  min-height: 36px !important;
-}
-/* Main widget area horizontal: left garden + seed inventory stacked vertically, right buttons vertically */
-.widget-main {
-  display: flex !important;
-  flex-direction: row !important;
-  gap: 1rem !important;
-  user-select: none;
-  align-items: flex-start; /* align top edges */
-}
-
-/* Left side container for garden section and seed inventory stacked vertically */
-#garden-seed-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  flex-grow: 1;
-  width: auto;
-}
-
-/* Garden section */
-#garden-section {
-  width: 180px; /* fixed width for garden image */
-  height: 180px; /* keep square */
-  border: 2px dashed var(--primary-color, #e75480);
-  border-radius: 10px;
-  background: #fff0f3;
-  cursor: pointer;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-
-/* Garden image fills garden section */
-#garden-image {
-  width: 90%;
-  height: 90%;
-  object-fit: contain;
-  user-select: none;
-  pointer-events: none;
-}
-
-/* Seed inventory section below garden */
-#seed-inventory-section {
-  background: #fff0f3;
-  border-radius: 10px;
-  padding: 0.4rem 0.6rem;
-  color: var(--primary-color, #e75480);
-  font-weight: 300;
-  font-size: 11px;
-  display: flex;
-  flex-direction: column;
-  user-select: none;
-  min-height: 75px;
-}
-
-/* Seed inventory container */
-#seed-inventory {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-  min-height: 36px;
-}
-
-/* Buttons container stacked vertically on right */
-.button-row {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  width: 80px; /* match button width */
-  user-select: none;
-}
-
-/* Buttons styling remains unchanged */
-button {
-  background: #fff0f3;
-  border: 2px solid var(--primary-color, #e75480);
-  border-radius: 10px;
-  cursor: pointer;
-  padding: 0.4rem 0.6rem;
-  width: 80px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: var(--primary-color, #e75480);
-  font-weight: 300;
-  font-size: 11px;
-  transition: background 0.3s ease, color 0.3s ease;
-  user-select: none;
-}
-
-button:hover,
-button:focus {
-  background: var(--primary-color, #e75480);
-  color: white;
-  outline: none;
 }
