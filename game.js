@@ -28,11 +28,6 @@ const themeDots = document.querySelectorAll(".theme-dot");
 const gardenWidget = document.getElementById("garden-widget");
 const vaseWidget = document.getElementById("vase-widget");
 
-// New variables for daily water limit and garden click
-let dailyWaterCount = 0;
-let lastWaterDate = null;
-const gardenSection = document.getElementById("garden-section");
-
 // Asset & Data Setup
 const seeds = [
   "bluebells", "lily", "marigold", "daisy", "sunflower", "rose",
@@ -59,25 +54,9 @@ function updateLotusPoints() {
   lotusPointsEl.textContent = state.lotusPoints;
 }
 
-// Updated utility function: update streak display and add near lotus points
+// Utility function: update streak display
 function updateStreak() {
   streakCountEl.textContent = state.streak;
-
-  let streakDisplay = document.querySelector(".streak-display");
-  if (!streakDisplay) {
-    streakDisplay = document.createElement("span");
-    streakDisplay.className = "streak-display";
-    streakDisplay.style.marginLeft = "12px";
-    streakDisplay.style.fontWeight = "300";
-    streakDisplay.style.fontSize = "0.9rem";
-    streakDisplay.style.color = "var(--primary-color)";
-
-    const lotusPointsValue = document.getElementById("lotus-points-value");
-    if (lotusPointsValue && lotusPointsValue.parentNode) {
-      lotusPointsValue.parentNode.appendChild(streakDisplay);
-    }
-  }
-  streakDisplay.textContent = `daily login streak: ${state.streak} ⟢`;
 }
 
 // Utility: update garden image
@@ -148,18 +127,11 @@ function updateVaseCollection() {
 function showPopupMessage(message) {
   popupMessage.textContent = message;
   popupMessage.classList.add("visible");
+  popupMessage.classList.remove("hidden");
   setTimeout(() => {
     popupMessage.classList.remove("visible");
+    popupMessage.classList.add("hidden");
   }, 2500);
-}
-
-// Daily water reset helper
-function resetDailyWaterIfNeeded() {
-  const today = new Date().toDateString();
-  if (lastWaterDate !== today) {
-    dailyWaterCount = 0;
-    lastWaterDate = today;
-  }
 }
 
 // Plant seed handler
@@ -176,14 +148,8 @@ function plantSeed(seedName) {
   }
 }
 
-// Updated water flower handler with daily water limit
+// Water flower handler
 function waterFlower() {
-  resetDailyWaterIfNeeded();
-  if (dailyWaterCount >= 25) {
-    showPopupMessage("daily watering limit reached 💧");
-    return;
-  }
-
   if (!state.currentFlower) {
     showPopupMessage("plant a seed first 🌱");
     return;
@@ -194,7 +160,6 @@ function waterFlower() {
     state.flowerStage = stages[currentIndex + 1];
     updateGardenImage();
     showPopupMessage(`your ${state.currentFlower} grew! 🌸`);
-    dailyWaterCount++;
   } else {
     showPopupMessage("flower is already mature 🌼");
   }
@@ -254,14 +219,10 @@ seedInventoryEl.addEventListener("keydown", e => {
   }
 });
 
-// Garden click opens seed journal or popup if no seed planted
-gardenSection.addEventListener("click", () => {
-  if (!state.currentFlower) {
-    showPopupMessage("plant seed first!");
-  } else {
-    openSeedJournal();
-  }
-});
+// Button event listeners
+waterBtn.addEventListener("click", waterFlower);
+harvestBtn.addEventListener("click", harvestFlower);
+buyWaterBtn.addEventListener("click", buyWater);
 
 // Theme switching handler
 themeDots.forEach(dot => {
@@ -288,90 +249,90 @@ themeDots.forEach(dot => {
 // Seed journal navigation variables
 let currentJournalIndex = 0;
 
+// Function to open seed journal popup
 function openSeedJournal() {
-  seedJournalPopup.classList.remove("hidden");
-  seedJournalBtn.setAttribute("aria-expanded", "true");
+  if (Object.values(state.seedInventory).every(count => count === 0)) {
+    showPopupMessage("no seeds in inventory to view");
+    return;
+  }
   currentJournalIndex = 0;
-  updateSeedJournalCard();
+  renderSeedJournalCard(currentJournalIndex);
+  seedJournalPopup.classList.remove("hidden");
+  seedJournalPopup.setAttribute("aria-expanded", "true");
+  seedJournalBtn.setAttribute("aria-expanded", "true");
   seedJournalPopup.focus();
 }
 
+// Function to close seed journal popup
 function closeSeedJournal() {
   seedJournalPopup.classList.add("hidden");
+  seedJournalPopup.setAttribute("aria-expanded", "false");
   seedJournalBtn.setAttribute("aria-expanded", "false");
   seedJournalBtn.focus();
 }
 
-function updateSeedJournalCard() {
-  const flower = seeds[currentJournalIndex];
-  const imgSrc = `assets/seedjournal/${flower}-seed.png`;
-  const isLocked = state.seedInventory[flower] === 0 && !state.harvestedFlowers.includes(flower);
+// Render seed journal card info
+function renderSeedJournalCard(index) {
+  const seedNames = Object.keys(state.seedInventory).filter(seed => state.seedInventory[seed] > 0);
+  if (seedNames.length === 0) {
+    seedJournalCard.innerHTML = "<p>no seeds in journal</p>";
+    return;
+  }
+  const seed = seedNames[index];
+  const count = state.seedInventory[seed];
+
   seedJournalCard.innerHTML = `
-    <img src="${isLocked ? "assets/seedjournal/locked-seed.png" : imgSrc}" alt="${flower} seed journal card" />
-    <p>${flower}</p>
-    <p>${isLocked ? "locked" : "unlocked"}</p>
-    <p>cost: ${getSeedCost(flower)} lotus points</p>
+    <img src="assets/seedbags/${seed}-seedbag.png" alt="${seed} seed bag" />
+    <p><strong>${seed}</strong></p>
+    <p>Quantity: ${count}</p>
+    <p>Click a seed in inventory to plant it in the garden.</p>
   `;
 }
 
-function prevSeedJournal() {
-  if (currentJournalIndex > 0) {
-    currentJournalIndex--;
-    updateSeedJournalCard();
-  }
+// Navigate to previous seed in journal
+function prevSeed() {
+  const seedNames = Object.keys(state.seedInventory).filter(seed => state.seedInventory[seed] > 0);
+  if (seedNames.length === 0) return;
+
+  currentJournalIndex = (currentJournalIndex - 1 + seedNames.length) % seedNames.length;
+  renderSeedJournalCard(currentJournalIndex);
 }
 
-function nextSeedJournal() {
-  if (currentJournalIndex < seeds.length - 1) {
-    currentJournalIndex++;
-    updateSeedJournalCard();
-  }
+// Navigate to next seed in journal
+function nextSeed() {
+  const seedNames = Object.keys(state.seedInventory).filter(seed => state.seedInventory[seed] > 0);
+  if (seedNames.length === 0) return;
+
+  currentJournalIndex = (currentJournalIndex + 1) % seedNames.length;
+  renderSeedJournalCard(currentJournalIndex);
 }
 
-// Buy seeds popup (dynamic cost list)
-function openBuySeedsPopup() {
-  buySeedsPopup.classList.remove("hidden");
-  buySeedListBtn.setAttribute("aria-expanded", "true");
-  buySeedsPopup.focus();
-  renderBuySeedsList();
-}
+// Buy seeds popup controls
+const buySeedsList = document.getElementById("buy-seeds-list");
 
-function closeBuySeedsPopup() {
-  buySeedsPopup.classList.add("hidden");
-  buySeedListBtn.setAttribute("aria-expanded", "false");
-  buySeedListBtn.focus();
-}
-
-const buySeedsListEl = document.getElementById("buy-seeds-list");
-
-// Dynamic cost for seeds
-function getSeedCost(seedName) {
-  const index = seeds.indexOf(seedName);
-  if (index === -1) return 5; // default cost
-  return 5 + index * 2; // cost increases by 2 per seed index
-}
-
-// Render buy seeds list with dynamic costs
-function renderBuySeedsList() {
-  buySeedsListEl.innerHTML = "";
+// Populate buy seeds list
+function populateBuySeedsList() {
+  buySeedsList.innerHTML = "";
   seeds.forEach(seed => {
-    const cost = getSeedCost(seed);
     const li = document.createElement("li");
-    li.textContent = `${seed} - ${cost} lotus points`;
-    li.tabIndex = 0;
+    li.setAttribute("tabindex", "0");
+    li.setAttribute("role", "option");
+    li.textContent = `${seed} seed - 5 points`;
     li.dataset.seed = seed;
-    buySeedsListEl.appendChild(li);
+    buySeedsList.appendChild(li);
   });
 }
 
-// Buy seeds click handler
-buySeedsListEl.addEventListener("click", e => {
-  if (e.target.tagName === "LI") {
-    const seed = e.target.dataset.seed;
-    buySeed(seed);
-  }
+// Buy seed handler when clicking in buy seeds popup
+buySeedsList.addEventListener("click", (e) => {
+  const li = e.target.closest("li");
+  if (!li) return;
+  const seed = li.dataset.seed;
+  buySeed(seed);
 });
-buySeedsListEl.addEventListener("keydown", e => {
+
+// Keyboard support for buying seeds (Enter or Space)
+buySeedsList.addEventListener("keydown", (e) => {
   if ((e.key === "Enter" || e.key === " ") && e.target.tagName === "LI") {
     e.preventDefault();
     const seed = e.target.dataset.seed;
@@ -379,55 +340,95 @@ buySeedsListEl.addEventListener("keydown", e => {
   }
 });
 
+// Buy a seed if enough lotus points
 function buySeed(seedName) {
-  const cost = getSeedCost(seedName);
-  if (state.lotusPoints < cost) {
-    showPopupMessage(`need ${cost} lotus points to buy seed`);
+  if (state.lotusPoints < 5) {
+    showPopupMessage("need 5 points to buy seed 🌱");
     return;
   }
-  state.lotusPoints -= cost;
+  state.lotusPoints -= 5;
   state.seedInventory[seedName]++;
   updateLotusPoints();
   updateSeedInventory();
   showPopupMessage(`bought 1 ${seedName} seed 🌱`);
-  closeBuySeedsPopup();
 }
 
-// Event listeners for popups close buttons
-closeJournalBtn.addEventListener("click", closeSeedJournal);
-closeBuySeedsBtn.addEventListener("click", closeBuySeedsPopup);
+// Open buy seeds popup
+function openBuySeedsPopup() {
+  populateBuySeedsList();
+  buySeedsPopup.classList.remove("hidden");
+  buySeedsPopup.setAttribute("aria-expanded", "true");
+  buySeedListBtn.setAttribute("aria-expanded", "true");
+  buySeedsPopup.focus();
+}
 
-// Open popups buttons
+// Close buy seeds popup
+function closeBuySeedsPopup() {
+  buySeedsPopup.classList.add("hidden");
+  buySeedsPopup.setAttribute("aria-expanded", "false");
+  buySeedListBtn.setAttribute("aria-expanded", "false");
+  buySeedListBtn.focus();
+}
+
+// Event listeners for popup buttons
 seedJournalBtn.addEventListener("click", () => {
-  if (seedJournalPopup.classList.contains("hidden")) openSeedJournal();
-  else closeSeedJournal();
-});
-buySeedListBtn.addEventListener("click", () => {
-  if (buySeedsPopup.classList.contains("hidden")) openBuySeedsPopup();
-  else closeBuySeedsPopup();
-});
-
-// Seed journal navigation buttons
-prevSeedBtn.addEventListener("click", prevSeedJournal);
-nextSeedBtn.addEventListener("click", nextSeedJournal);
-
-// Keyboard navigation for popups ESC to close
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") {
-    if (!seedJournalPopup.classList.contains("hidden")) closeSeedJournal();
-    if (!buySeedsPopup.classList.contains("hidden")) closeBuySeedsPopup();
+  if (seedJournalPopup.classList.contains("hidden")) {
+    openSeedJournal();
+  } else {
+    closeSeedJournal();
   }
 });
 
-// Button event listeners
-waterBtn.addEventListener("click", waterFlower);
-harvestBtn.addEventListener("click", harvestFlower);
-buyWaterBtn.addEventListener("click", buyWater);
+buySeedListBtn.addEventListener("click", () => {
+  if (buySeedsPopup.classList.contains("hidden")) {
+    openBuySeedsPopup();
+  } else {
+    closeBuySeedsPopup();
+  }
+});
 
-// Initialize UI with default state and reset daily water count
-resetDailyWaterIfNeeded();
+closeJournalBtn.addEventListener("click", closeSeedJournal);
+closeBuySeedsBtn.addEventListener("click", closeBuySeedsPopup);
+
+// Keyboard accessibility: close popups on Escape key
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    if (!seedJournalPopup.classList.contains("hidden")) {
+      closeSeedJournal();
+    }
+    if (!buySeedsPopup.classList.contains("hidden")) {
+      closeBuySeedsPopup();
+    }
+  }
+});
+
+// Seed journal navigation buttons
+prevSeedBtn.addEventListener("click", prevSeed);
+nextSeedBtn.addEventListener("click", nextSeed);
+
+// Keyboard support for prev/next buttons (Enter or Space)
+prevSeedBtn.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    prevSeed();
+  }
+});
+nextSeedBtn.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    nextSeed();
+  }
+});
+
+// Initial setup
 updateLotusPoints();
 updateStreak();
 updateGardenImage();
 updateSeedInventory();
 updateVaseCollection();
+
+// Set initial theme aria states properly
+themeDots.forEach(dot => {
+  dot.setAttribute("aria-checked", dot.classList.contains("active") ? "true" : "false");
+  dot.tabIndex = dot.classList.contains("active") ? 0 : -1;
+});
