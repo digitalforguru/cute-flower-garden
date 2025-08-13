@@ -28,6 +28,11 @@ const themeDots = document.querySelectorAll(".theme-dot");
 const gardenWidget = document.getElementById("garden-widget");
 const vaseWidget = document.getElementById("vase-widget");
 
+// New variables for daily water limit and garden click
+let dailyWaterCount = 0;
+let lastWaterDate = null;
+const gardenSection = document.getElementById("garden-section");
+
 // Asset & Data Setup
 const seeds = [
   "bluebells", "lily", "marigold", "daisy", "sunflower", "rose",
@@ -54,9 +59,25 @@ function updateLotusPoints() {
   lotusPointsEl.textContent = state.lotusPoints;
 }
 
-// Utility function: update streak display
+// Updated utility function: update streak display and add near lotus points
 function updateStreak() {
   streakCountEl.textContent = state.streak;
+
+  let streakDisplay = document.querySelector(".streak-display");
+  if (!streakDisplay) {
+    streakDisplay = document.createElement("span");
+    streakDisplay.className = "streak-display";
+    streakDisplay.style.marginLeft = "12px";
+    streakDisplay.style.fontWeight = "300";
+    streakDisplay.style.fontSize = "0.9rem";
+    streakDisplay.style.color = "var(--primary-color)";
+
+    const lotusPointsValue = document.getElementById("lotus-points-value");
+    if (lotusPointsValue && lotusPointsValue.parentNode) {
+      lotusPointsValue.parentNode.appendChild(streakDisplay);
+    }
+  }
+  streakDisplay.textContent = `daily login streak: ${state.streak} ⟢`;
 }
 
 // Utility: update garden image
@@ -132,6 +153,15 @@ function showPopupMessage(message) {
   }, 2500);
 }
 
+// Daily water reset helper
+function resetDailyWaterIfNeeded() {
+  const today = new Date().toDateString();
+  if (lastWaterDate !== today) {
+    dailyWaterCount = 0;
+    lastWaterDate = today;
+  }
+}
+
 // Plant seed handler
 function plantSeed(seedName) {
   if (state.seedInventory[seedName] > 0) {
@@ -146,8 +176,14 @@ function plantSeed(seedName) {
   }
 }
 
-// Water flower handler
+// Updated water flower handler with daily water limit
 function waterFlower() {
+  resetDailyWaterIfNeeded();
+  if (dailyWaterCount >= 25) {
+    showPopupMessage("daily watering limit reached 💧");
+    return;
+  }
+
   if (!state.currentFlower) {
     showPopupMessage("plant a seed first 🌱");
     return;
@@ -158,6 +194,7 @@ function waterFlower() {
     state.flowerStage = stages[currentIndex + 1];
     updateGardenImage();
     showPopupMessage(`your ${state.currentFlower} grew! 🌸`);
+    dailyWaterCount++;
   } else {
     showPopupMessage("flower is already mature 🌼");
   }
@@ -217,10 +254,14 @@ seedInventoryEl.addEventListener("keydown", e => {
   }
 });
 
-// Button event listeners
-waterBtn.addEventListener("click", waterFlower);
-harvestBtn.addEventListener("click", harvestFlower);
-buyWaterBtn.addEventListener("click", buyWater);
+// Garden click opens seed journal or popup if no seed planted
+gardenSection.addEventListener("click", () => {
+  if (!state.currentFlower) {
+    showPopupMessage("plant seed first!");
+  } else {
+    openSeedJournal();
+  }
+});
 
 // Theme switching handler
 themeDots.forEach(dot => {
@@ -269,7 +310,7 @@ function updateSeedJournalCard() {
     <img src="${isLocked ? "assets/seedjournal/locked-seed.png" : imgSrc}" alt="${flower} seed journal card" />
     <p>${flower}</p>
     <p>${isLocked ? "locked" : "unlocked"}</p>
-    <p>cost: 5 lotus points</p>
+    <p>cost: ${getSeedCost(flower)} lotus points</p>
   `;
 }
 
@@ -287,7 +328,7 @@ function nextSeedJournal() {
   }
 }
 
-// Buy seeds popup (simplified example)
+// Buy seeds popup (dynamic cost list)
 function openBuySeedsPopup() {
   buySeedsPopup.classList.remove("hidden");
   buySeedListBtn.setAttribute("aria-expanded", "true");
@@ -303,11 +344,20 @@ function closeBuySeedsPopup() {
 
 const buySeedsListEl = document.getElementById("buy-seeds-list");
 
+// Dynamic cost for seeds
+function getSeedCost(seedName) {
+  const index = seeds.indexOf(seedName);
+  if (index === -1) return 5; // default cost
+  return 5 + index * 2; // cost increases by 2 per seed index
+}
+
+// Render buy seeds list with dynamic costs
 function renderBuySeedsList() {
   buySeedsListEl.innerHTML = "";
   seeds.forEach(seed => {
+    const cost = getSeedCost(seed);
     const li = document.createElement("li");
-    li.textContent = `${seed} - 5 lotus points`;
+    li.textContent = `${seed} - ${cost} lotus points`;
     li.tabIndex = 0;
     li.dataset.seed = seed;
     buySeedsListEl.appendChild(li);
@@ -330,11 +380,12 @@ buySeedsListEl.addEventListener("keydown", e => {
 });
 
 function buySeed(seedName) {
-  if (state.lotusPoints < 5) {
-    showPopupMessage("need 5 lotus points to buy seed");
+  const cost = getSeedCost(seedName);
+  if (state.lotusPoints < cost) {
+    showPopupMessage(`need ${cost} lotus points to buy seed`);
     return;
   }
-  state.lotusPoints -= 5;
+  state.lotusPoints -= cost;
   state.seedInventory[seedName]++;
   updateLotusPoints();
   updateSeedInventory();
@@ -368,7 +419,13 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-// Initialize UI with default state
+// Button event listeners
+waterBtn.addEventListener("click", waterFlower);
+harvestBtn.addEventListener("click", harvestFlower);
+buyWaterBtn.addEventListener("click", buyWater);
+
+// Initialize UI with default state and reset daily water count
+resetDailyWaterIfNeeded();
 updateLotusPoints();
 updateStreak();
 updateGardenImage();
