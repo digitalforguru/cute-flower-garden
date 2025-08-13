@@ -13,20 +13,20 @@
   <div id="garden-vase-wrapper">
     <!-- Garden widget -->
     <section id="garden-widget" class="theme-pink" aria-label="My mini garden">
-      <header class="widget-header">
-        <h1>⋆˚✿ my lil flowers ✿˖°</h1>
-        <div id="lotus-points" aria-live="polite" aria-atomic="true" class="points-display">
-          <img src="assets/UI/lotus-points-icon.png" alt="lotus points" class="icon-large" /> 
-         <div class="widget">
-    <div class="widget-header">
-        <div class="lotus-points">
-             Lotus Points: <span id="lotus-points">0</span>
-        </div>
-        <div class="login-streak">
-             Daily Streak: <span id="streak-count">0</span>
-        </div>
+     <header class="widget-header">
+  <h1>⋆˚✿ my lil flowers ✿˖°</h1>
+  
+  <div style="display: flex; align-items: center; gap: 1rem;">
+    <div id="lotus-points" aria-live="polite" aria-atomic="true" class="points-display">
+      <img src="assets/UI/lotus-points-icon.png" alt="lotus points" class="icon-large" /> 
+      <span id="lotus-points-value">0</span>
     </div>
 
+    <div id="daily-streak" aria-label="daily login streak">
+      <span>⟢</span> <span id="streak-count">0</span>
+    </div>
+  </div>
+</header>
     <!-- Rest of your widget contents -->
 
       <main class="widget-main">
