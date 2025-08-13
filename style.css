@@ -38,7 +38,7 @@ body, html {
   border: 2px solid var(--primary-color, #e75480);
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+  padding: 0rem;
   color: var(--primary-color, #e75480);
   font-weight: 300;
   letter-spacing: 0.02em;
@@ -124,7 +124,7 @@ body, html {
 
 /* Garden area square */
 #garden-section {
-  width: 100%;
+  width: 55%;
   aspect-ratio: 1 / 1;
   border: 2px dashed var(--primary-color, #e75480);
   border-radius: 10px;
@@ -514,4 +514,28 @@ button:focus-visible,
 #vase-collection::-webkit-scrollbar-track,
 #buy-seeds-list::-webkit-scrollbar-track {
   background: transparent;
+}
+/* Move content closer to the header inside garden widget */
+
+#garden-widget {
+  padding-top: 0.5rem; /* reduce top padding from 1rem to 0.5rem */
+}
+
+.widget-header {
+  margin-bottom: 0.2rem; /* reduce spacing below header */
+}
+
+.widget-main {
+  gap: 0.4rem; /* reduce gap between main sections */
+}
+
+/* Optional: Reduce margin-bottom on seed inventory section title */
+#seed-inventory-section h2 {
+  margin-bottom: 0.1rem;
+}
+
+/* Optional: Reduce vertical padding in seed inventory section */
+#seed-inventory-section {
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
 }
