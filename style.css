@@ -30,8 +30,8 @@ body, html {
 
 /* Garden Widget */
 #garden-widget {
-  width: 320px;
-  height: 320px;
+  width: 300px;
+  height: 300px;
   border-radius: 12px;
   background: var(--background-color, #fff8f9);
   box-shadow: 0 0 10px rgba(231, 84, 128, 0.4);
@@ -65,7 +65,7 @@ body, html {
 
 /* Vase title */
 #vase-widget h2 {
-  font-size: 1rem;
+  font-size: 0.5rem;
   margin-bottom: 0.4rem;
   text-align: center;
   user-select: none;
@@ -95,8 +95,8 @@ body, html {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: 300;
-  font-size: 1.2rem;
+  font-weight: 200;
+  font-size: 0.75rem;
   user-select: none;
 }
 
@@ -139,8 +139,8 @@ body, html {
 }
 
 #garden-image {
-  width: 90%;
-  height: 90%;
+  width: 55%;
+  height: 55%;
   object-fit: contain;
   user-select: none;
   pointer-events: none;
@@ -161,7 +161,7 @@ body, html {
 }
 
 #seed-inventory-section h2 {
-  font-size: 0.9rem;
+  font-size: 0.5rem;
   margin-bottom: 0.2rem;
   user-select: none;
 }
@@ -209,8 +209,8 @@ body, html {
 }
 
 .seed-item img {
-  width: 36px;
-  height: 36px;
+  width: 50px;
+  height: 50px;
   user-select: none;
   pointer-events: none;
   margin-bottom: 2px;
@@ -496,96 +496,6 @@ button:focus-visible,
 }
 
 /* Scrollbar styles for seed inventory and vase */
-#seed-inventory::-webkit-scrollbar,
-#vase-collection::-webkit-scrollbar,
-#buy-seeds-list::-webkit-scrollbar {
-  height: 6px;
-  width: 6px;
-}
-
-#seed-inventory::-webkit-scrollbar-thumb,
-#vase-collection::-webkit-scrollbar-thumb,
-#buy-seeds-list::-webkit-scrollbar-thumb {
-  background-color: var(--primary-color, #e75480);
-  border-radius: 3px;
-}
-
-#seed-inventory::-webkit-scrollbar-track,
-#vase-collection::-webkit-scrollbar-track,
-#buy-seeds-list::-webkit-scrollbar-track {
-  background: transparent;
-}
-/* ========== ADDITIONS & UPDATES ========== */
-
-/* Popup close buttons focus */
-.popup button#close-journal-btn,
-.popup button#close-buy-seeds-btn {
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  background: transparent;
-  border: none;
-  font-size: 1.2rem;
-  color: var(--primary-color, #e75480);
-  cursor: pointer;
-}
-
-.popup button#close-journal-btn:focus-visible,
-.popup button#close-buy-seeds-btn:focus-visible {
-  outline: 3px solid var(--primary-color, #e75480);
-  outline-offset: 2px;
-}
-
-/* Popup nav buttons focus */
-.popup-nav button:focus-visible {
-  outline: 3px solid var(--primary-color, #e75480);
-  outline-offset: 2px;
-}
-
-/* Buy seeds list items focus */
-#buy-seeds-list li:focus-visible {
-  outline: 3px solid var(--primary-color, #e75480);
-  outline-offset: 2px;
-}
-
-/* Make buy seeds list items cursor pointer (already present but ensuring) */
-#buy-seeds-list li {
-  cursor: pointer;
-}
-
-/* Slight improvement: add cursor pointer for popup nav buttons */
-.popup-nav button {
-  cursor: pointer;
-}
-
-/* Optional: keep your existing button:hover focus styling but 
-   add focus-visible outline for accessibility */
-button:hover,
-button:focus-visible {
-  background: var(--primary-color, #e75480);
-  color: white;
-}
-
-/* For popup nav buttons and close buttons, override hover focus outline:none to a visible one */
-.popup-nav button:hover,
-.popup-nav button:focus-visible {
-  background: #c14770;
-  outline: 3px solid var(--primary-color, #e75480);
-  outline-offset: 2px;
-}
-
-/* Make sure theme-dot focus-visible outline stands out on all themes */
-.theme-dot:focus-visible {
-  outline: 3px solid white;
-  outline-offset: 3px;
-}
-
-/* For popup accessibility: add outline:none removal on popup when focused so keyboard users see outlines */
-.popup:focus-visible {
-  outline: none;
-}
-
-/* Ensures popup scrollbars look consistent */
 #seed-inventory::-webkit-scrollbar,
 #vase-collection::-webkit-scrollbar,
 #buy-seeds-list::-webkit-scrollbar {
