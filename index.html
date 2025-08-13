@@ -15,18 +15,26 @@
     <section id="garden-widget" class="theme-pink" aria-label="My mini garden">
       <header class="widget-header">
         <h1>⋆˚✿ my lil flowers ✿˖°</h1>
-        <div id="lotus-points" aria-live="polite" aria-atomic="true" class="points-display">
-          <img src="assets/UI/lotus-points-icon.png" alt="lotus points" class="icon-large" /> 
-          <span id="lotus-points-value">0</span>
+        <div class="header-right">
+          <div id="lotus-points" aria-live="polite" aria-atomic="true" class="points-display">
+            <img src="assets/UI/lotus-points-icon.png" alt="lotus points" class="icon-large" /> 
+            <span id="lotus-points-value">0</span>
+          </div>
+          <div id="daily-streak-section" aria-label="daily login streak" tabindex="0" class="streak-display">
+            <p>daily login streak: <span id="streak-count">0</span> ⟢</p>
+          </div>
         </div>
       </header>
 
       <main class="widget-main">
 
-        <section id="garden-section" aria-label="garden area" tabindex="0" role="button" aria-describedby="garden-info">
+        <section id="garden-section" aria-label="garden area" tabindex="0" role="button" aria-describedby="garden-info garden-click-text">
           <img id="garden-image" src="assets/garden/vacant.png" alt="empty garden" />
           <div id="garden-info" class="sr-only">Click to see flower details or plant a seed</div>
         </section>
+        <p id="garden-click-text" class="small-text" aria-live="polite" aria-atomic="true" style="text-align:center; margin-top: 0.3rem;">
+          click to see flower details
+        </p>
 
         <section id="seed-inventory-section" aria-label="seed inventory">
           <h2>seed inventory</h2>
@@ -55,10 +63,6 @@
             <img src="assets/UI/buy-water.gif" alt="buy water" class="icon-large" />
             <span class="button-label">buy water</span>
           </button>
-        </section>
-
-        <section id="daily-streak-section" aria-label="daily login streak" tabindex="0">
-          <p>daily login streak: <span id="streak-count">0</span> ⟢</p>
         </section>
 
       </main>
