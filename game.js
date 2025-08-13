@@ -54,10 +54,6 @@ function updateLotusPoints() {
   lotusPointsEl.textContent = state.lotusPoints;
 }
 
-// Utility function: update streak display
-function updateStreak() {
-  streakCountEl.textContent = state.streak;
-}
 
 // Utility: update garden image
 function updateGardenImage() {
