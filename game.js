@@ -1,7 +1,3 @@
-find where daily streak view is duplicating, keep the one at the top, and 
-
-yes please DO NOT CHANGE ANYTHING ELSE UNLESS ABSOLUTELY NECESSARY 
-
 // Variables
 const lotusPointsEl = document.getElementById("lotus-points-value");
 const gardenImage = document.getElementById("garden-image");
@@ -450,13 +446,6 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-// Initialize UI with default state
-updateLotusPoints();
-updateStreak();
-updateGardenImage();
-updateSeedInventory();
-updateVaseCollection();
-
 // --- ADDITIONS & UPDATES ONLY ---
 // Variables & DOM (add this for garden click text handler and streak display container)
 const gardenSection = document.getElementById("garden-section");
@@ -474,9 +463,6 @@ function resetDailyWaterIfNeeded() {
     lastWaterDate = today;
   }
 }
-
-// Call updateStreak once here to initialize streak display in header
-updateStreak();
 
 // Garden section click handler for flower info or alert
 gardenSection.addEventListener("click", () => {
