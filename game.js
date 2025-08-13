@@ -1,3 +1,4 @@
+// Variables
 const lotusPointsEl = document.getElementById("lotus-points-value");
 const gardenImage = document.getElementById("garden-image");
 const seedInventoryEl = document.getElementById("seed-inventory");
@@ -49,24 +50,6 @@ function loadState() {
     }
   }
 }
-function updateStreak() {
-  streakCountEl.textContent = state.streak;
-
-  // Also update streak display near lotus points in header
-  let streakDisplay = document.querySelector(".streak-display");
-  if (!streakDisplay) {
-    streakDisplay = document.createElement("span");
-    streakDisplay.className = "streak-display";
-    streakDisplay.style.marginLeft = "0.6rem";
-    streakDisplay.style.fontSize = "0.8rem";
-    streakDisplay.style.color = "var(--primary-color)";
-    
-    const header = document.querySelector(".widget-header");
-    if (header) {
-      header.appendChild(streakDisplay);
-    }
-  }
-  streakDisplay.textContent = `daily login streak: ${state.streak} 𖤣.𖥧.𖡼.⚘`;
 }function updateLotusPoints() {
   lotusPointsEl.textContent = state.lotusPoints;
   saveState();
@@ -488,6 +471,8 @@ function updateStreak() {
       container.appendChild(streakDisplay);
       header.appendChild(container);
     }
+  }
+  streakDisplay.textContent = `daily login streak: ${state.streak} 𖤣.𖥧.𖡼.⚘`;
 }
 
 // Call updateStreak once here to initialize streak display in header
