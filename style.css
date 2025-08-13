@@ -539,3 +539,77 @@ button:focus-visible,
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
 }
+/* === Layout updates to move contents up, align seed inventory right of garden section, and reposition theme selector === */
+
+/* Make garden widget main area layout horizontal */
+.widget-main {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 1rem !important;
+  align-items: flex-start !important; /* align top edges */
+  user-select: none;
+}
+
+/* Garden section (dotted box) with relative for absolute inside */
+#garden-section {
+  position: relative !important; /* for absolutely positioned info text inside */
+  width: 180px !important; /* fixed width so seed inventory fits right */
+  height: 180px !important; /* square shape */
+  border: 2px dashed var(--primary-color, #e75480) !important;
+  border-radius: 10px !important;
+  background: #fff0f3 !important;
+  cursor: pointer !important;
+  overflow: hidden !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+/* Make garden image fill entire garden section */
+#garden-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  user-select: none !important;
+  pointer-events: none !important;
+}
+
+/* Move seed inventory section to the right, fill remaining space */
+#seed-inventory-section {
+  flex-grow: 1 !important;
+  min-width: 120px !important; /* minimum width so it doesn't shrink too much */
+  background: #fff0f3 !important;
+  border-radius: 10px !important;
+  padding: 0.4rem 0.6rem !important;
+  color: var(--primary-color, #e75480) !important;
+  font-weight: 300 !important;
+  font-size: 11px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  user-select: none !important;
+}
+
+/* Seed inventory container inside seed inventory section */
+#seed-inventory {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  overflow-x: auto !important;
+  padding-bottom: 4px !important;
+  min-height: 36px !important;
+}
+
+/* Place theme selector below the entire widget */
+#theme-selector {
+  margin-top: 1rem !important;
+  justify-content: center !important;
+  user-select: none !important;
+  width: 100% !important;
+  display: flex !important;
+  gap: 12px !important;
+}
+
+/* Shrink vertical spacing inside garden widget */
+#garden-widget {
+  padding: 0.8rem 1rem 1rem 1rem !important; /* less top padding */
+}
