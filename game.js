@@ -50,6 +50,9 @@ function loadState() {
     }
   }
 }
+function updateStreak() {
+  streakCountEl.textContent = state.streak;
+
   // Also update streak display near lotus points in header
   let streakDisplay = document.querySelector(".streak-display");
   if (!streakDisplay) {
@@ -63,6 +66,9 @@ function loadState() {
     if (header) {
       header.appendChild(streakDisplay);
     }
+  }
+  streakDisplay.textContent = `daily login streak: ${state.streak} ⟢`;
+}function updateLotusPoints() {
   lotusPointsEl.textContent = state.lotusPoints;
   saveState();
 }
@@ -124,6 +130,11 @@ function updateDailyStreak() {
 // Utility function: update lotus points display
 function updateLotusPoints() {
   lotusPointsEl.textContent = state.lotusPoints;
+}
+
+// Utility function: update streak display
+function updateStreak() {
+  streakCountEl.textContent = state.streak;
 }
 
 // Utility: update garden image
