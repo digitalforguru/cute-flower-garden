@@ -577,20 +577,24 @@ gardenSection.addEventListener("click", () => {
   }
 
   const factData = getStageFact(state.currentFlower, state.flowerStage);
-
   if (!factData) return;
 
+  // Make sure seedJournalCard exists and update only its innerHTML
   seedJournalCard.innerHTML = `
     <div class="flower-fact-card">
       <h3>${state.currentFlower}</h3>
-      <p>⋆˚✿˖° ${factData.fact}</p>
+      <p>𖤣.𖥧.𖡼.⚘ ${factData.fact}</p>
       <p>-`✮´- "${factData.quote}"</p>
-      <p>💧 Waters until harvest: ${3 - ["seedstage","sproutstage","midgrowth"].indexOf(state.flowerStage)}</p>
-    </div>                         
+      <p>💧 Waters until harvest: ${["seedstage","sproutstage","midgrowth"].includes(state.flowerStage) ? 3 - ["seedstage","sproutstage","midgrowth"].indexOf(state.flowerStage) : 0}</p>
+    </div>
   `;
-function getStageFact(flower, stage) {
-  if (!flower || !flowerFacts[flower]) return null;
 
+  // Open the popup safely
+  seedJournalPopup.classList.remove("hidden");
+  seedJournalBtn.setAttribute("aria-expanded", "true");
+  // Focus on the popup but keep other buttons clickable
+  seedJournalPopup.focus();
+});
   const stageMap = {
     seedstage: 0,
     sproutstage: 1,
