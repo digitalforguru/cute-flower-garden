@@ -75,7 +75,8 @@ function updateStreak() {
 // Asset & Data Setup
 const seeds = [
   "bluebells", "lily", "marigold", "daisy", "sunflower", "rose",
-  "snapdragons", "peonies", "pansies", "cherryblossom", "lavender", "tulip"
+  "snapdragon", "peonies", "pansies", "cherryblossom", "lavender", "tulip", "taccabathalloween", "poinsettiachristmas", "helleborewinter", "irisflowerspring","maplesaplingfall","dandelionsummer","shamrockcloverstp",
+  "bleedingheartsvalentines", "orchid", "nasturtium", "morningglory", "ipheionstarflower4th", "hibiscus", "geranium", "gardenia", "freesia", "dahlia", "daffodil", "cosmos", "begonia"
 ];
 
 // Store for game state
@@ -488,7 +489,7 @@ function waterFlower() {
     return;
   }
   if (dailyWaterCount >= 25) {
-    showPopupMessage("daily watering limit reached 💧");
+    showPopupMessage("daily watering limit reached :(");
     return;
   }
   const stages = ["seedstage", "sproutstage", "midgrowth", "matureflower"];
