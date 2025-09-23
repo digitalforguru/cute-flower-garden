@@ -145,10 +145,11 @@ function updateVaseCollection() {
     vaseCollectionEl.textContent = "no harvested flowers yet";
     return;
   }
-  state.harvestedFlowers.forEach(f => {
+  state.harvestedFlowers.forEach(fName => {
+    const f = flowers[fName]; // get flower object
     const img = document.createElement("img");
-    img.src = `assets/vase/vase-${f}.png`;
-    img.alt = f;
+    img.src = `assets/vase/vase-${f.img}.png`; // use img property
+    img.alt = fName;
     img.className = "vase-item";
     vaseCollectionEl.appendChild(img);
   });
