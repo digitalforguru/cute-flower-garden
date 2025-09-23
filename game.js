@@ -35,7 +35,13 @@ const buyWaterListEl = getEl("buy-water-list");
 const closeBuyWaterBtn = getEl("close-buy-water-btn");
 
 const STORAGE_KEY = "cuteGardenState";
-
+const DAILY_WATER_BY_RARITY = {
+  common: 10,
+  uncommon: 20,
+  rare: 25,
+  epic: 35,
+  legendary: 40
+};
 // ====== FLOWERS DATA ======
 const flowers = {
   "daisy": { rarity: "common", water: 15, cost: 50, img: "daisy" },
@@ -234,6 +240,18 @@ function resetDailyWaterIfNeeded() {
   const today = new Date().toDateString();
   if (state.lastWaterDate !== today) {
     state.lastWaterDate = today;
+
+    // Determine highest rarity of unlocked seeds
+    let highestRarity = "common";
+    const rarities = ["common", "uncommon", "rare", "epic", "legendary"];
+    for (const fName of seeds) {
+      if (state.seedInventory[fName] > 0) {
+        const r = flowers[fName].rarity;
+        if (rarities.indexOf(r) > rarities.indexOf(highestRarity)) highestRarity = r;
+      }
+    }
+    state.watersToday = DAILY_WATER_BY_RARITY[highestRarity] || 10;
+
     saveState();
   }
 }
@@ -318,8 +336,21 @@ function renderBuyWaterList() {
 }
 
 if (buyWaterBtn) buyWaterBtn.addEventListener("click", () => {
-  if(buyWaterListEl) buyWaterListEl.classList.toggle("hidden");
+  if (!buyWaterListEl) return;
+
+  // Close other popups if open
+  if (seedJournalPopup) seedJournalPopup.style.display = "none";
+  if (buySeedsPopup) buySeedsPopup.style.display = "none";
+
+  // Toggle water menu
+  buyWaterListEl.style.display = buyWaterListEl.style.display === "block" ? "none" : "block";
+
+  // Render water options
   renderBuyWaterList();
+});
+
+if (closeBuyWaterBtn) closeBuyWaterBtn.addEventListener("click", () => {
+  if (buyWaterListEl) buyWaterListEl.style.display = "none";
 });
 
 if(closeBuyWaterBtn) closeBuyWaterBtn.addEventListener("click", () => {
