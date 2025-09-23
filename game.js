@@ -28,7 +28,6 @@ const gardenWidget = document.getElementById("garden-widget");
 const vaseWidget = document.getElementById("vase-widget");
 
 const buySeedsListEl = document.getElementById("buy-seeds-list");
-const buyWaterMenu = document.getElementById("buy-water-menu");
 const buyWaterBtn = document.getElementById("buy-water-btn");
 const buyWaterListEl = document.getElementById("buy-water-list");
 
@@ -219,11 +218,13 @@ function resetDailyWaterIfNeeded() {
 function waterFlower() {
   resetDailyWaterIfNeeded();
   if (!state.currentFlower) { showPopupMessage("Plant a seed first 🌱"); return; }
+  if (state.watersToday <= 0) { showPopupMessage("No water left! Buy more 💧"); return; }
+
   const flowerName = state.currentFlower;
   const flower = flowers[flowerName];
 
   state.waterGiven[flowerName]++;
-  state.watersToday++;
+  state.watersToday--;
 
   const totalWater = flower.water;
   const waters = state.waterGiven[flowerName];
@@ -266,10 +267,7 @@ function harvestFlower() {
 }
 
 // ====== BUY WATER ======
-buyWaterBtn.addEventListener("click", () => {
-  buyWaterMenu.classList.toggle("hidden");
-  renderBuyWaterList();
-});
+buyWaterBtn.addEventListener("click", () => { buyWaterListEl.classList.toggle("hidden"); renderBuyWaterList(); });
 
 function renderBuyWaterList() {
   buyWaterListEl.innerHTML = "";
@@ -372,19 +370,20 @@ harvestBtn.addEventListener("click",harvestFlower);
 // ====== GLOBAL FUNCTIONS ======
 window.plantSeed = plantSeed;
 
-// ====== INITIALIZATION ======
+// ====== INITIALIZATION CONTINUED ======
 function initGame() {
-loadState();
-updateLotusPoints();
-updateWaterCount();
-updateStreak();
-applyTheme();
-updateGardenImage();
-updateSeedInventory();
-updateVaseCollection();
-renderBuySeedsList();
-updateSeedJournalCard();
-checkDailyStreak();
+  loadState();
+  updateLotusPoints();
+  updateWaterCount();
+  updateStreak();
+  applyTheme();
+  updateGardenImage();
+  updateSeedInventory();
+  updateVaseCollection();
+  renderBuySeedsList();
+  updateSeedJournalCard();
+  checkDailyStreak();
+  renderBuyWaterList(); // ensure water options are visible if menu open
 }
 
 initGame();
