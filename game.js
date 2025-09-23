@@ -340,14 +340,21 @@ function closeSeedJournal() {
 }
 
 function updateSeedJournalCard() {
-  const flower = seeds[currentJournalIndex];
-  const imgSrc = `assets/seedjournal/${flower}-seed.png`;
-  const isLocked = state.seedInventory[flower] === 0 && !state.harvestedFlowers.includes(flower);
+  const flowerName = seeds[currentJournalIndex];
+
+  // Check if locked
+  const isLocked = !state.inventory.includes(flowerName) && !state.harvestedFlowers.includes(flowerName);
+
+  // Use specific locked image if locked, otherwise normal seed image
+  const imgSrc = isLocked 
+    ? `assets/seedjournal/${flowerName}-lockedseed.png`   // specific locked image
+    : `assets/seedjournal/${flowerName}-seed.png`;       // normal seed image
+
   seedJournalCard.innerHTML = `
-    <img src="${isLocked ? "assets/seedjournal/locked-seed.png" : imgSrc}" alt="${flower} seed journal card" />
-    <p>${flower}</p>
-    <p>${isLocked ? "locked" : "unlocked"}</p>
-    <p>cost: 5 lotus points</p>
+    <img src="${imgSrc}" alt="${flowerName} seed journal card" />
+    <h3>${flowerName}</h3>
+    <p>Status: ${isLocked ? "Locked" : "Unlocked"}</p>
+    <p>Cost: 5 lotus points</p>
   `;
 }
 
