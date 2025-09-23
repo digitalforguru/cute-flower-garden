@@ -154,6 +154,7 @@ function updateVaseCollection() {
   });
 }
 
+// ====== UPDATE SEED INVENTORY ======
 function updateSeedInventory() {
   seedInventoryEl.innerHTML = "";
   const owned = seeds.filter(f => state.seedInventory[f] > 0);
@@ -178,6 +179,29 @@ function updateSeedInventory() {
   });
 }
 
+// ====== UPDATE SEED JOURNAL ======
+function updateSeedJournalCard() {
+  const idx = state.seedJournalIndex;
+  const fName = seeds[idx];
+  const f = flowers[fName];
+
+  // Unlocked if user has seeds OR has harvested before
+  const isLocked = !(state.seedInventory[fName] > 0 || state.harvestedFlowers.includes(fName));
+
+  // Use seedbag naming for consistency
+  const imgSrc = isLocked 
+    ? `assets/seedjournal/${f.img}-locked.png` 
+    : `assets/seedjournal/${f.img}-seedbag.png`;
+
+  seedJournalCard.innerHTML = `
+    <img src="${imgSrc}" alt="${fName}" class="journal-img"/>
+    <p class="journal-name">${fName}</p>
+    <p class="journal-rarity" style="color:${getRarityColor(f.rarity)}">${f.rarity}</p>
+    <p>Water Needed: 💧 ${f.water}</p>
+    <p>Cost: 🌸 ${f.cost}</p>
+    <p>Status: ${isLocked ? "🔒 Locked" : "✅ Unlocked"}</p>
+  `;
+}
 // ====== PLANT / WATER / HARVEST ======
 function plantSeed(fName) {
   if (!state.seedInventory[fName] || state.seedInventory[fName] <= 0) {
@@ -206,8 +230,8 @@ function resetDailyWaterIfNeeded() {
 function waterFlower() {
   resetDailyWaterIfNeeded();
 
-  if (!state.currentFlower) return showPopup("Plant a seed first 🌱");
-  if (dailyWaterCount >= 25) return showPopup("Daily water limit reached");
+  if (!state.currentFlower) return showPopupMessage("Plant a seed first 🌱");
+  if (dailyWaterCount >= 25) return showPopupMessage("Daily water limit reached");
 
   const flowerName = state.currentFlower;
   const flower = flowers[flowerName];
@@ -217,19 +241,22 @@ function waterFlower() {
   dailyWaterCount++;
 
   const totalWater = flower.water;
-  const stageCount = 4; // seed, sprout, midgrowth, mature
   const waters = state.waterGiven[flowerName];
 
-  // Determine stage based on water thresholds
-  const threshold = totalWater / stageCount;
+  // Calculate exact thresholds
+  const stage1 = Math.ceil(totalWater / 4);      // sprout
+  const stage2 = Math.ceil(totalWater / 2);      // midgrowth
+  const stage3 = Math.ceil((totalWater * 3) / 4); // mature
+  // Final stage: totalWater
 
+  // Assign stages based on exact thresholds
   if (waters >= totalWater) {
     state.flowerStage = "matureflower";
-  } else if (waters >= threshold * 3) {
-    state.flowerStage = "matureflower"; // second-to-last water shows mature
-  } else if (waters >= threshold * 2) {
+  } else if (waters >= stage3) {
+    state.flowerStage = "matureflower"; // second-to-last stage shows mature
+  } else if (waters >= stage2) {
     state.flowerStage = "midgrowth";
-  } else if (waters >= threshold) {
+  } else if (waters >= stage1) {
     state.flowerStage = "sproutstage";
   } else {
     state.flowerStage = "seedstage";
@@ -240,9 +267,9 @@ function waterFlower() {
   saveState();
 
   if (waters >= flower.water) {
-    showPopup(`${flowerName} is ready to harvest! 🌸`);
+    showPopupMessage(`${flowerName} is ready to harvest! 🌸`);
   } else {
-    showPopup(`Watered ${flowerName} 💧 (${waters}/${flower.water})`);
+    showPopupMessage(`Watered ${flowerName} 💧 (${waters}/${flower.water})`);
   }
 }
 
@@ -307,31 +334,6 @@ function renderBuySeedsList() {
     });
     buySeedsListEl.appendChild(li);
   });
-}
-
-// ====== SEED JOURNAL ======
-function updateSeedJournalCard() {
-  const idx = state.seedJournalIndex;
-  const fName = seeds[idx];
-  const f = flowers[fName];
-
-  // Unlocked if user has seeds OR has harvested before
-  const isLocked = !(state.seedInventory[fName] > 0 || state.harvestedFlowers.includes(fName));
-
-  // Choose image based on lock status
-  const imgSrc = isLocked 
-    ? `assets/seedjournal/${f.img}-locked.png` 
-    : `assets/seedjournal/${f.img}-seed.png`;
-
-  // Update the journal card
-  seedJournalCard.innerHTML = `
-    <img src="${imgSrc}" alt="${fName}" class="journal-img"/>
-    <p class="journal-name">${fName}</p>
-    <p class="journal-rarity" style="color:${getRarityColor(f.rarity)}">${f.rarity}</p>
-    <p>Water Needed: 💧 ${f.water}</p>
-    <p>Cost: 🌸 ${f.cost}</p>
-    <p>Status: ${isLocked ? "🔒 Locked" : "✅ Unlocked"}</p>
-  `;
 }
 
 prevSeedBtn.addEventListener("click", () => {
