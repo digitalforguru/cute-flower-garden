@@ -8,8 +8,6 @@ const streakCountEl = document.getElementById("streak-count");
 const waterBtn = document.getElementById("water-btn");
 const harvestBtn = document.getElementById("harvest-btn");
 
-const buyWaterBtns = document.querySelectorAll(".buy-water-qty");
-
 const seedJournalBtn = document.getElementById("seed-journal-btn");
 const buySeedListBtn = document.getElementById("buy-seed-list-btn");
 const seedJournalPopup = document.getElementById("seed-journal-popup");
@@ -27,6 +25,7 @@ const vaseCollectionEl = document.getElementById("vase-collection");
 const themeDots = document.querySelectorAll(".theme-dot");
 const gardenWidget = document.getElementById("garden-widget");
 const vaseWidget = document.getElementById("vase-widget");
+const waterCountEl = document.getElementById("water-count-value");
 
 const buySeedsListEl = document.getElementById("buy-seeds-list");
 
@@ -86,7 +85,8 @@ const state = {
   waterGiven: {},
   theme: "pink",
   seedJournalIndex: 0,
-  lastLoginDate: null
+  lastLoginDate: null,
+  watersToday: 0 // 💧 add this
 };
 
 // Initialize seedInventory and waterGiven
@@ -128,7 +128,10 @@ function loadState() {
 // ====== UI UPDATES ======
 function updateLotusPoints() { lotusPointsEl.textContent = state.lotusPoints; saveState(); }
 function updateStreak() { streakCountEl.textContent = state.streak; saveState(); }
-
+function updateWaterCount() {
+  waterCountEl.textContent = state.watersToday;
+  saveState();
+}
 function updateGardenImage() {
   if (!state.currentFlower) {
     gardenImage.src = "assets/garden/vacant.png";
@@ -320,8 +323,8 @@ function renderBuyWaterList() {
 
   const options = [
     { qty: 5, cost: 5 },
-    { qty: 20, cost: 18 },
-    { qty: 50, cost: 40 }
+    { qty: 10, cost: 9 },
+    { qty: 20, cost: 18 }
   ];
 
   options.forEach(opt => {
@@ -334,6 +337,7 @@ function renderBuyWaterList() {
       state.lotusPoints -= opt.cost;
       state.watersToday += opt.qty;
       updateLotusPoints();
+      updateWaterCount();
       saveState();
       showPopupMessage(`Bought ${opt.qty} water 💧`);
     });
