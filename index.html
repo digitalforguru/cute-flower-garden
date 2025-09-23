@@ -11,74 +11,75 @@
 <div id="app-container" role="application" aria-label="Cute garden widget and vase shelf" style="background: transparent;">
 
   <div id="garden-vase-wrapper">
+
     <!-- Garden widget -->
     <section id="garden-widget" class="theme-pink" aria-label="My mini garden">
-    <header class="widget-header">
-  <h1>⋆˚✿ my lil flowers ✿˖°</h1>
-  
-  <div style="display: flex; align-items: center; gap: 1rem;">
-    <div id="lotus-points" aria-live="polite" aria-atomic="true" class="points-display">
-      <img src="assets/UI/lotus-points-icon.png" alt="lotus points" class="icon-large" /> 
-      <span id="lotus-points-value">0</span>
-    </div>
-</header>
+      <header class="widget-header">
+        <h1>⋆˚✿ my lil flowers ✿˖°</h1>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div id="lotus-points" aria-live="polite" aria-atomic="true" class="points-display">
+            <img src="assets/UI/lotus-points-icon.png" alt="lotus points" class="icon-large" /> 
+            <span id="lotus-points-value">0</span>
+          </div>
+        </div>
+      </header>
 
       <main class="widget-main">
+        <div style="display: flex; gap: 1rem;">
 
-  <div style="display: flex; gap: 1rem;">
+          <!-- Garden area -->
+          <section id="garden-section" aria-label="garden area" tabindex="0" role="button" aria-describedby="garden-info" style="flex-shrink: 0; width: 180px; height: 180px; position: relative;">
+            <img id="garden-image" src="assets/garden/vacant.png" alt="empty garden" style="width: 100%; height: 100%; object-fit: contain; pointer-events:none; user-select:none;" />
+            <div id="garden-info" class="info-text" style="position:absolute; bottom:6px; left:6px; font-size:10px; user-select:none; pointer-events:none;">
+              click to see flower details
+            </div>
+          </section>
 
-    <!-- Garden area (image + dotted box) on the left -->
-    <section id="garden-section" aria-label="garden area" tabindex="0" role="button" aria-describedby="garden-info" style="flex-shrink: 0; width: 180px; height: 180px; position: relative;">
-      <img id="garden-image" src="assets/garden/vacant.png" alt="empty garden" style="width: 100%; height: 100%; object-fit: contain; pointer-events:none; user-select:none;" />
-      <div id="garden-info" class="info-text" style="position:absolute; bottom:6px; left:6px; font-size:10px; user-select:none; pointer-events:none;">
-        click to see flower details
-      </div>
-    </section>
+          <!-- Buttons column -->
+          <div style="display: flex; flex-direction: column; justify-content: flex-start; gap: 1rem;">
 
-    <!-- Buttons column on the right -->
-    <div style="display: flex; flex-direction: column; justify-content: flex-start; gap: 1rem;">
+            <!-- Seed journal & seed shop buttons -->
+            <section id="seed-journal-section" aria-label="seed journal and seed shop" class="button-row" style="gap: 0.5rem; margin-bottom: 1rem;">
+              <button id="seed-journal-btn" aria-haspopup="dialog" aria-controls="seed-journal-popup" aria-expanded="false" title="Open seed journal" style="padding: 0.3rem 0.5rem; font-size: 10px; width: auto;">📖 seed journal</button>
+              <button id="buy-seed-list-btn" aria-haspopup="dialog" aria-controls="buy-seeds-popup" aria-expanded="false" title="Buy new seeds" style="padding: 0.3rem 0.5rem; font-size: 10px; width: auto;">🛒 buy seeds</button>
+            </section>
 
-      <!-- Smaller buttons top right -->
-      <section id="seed-journal-section" aria-label="seed journal and seed shop" class="button-row" style="gap: 0.5rem; margin-bottom: 1rem;">
-        <button id="seed-journal-btn" aria-haspopup="dialog" aria-controls="seed-journal-popup" aria-expanded="false" title="Open seed journal" style="padding: 0.3rem 0.5rem; font-size: 10px; width: auto;">📖 seed journal</button>
-        <button id="buy-seed-list-btn" aria-haspopup="dialog" aria-controls="buy-seeds-popup" aria-expanded="false" title="Buy new seeds" style="padding: 0.3rem 0.5rem; font-size: 10px; width: auto;">🛒 buy seeds</button>
-      </section>
+            <!-- Main action buttons -->
+            <section id="actions-section" aria-label="garden actions" class="button-row" style="flex-direction: column; gap: 0.8rem; width: 80px;">
+              <button id="water-btn" aria-label="water flower" style="width: 100%;">
+                <img src="assets/UI/watercan.png" alt="water can" class="icon-large" />
+                <span class="button-label">water</span>
+              </button>
 
-      <!-- Main action buttons -->
-      <section id="actions-section" aria-label="garden actions" class="button-row" style="flex-direction: column; gap: 0.8rem; width: 80px;">
-        <button id="water-btn" aria-label="water flower" style="width: 100%;">
-          <img src="assets/UI/watercan.png" alt="water can" class="icon-large" />
-          <span class="button-label">water</span>
-        </button>
+              <button id="harvest-btn" aria-label="harvest flower" style="width: 100%;">
+                <img src="assets/UI/harvestbasket.png" alt="harvest basket" class="icon-large" />
+                <span class="button-label">harvest</span>
+              </button>
 
-        <button id="harvest-btn" aria-label="harvest flower" style="width: 100%;">
-          <img src="assets/UI/harvestbasket.png" alt="harvest basket" class="icon-large" />
-          <span class="button-label">harvest</span>
-        </button>
+              <button id="buy-water-btn" aria-label="buy water" style="width: 100%;">
+                <img src="assets/UI/buy-water.gif" alt="buy water" class="icon-large" />
+                <span class="button-label">buy water</span>
+              </button>
+            </section>
 
-        <button id="buy-water-btn" aria-label="buy water" style="width: 100%;">
-          <img src="assets/UI/buy-water.gif" alt="buy water" class="icon-large" />
-          <span class="button-label">buy water</span>
-        </button>
-      </section>
+          </div>
 
-    </div>
+        </div>
 
-  </div>
+        <!-- Seed inventory -->
+        <section id="seed-inventory-section" aria-label="seed inventory" style="margin-top: 1rem;">
+          <h2>seed inventory</h2>
+          <small class="info-text">click a seed to plant</small>
+          <div id="seed-inventory" tabindex="0" role="list" aria-live="polite" aria-label="Available seeds" style="display: flex; flex-wrap: wrap; gap: 8px; overflow-x: auto; min-height: 36px; padding-bottom: 4px;"></div>
+          <div id="no-seeds-text" class="no-seeds">no seeds yet</div>
+        </section>
 
-  <!-- Seed inventory full width below -->
-  <section id="seed-inventory-section" aria-label="seed inventory" style="margin-top: 1rem;">
-    <h2>seed inventory</h2>
-    <small class="info-text">click a seed to plant</small>
-    <div id="seed-inventory" tabindex="0" role="list" aria-live="polite" aria-label="Available seeds" style="display: flex; flex-wrap: wrap; gap: 8px; overflow-x: auto; min-height: 36px; padding-bottom: 4px;"></div>
-    <div id="no-seeds-text" class="no-seeds">no seeds yet</div>
-  </section>
+        <!-- Daily streak -->
+        <section id="daily-streak-section" aria-label="daily login streak" tabindex="0" style="margin-top: 0.8rem;">
+          <p>daily login streak: <span id="streak-count">0</span> ⟢</p>
+        </section>
 
-  <section id="daily-streak-section" aria-label="daily login streak" tabindex="0" style="margin-top: 0.8rem;">
-    <p>daily login streak: <span id="streak-count">0</span> ⟢</p>
-  </section>
-
-</main>
+      </main>
 
       <!-- Seed Journal Popup -->
       <div id="seed-journal-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-journal-title" tabindex="-1">
@@ -116,7 +117,9 @@
       <h2>harvested flowers</h2>
       <div id="vase-collection"></div>
     </section>
+
   </div>
+</div>
 
 <script src="game.js"></script>
 </body>
