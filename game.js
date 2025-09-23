@@ -73,11 +73,45 @@ function updateStreak() {
   saveState();
 }
 // Asset & Data Setup
-const seeds = [
-  "bluebells", "lily", "marigold", "daisy", "sunflower", "rose",
-  "snapdragon", "peonies", "pansies", "cherryblossom", "lavender", "tulip", "taccabathalloween", "poinsettiachristmas", "helleborewinter", "irisflowerspring","maplesaplingfall","dandelionsummer","shamrockcloverstp",
-  "bleedingheartsvalentines", "orchid", "nasturtium", "morningglory", "ipheionstarflower4th", "hibiscus", "geranium", "gardenia", "freesia", "dahlia", "daffodil", "cosmos", "begonia"
-];
+const flowers = {
+  daisy: { rarity: "common", water: 15, reward: 50 },
+  marigold: { rarity: "common", water: 20, reward: 75 },
+  pansies: { rarity: "common", water: 25, reward: 100 },
+  nasturtium: { rarity: "common", water: 30, reward: 125 },
+  geranium: { rarity: "common", water: 35, reward: 150 },
+  begonia: { rarity: "common", water: 40, reward: 175 },
+  sunflowers: { rarity: "common", water: 45, reward: 200 },
+  cosmos: { rarity: "common", water: 50, reward: 225 },
+
+  bluebells: { rarity: "uncommon", water: 55, reward: 300 },
+  snapdragons: { rarity: "uncommon", water: 60, reward: 350 },
+  morningglory: { rarity: "uncommon", water: 65, reward: 400 },
+  tulips: { rarity: "uncommon", water: 70, reward: 450 },
+  freesia: { rarity: "uncommon", water: 75, reward: 500 },
+  anemone: { rarity: "uncommon", water: 80, reward: 550 },
+  lavender: { rarity: "uncommon", water: 90, reward: 600 },
+  daffodils: { rarity: "uncommon", water: 100, reward: 650 },
+
+  cherryblossom: { rarity: "rare", water: 90, reward: 800 },
+  lily: { rarity: "rare", water: 100, reward: 900 },
+  rose: { rarity: "rare", water: 110, reward: 1000 },
+  dahlia: { rarity: "rare", water: 120, reward: 1100 },
+  hibiscus: { rarity: "rare", water: 130, reward: 1200 },
+  peonies: { rarity: "rare", water: 140, reward: 1300 },
+  gardenia: { rarity: "rare", water: 150, reward: 1400 },
+  orchid: { rarity: "rare", water: 160, reward: 1500 },
+
+  dandelionsummer: { rarity: "epic", water: 150, reward: 2000 },
+  maplesaplingfall: { rarity: "epic", water: 165, reward: 2200 },
+  helleborewinter: { rarity: "epic", water: 180, reward: 2400 },
+  irisflowerspring: { rarity: "epic", water: 195, reward: 2600 },
+
+  bleedingheartsvalentines: { rarity: "legendary", water: 210, reward: 2800 },
+  shamrockcloverstp: { rarity: "legendary", water: 225, reward: 3000 },
+  ipheionstarflower4th: { rarity: "legendary", water: 250, reward: 5000 },
+  poinsettiacristmas: { rarity: "legendary", water: 300, reward: 5500 },
+  taccabathalloween: { rarity: "legendary", water: 350, reward: 6000 }
+};
 
 // Store for game state
 const state = {
@@ -92,9 +126,14 @@ const state = {
 
   lastLoginDate: null  // <-- add this here
 };
-
+state.waterGiven = {};
+Object.keys(flowers).forEach(flowerName => {
+  state.waterGiven[flowerName] = 0;
+});
 // Initialize seed inventory with 0 seeds
-seeds.forEach(seed => state.seedInventory[seed] = 0);
+Object.keys(flowers).forEach(flower => {
+  state.seedInventory[flower] = 0;
+});
 function updateDailyStreak() {
   const today = new Date().toDateString();
 
@@ -153,35 +192,27 @@ function updateGardenImage() {
 
 // Update seed inventory display
 function updateSeedInventory() {
-  seedInventoryEl.innerHTML = "";
-  let hasSeeds = false;
-  seeds.forEach(seed => {
-    const count = state.seedInventory[seed];
-    if (count > 0) {
-      hasSeeds = true;
-      const seedDiv = document.createElement("div");
-      seedDiv.className = "seed-item";
-      seedDiv.setAttribute("tabindex", "0");
-      seedDiv.setAttribute("role", "listitem");
-      seedDiv.setAttribute("aria-label", `${seed} seed, count ${count}`);
-      seedDiv.dataset.seed = seed;
+  const inventoryList = document.getElementById("seedInventory");
+  inventoryList.innerHTML = "";
 
-      const img = document.createElement("img");
-      img.src = `assets/seedbags/${seed}-seedbag.png`;
-      img.alt = `${seed} seed bag`;
-      seedDiv.appendChild(img);
+  Object.keys(flowers).forEach(flowerName => {
+    const flower = flowers[flowerName];
+    const count = state.seedInventory[flowerName];
+    const cost = Math.floor(flower.reward / 10);
+    const waterProgress = state.waterGiven[flowerName] || 0;
+    const rarityBadge = `<span class="rarity-badge rarity-${flower.rarity}">${flower.rarity}</span>`;
 
-      const label = document.createElement("span");
-      label.className = "seed-name";
-      label.textContent = `${seed} (${count})`;
-      seedDiv.appendChild(label);
-
-      seedInventoryEl.appendChild(seedDiv);
-    }
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <strong>${flowerName}</strong> ${rarityBadge} <br/>
+      🌱 Seeds: ${count} | 💧 Water: ${waterProgress}/${flower.water} | 🌸 Reward: ${flower.reward} | 💰 Cost: ${cost}
+      <br/>
+      <button onclick="waterFlower('${flowerName}')">💧 Water</button>
+      <button onclick="harvestFlower('${flowerName}')">🌸 Harvest</button>
+    `;
+    inventoryList.appendChild(li);
   });
-  noSeedsText.style.display = hasSeeds ? "none" : "block";
 }
-
 // Update vase shelf display
 function updateVaseCollection() {
   vaseCollectionEl.innerHTML = "";
@@ -209,6 +240,24 @@ function showPopupMessage(message) {
   setTimeout(() => {
     popupMessage.classList.remove("visible");
   }, 2500);
+}
+function waterFlower(flowerName) {
+  const flower = flowers[flowerName];
+  if (!flower) return;
+
+  // increase water given
+  state.waterGiven[flowerName]++;
+
+  // check progress
+  const progress = state.waterGiven[flowerName];
+  if (progress >= flower.water) {
+    showPopupMessage(`💧 ${flowerName} is fully watered and ready to harvest!`);
+  } else {
+    const remaining = flower.water - progress;
+    showPopupMessage(`💧 You watered ${flowerName}. ${remaining} more waters needed.`);
+  }
+
+  updateSeedInventory(); // show progress in inventory
 }
 
 // Plant seed handler
@@ -243,19 +292,32 @@ function waterFlower() {
 }
 
 // Harvest flower handler
-function harvestFlower() {
-  if (!state.currentFlower) {
-    showPopupMessage("plant and grow a flower first 🌱");
+function harvestFlower(flowerName) {
+  const flower = flowers[flowerName];
+  if (!flower) return;
+
+  const waterGiven = state.waterGiven?.[flowerName] || 0;
+  if (waterGiven < flower.water) {
+    showPopupMessage(`💧 ${flowerName} needs ${flower.water - waterGiven} more water before harvest!`);
     return;
   }
-  if (state.flowerStage !== "matureflower") {
-    showPopupMessage("flower is not mature yet 🌸");
-    return;
+
+  if (state.seedInventory[flowerName] > 0) {
+    state.seedInventory[flowerName]--;
+    state.harvestedFlowers.push(flowerName);
+    state.lotusPoints += flower.reward;
+
+    // reset water after harvesting
+    state.waterGiven[flowerName] = 0;
+
+    updateLotusPoints();
+    updateSeedInventory();
+
+    showPopupMessage(`🌸 You harvested a ${flowerName}! +${flower.reward} lotus points`);
+  } else {
+    showPopupMessage(`❌ No ${flowerName} seeds available to harvest.`);
   }
-  // Add to harvested
-  if (!state.harvestedFlowers.includes(state.currentFlower)) {
-    state.harvestedFlowers.push(state.currentFlower);
-  }
+}
   // Add lotus points for harvest
   state.lotusPoints += 5;
   updateLotusPoints();
@@ -341,8 +403,23 @@ function closeSeedJournal() {
 }
 
 function updateSeedJournalCard() {
-  const flowerName = seeds[currentJournalIndex];
+  const flowerNames = Object.keys(flowers);
+  const flowerName = flowerNames[currentJournalIndex];
+  const flower = flowers[flowerName];
 
+  const imgSrc = `assets/seedjournal/${flowerName}-seed.png`;
+  const isLocked = state.seedInventory[flowerName] === 0 && !state.harvestedFlowers.includes(flowerName);
+
+  const rarityBadge = `<span class="rarity-badge rarity-${flower.rarity}">${flower.rarity}</span>`;
+
+  seedJournalCard.innerHTML = `
+    <img src="${isLocked ? "assets/seedjournal/locked-seed.png" : imgSrc}" alt="${flowerName} seed journal card" />
+    <h3>${flowerName} ${rarityBadge}</h3>
+    <p>Status: ${isLocked ? "🔒 Locked" : "✅ Unlocked"}</p>
+    <p>Reward: 🌸 ${flower.reward} lotus points</p>
+    <p>Water Needed: 💧 ${flower.water}</p>
+  `;
+}
   // Check if locked
   const isLocked = !state.inventory.includes(flowerName) && !state.harvestedFlowers.includes(flowerName);
 
@@ -390,13 +467,22 @@ function closeBuySeedsPopup() {
 const buySeedsListEl = document.getElementById("buy-seeds-list");
 
 function renderBuySeedsList() {
-  buySeedsListEl.innerHTML = "";
-  seeds.forEach(seed => {
+  const list = document.getElementById("buySeedsList");
+  list.innerHTML = "";
+
+  Object.keys(flowers).forEach(flowerName => {
+    const flower = flowers[flowerName];
+    const cost = Math.floor(flower.reward / 10); // adjustable later
+
     const li = document.createElement("li");
-    li.textContent = `${seed} - 5 lotus points`;
-    li.tabIndex = 0;
-    li.dataset.seed = seed;
-    buySeedsListEl.appendChild(li);
+    li.innerHTML = `
+      <button onclick="buySeed('${flowerName}')">
+        Buy ${flowerName} 🌸 
+        <span class="rarity-badge rarity-${flower.rarity}">${flower.rarity}</span> 
+        (Cost: ${cost} lotus)
+      </button>
+    `;
+    list.appendChild(li);
   });
 }
 
@@ -415,19 +501,21 @@ buySeedsListEl.addEventListener("keydown", e => {
   }
 });
 
-function buySeed(seedName) {
-  if (state.lotusPoints < 5) {
-    showPopupMessage("need 5 lotus points to buy seed");
+function buySeed(flowerName) {
+  const cost = Math.floor(flowers[flowerName].reward / 10); 
+  // or set a fixed cost property later
+
+  if (state.lotusPoints < cost) {
+    showPopupMessage(`need ${cost} lotus points to buy ${flowerName}`);
     return;
   }
-  state.lotusPoints -= 5;
-  state.seedInventory[seedName]++;
+  state.lotusPoints -= cost;
+  state.seedInventory[flowerName]++;
   updateLotusPoints();
   updateSeedInventory();
-  showPopupMessage(`bought 1 ${seedName} seed 🌱`);
+  showPopupMessage(`bought 1 ${flowerName} seed 🌱`);
   closeBuySeedsPopup();
 }
-
 // Event listeners for popups close buttons
 closeJournalBtn.addEventListener("click", closeSeedJournal);
 closeBuySeedsBtn.addEventListener("click", closeBuySeedsPopup);
