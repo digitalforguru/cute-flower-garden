@@ -112,7 +112,8 @@ const flowers = {
   poinsettiacristmas: { rarity: "legendary", water: 300, reward: 5500 },
   taccabathalloween: { rarity: "legendary", water: 350, reward: 6000 }
 };
-
+// Array of seed names for ordering
+const seeds = Object.keys(flowers);
 // Store for game state
 const state = {
   lotusPoints: 20,
@@ -241,9 +242,6 @@ function showPopupMessage(message) {
     popupMessage.classList.remove("visible");
   }, 2500);
 }
-function waterFlower(flowerName) {
-  const flower = flowers[flowerName];
-  if (!flower) return;
 
   // increase water given
   state.waterGiven[flowerName]++;
@@ -275,54 +273,100 @@ function plantSeed(seedName) {
 }
 
 // Water flower handler
-function waterFlower() {
-  if (!state.currentFlower) {
-    showPopupMessage("plant a seed first 🌱");
+function waterFlower(flowerName = null) {
+  resetDailyWaterIfNeeded(); // daily limit check
+
+  // Determine which flower to water
+  let targetFlower = flowerName || state.currentFlower;
+  if (!targetFlower) {
+    showPopupMessage("🌱 plant a seed first!");
     return;
   }
-  const stages = ["seedstage", "sproutstage", "midgrowth", "matureflower"];
-  let currentIndex = stages.indexOf(state.flowerStage);
-  if (currentIndex < stages.length - 1) {
-    state.flowerStage = stages[currentIndex + 1];
-    updateGardenImage();
-    showPopupMessage(`your ${state.currentFlower} grew! 🌸`);
-  } else {
-    showPopupMessage("flower is already mature 🌼");
+
+  // Check daily limit
+  if (dailyWaterCount >= 25) {
+    showPopupMessage("💧 daily watering limit reached");
+    return;
   }
+
+  // Increment water given
+  state.waterGiven[targetFlower] = (state.waterGiven[targetFlower] || 0) + 1;
+  dailyWaterCount++;
+
+  const flowerData = flowers[targetFlower];
+  const progress = state.waterGiven[targetFlower];
+
+  // Update growth stage if currentFlower is planted
+  if (state.currentFlower === targetFlower) {
+    const stages = ["seedstage", "sproutstage", "midgrowth", "matureflower"];
+    let currentIndex = stages.indexOf(state.flowerStage);
+    if (currentIndex < stages.length - 1) {
+      state.flowerStage = stages[currentIndex + 1];
+      updateGardenImage();
+      showPopupMessage(`💧 ${targetFlower} grew! Stage: ${state.flowerStage}`);
+    }
+  }
+
+  // Notify ready to harvest
+  if (progress >= flowerData.water) {
+    showPopupMessage(`🌸 ${targetFlower} is fully watered and ready to harvest!`);
+  } else {
+    showPopupMessage(`💧 You watered ${targetFlower}. ${flowerData.water - progress} more waters needed.`);
+  }
+
+  updateSeedInventory(); // refresh inventory display
+  saveState();
 }
 
 // Harvest flower handler
-function harvestFlower(flowerName) {
-  const flower = flowers[flowerName];
-  if (!flower) return;
+// Helper: reset daily water count if date changed
+function resetDailyWaterIfNeeded() { ... }
 
-  const waterGiven = state.waterGiven?.[flowerName] || 0;
-  if (waterGiven < flower.water) {
-    showPopupMessage(`💧 ${flowerName} needs ${flower.water - waterGiven} more water before harvest!`);
+// === INSERT MERGED FUNCTIONS HERE ===
+function harvestFlower(flowerName = null) {
+  // Determine which flower to harvest: inventory or garden
+  const targetFlower = flowerName || state.currentFlower;
+  if (!targetFlower) {
+    showPopupMessage("plant a seed first 🌱");
     return;
   }
 
-  if (state.seedInventory[flowerName] > 0) {
-    state.seedInventory[flowerName]--;
-    state.harvestedFlowers.push(flowerName);
-    state.lotusPoints += flower.reward;
+  const flower = flowers[targetFlower];
+  const waterGiven = state.waterGiven?.[targetFlower] || 0;
 
-    // reset water after harvesting
-    state.waterGiven[flowerName] = 0;
-
-    updateLotusPoints();
-    updateSeedInventory();
-
-    showPopupMessage(`🌸 You harvested a ${flowerName}! +${flower.reward} lotus points`);
-  } else {
-    showPopupMessage(`❌ No ${flowerName} seeds available to harvest.`);
+  if (waterGiven < flower.water) {
+    showPopupMessage(`💧 ${targetFlower} needs ${flower.water - waterGiven} more water before harvest!`);
+    return;
   }
-}
-  // Add lotus points for harvest
-  state.lotusPoints += 5;
-  updateLotusPoints();
 
-  showPopupMessage(`harvested ${state.currentFlower} 🌼 +5 points`);
+  // Harvest logic
+  if (!flowerName) {
+    // Garden flower
+    state.harvestedFlowers.push(targetFlower);
+    state.lotusPoints += flower.reward;
+    state.waterGiven[targetFlower] = 0;
+    state.currentFlower = null;
+    state.flowerStage = "seedstage";
+    updateGardenImage();
+    updateVaseCollection();
+    showPopupMessage(`🌸 You harvested a ${targetFlower}! +${flower.reward} lotus points`);
+  } else {
+    // Inventory seed (if desired)
+    if (state.seedInventory[flowerName] > 0) {
+      state.seedInventory[flowerName]--;
+      state.harvestedFlowers.push(flowerName);
+      state.lotusPoints += flower.reward;
+      state.waterGiven[flowerName] = 0;
+      updateSeedInventory();
+      updateVaseCollection();
+      showPopupMessage(`🌸 You harvested a ${flowerName}! +${flower.reward} lotus points`);
+    } else {
+      showPopupMessage(`❌ No ${flowerName} seeds available to harvest.`);
+    }
+  }
+
+  updateLotusPoints();
+}
 
   // Reset garden
   state.currentFlower = null;
@@ -359,8 +403,9 @@ seedInventoryEl.addEventListener("keydown", e => {
 });
 
 // Button event listeners
-waterBtn.addEventListener("click", waterFlower);
-harvestBtn.addEventListener("click", harvestFlower);
+// Garden buttons
+waterBtn.addEventListener("click", () => waterFlower());       // waters currentFlower
+harvestBtn.addEventListener("click", () => harvestFlower());   // harvests currentFlower
 buyWaterBtn.addEventListener("click", buyWater);
 
 // Theme switching handler
@@ -403,39 +448,26 @@ function closeSeedJournal() {
 }
 
 function updateSeedJournalCard() {
-  const flowerNames = Object.keys(flowers);
-  const flowerName = flowerNames[currentJournalIndex];
+  const flowerName = seeds[currentJournalIndex];
   const flower = flowers[flowerName];
 
-  const imgSrc = `assets/seedjournal/${flowerName}-seed.png`;
   const isLocked = state.seedInventory[flowerName] === 0 && !state.harvestedFlowers.includes(flowerName);
+
+  // Use locked art if exists, otherwise normal
+  const imgSrc = isLocked
+    ? `assets/seedjournal/${flowerName}-lockedseed.png`
+    : `assets/seedjournal/${flowerName}-seed.png`;
 
   const rarityBadge = `<span class="rarity-badge rarity-${flower.rarity}">${flower.rarity}</span>`;
 
   seedJournalCard.innerHTML = `
-    <img src="${isLocked ? "assets/seedjournal/locked-seed.png" : imgSrc}" alt="${flowerName} seed journal card" />
+    <img src="${imgSrc}" alt="${flowerName} seed journal card" />
     <h3>${flowerName} ${rarityBadge}</h3>
     <p>Status: ${isLocked ? "🔒 Locked" : "✅ Unlocked"}</p>
     <p>Reward: 🌸 ${flower.reward} lotus points</p>
     <p>Water Needed: 💧 ${flower.water}</p>
   `;
 }
-  // Check if locked
-  const isLocked = !state.inventory.includes(flowerName) && !state.harvestedFlowers.includes(flowerName);
-
-  // Use specific locked image if locked, otherwise normal seed image
-  const imgSrc = isLocked 
-    ? `assets/seedjournal/${flowerName}-lockedseed.png`   // specific locked image
-    : `assets/seedjournal/${flowerName}-seed.png`;       // normal seed image
-
-  seedJournalCard.innerHTML = `
-    <img src="${imgSrc}" alt="${flowerName} seed journal card" />
-    <h3>${flowerName}</h3>
-    <p>Status: ${isLocked ? "Locked" : "Unlocked"}</p>
-    <p>Cost: 5 lotus points</p>
-  `;
-}
-
 function prevSeedJournal() {
   if (currentJournalIndex > 0) {
     currentJournalIndex--;
@@ -467,55 +499,36 @@ function closeBuySeedsPopup() {
 const buySeedsListEl = document.getElementById("buy-seeds-list");
 
 function renderBuySeedsList() {
-  const list = document.getElementById("buySeedsList");
-  list.innerHTML = "";
-
-  Object.keys(flowers).forEach(flowerName => {
-    const flower = flowers[flowerName];
-    const cost = Math.floor(flower.reward / 10); // adjustable later
-
+  buySeedsListEl.innerHTML = "";
+  seeds.forEach(seed => {
+    const cost = getSeedCost(seed);
     const li = document.createElement("li");
     li.innerHTML = `
-      <button onclick="buySeed('${flowerName}')">
-        Buy ${flowerName} 🌸 
-        <span class="rarity-badge rarity-${flower.rarity}">${flower.rarity}</span> 
+      <button onclick="buySeed('${seed}')">
+        Buy ${seed} 🌸 
+        <span class="rarity-badge rarity-${flowers[seed].rarity}">${flowers[seed].rarity}</span> 
         (Cost: ${cost} lotus)
       </button>
     `;
-    list.appendChild(li);
+    li.dataset.seed = seed;
+    li.tabIndex = 0;
+    buySeedsListEl.appendChild(li);
   });
 }
 
-// Buy seeds click handler
-buySeedsListEl.addEventListener("click", e => {
-  if (e.target.tagName === "LI") {
-    const seed = e.target.dataset.seed;
-    buySeed(seed);
-  }
-});
-buySeedsListEl.addEventListener("keydown", e => {
-  if ((e.key === "Enter" || e.key === " ") && e.target.tagName === "LI") {
-    e.preventDefault();
-    const seed = e.target.dataset.seed;
-    buySeed(seed);
-  }
-});
-
-function buySeed(flowerName) {
-  const cost = Math.floor(flowers[flowerName].reward / 10); 
-  // or set a fixed cost property later
-
+function buySeed(seedName) {
+  const cost = getSeedCost(seedName);
   if (state.lotusPoints < cost) {
-    showPopupMessage(`need ${cost} lotus points to buy ${flowerName}`);
+    showPopupMessage(`need ${cost} lotus points to buy ${seedName}`);
     return;
   }
   state.lotusPoints -= cost;
-  state.seedInventory[flowerName]++;
+  state.seedInventory[seedName]++;
   updateLotusPoints();
   updateSeedInventory();
-  showPopupMessage(`bought 1 ${flowerName} seed 🌱`);
+  showPopupMessage(`bought 1 ${seedName} seed 🌱`);
   closeBuySeedsPopup();
-}
+} 
 // Event listeners for popups close buttons
 closeJournalBtn.addEventListener("click", closeSeedJournal);
 closeBuySeedsBtn.addEventListener("click", closeBuySeedsPopup);
