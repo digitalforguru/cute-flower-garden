@@ -45,14 +45,14 @@ const flowers = {
 
   bluebells: { rarity: "uncommon", water: 55, cost: 300, img: "bluebells" },
   snapdragons: { rarity: "uncommon", water: 60, cost: 350, img: "snapdragon" },
-  morning glories: { rarity: "uncommon", water: 65, cost: 400, img: "morningglory" },
+  "morning glories": { rarity: "uncommon", water: 65, cost: 400, img: "morningglory" },
   tulips: { rarity: "uncommon", water: 70, cost: 450, img: "tulip" },
   freesias: { rarity: "uncommon", water: 75, cost: 500, img: "freesia" },
   anemones: { rarity: "uncommon", water: 80, cost: 550, img: "anemone" },
   lavender: { rarity: "uncommon", water: 90, cost: 600, img: "lavender" },
   daffodils: { rarity: "uncommon", water: 100, cost: 650, img: "daffodil" },
 
-  cherry blossom tree: { rarity: "rare", water: 90, cost: 800, img: "cherryblossom" },
+  "cherry blossom tree": { rarity: "rare", water: 90, cost: 800, img: "cherryblossom" },
   lillies: { rarity: "rare", water: 100, cost: 900, img: "lily" },
   roses: { rarity: "rare", water: 110, cost: 1000, img: "rose" },
   dahlias: { rarity: "rare", water: 120, cost: 1100, img: "dahlia" },
@@ -61,16 +61,16 @@ const flowers = {
   gardenias: { rarity: "rare", water: 150, cost: 1400, img: "gardenia" },
   orchids: { rarity: "rare", water: 160, cost: 1500, img: "orchid" },
 
-  dandelion x summer: { rarity: "epic", water: 150, cost: 2000, img: "dandelionsummer" },
-  maple sapling tree x fall: { rarity: "epic", water: 165, cost: 2200, img: "maplesaplingfall" },
-  hellebore flowers x winter: { rarity: "epic", water: 180, cost: 2400, img: "helleborewinter" },
-  iris flower x spring: { rarity: "epic", water: 195, cost: 2600, img: "irisflowerspring" },
+  "dandelion x summer": { rarity: "epic", water: 150, cost: 2000, img: "dandelionsummer" },
+  "maple sapling tree x fall": { rarity: "epic", water: 165, cost: 2200, img: "maplesaplingfall" },
+  "hellebore flowers x winter": { rarity: "epic", water: 180, cost: 2400, img: "helleborewinter" },
+  "iris flowers x spring": { rarity: "epic", water: 195, cost: 2600, img: "irisflowerspring" },
 
-  bleeding hearts x valentines: { rarity: "legendary", water: 210, cost: 2800, img: "bleedingheartsvalentines" },
-  shamrock clovers x st patricks day: { rarity: "legendary", water: 225, cost: 3000, img: "shamrockcloverstp" },
-  ipheion starflower x 4th of july: { rarity: "legendary", water: 250, cost: 5000, img: "ipheionstarflower4th" },
-  poinsettia x christmas: { rarity: "legendary", water: 300, cost: 5500, img: "poinsettiachristmas" },
-  tacca bat flower x halloween: { rarity: "legendary", water: 350, cost: 6000, img: "taccabathalloween" },
+  "bleeding hearts x valentines": { rarity: "legendary", water: 210, cost: 2800, img: "bleedingheartsvalentines" },
+  "shamrock clovers x st patricks day": { rarity: "legendary", water: 225, cost: 3000, img: "shamrockcloverstp" },
+ "ipheion starflower x 4th of july": { rarity: "legendary", water: 250, cost: 5000, img: "ipheionstarflower4th" },
+  "poinsettia x christmas": { rarity: "legendary", water: 300, cost: 5500, img: "poinsettiachristmas" },
+  "tacca bat flower x halloween": { rarity: "legendary", water: 350, cost: 6000, img: "taccabathalloween" },
 };
 
 const seeds = Object.keys(flowers);
