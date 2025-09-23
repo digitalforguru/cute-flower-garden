@@ -190,8 +190,8 @@ function updateSeedJournalCard() {
 
   // Use seedbag naming for consistency
   const imgSrc = isLocked 
-    ? `assets/seedjournal/${f.img}-locked.png` 
-    : `assets/seedjournal/${f.img}-seedbag.png`;
+    ? `assets/seedjournal/${f.img}-lockedseed.png` 
+    : `assets/seedjournal/${f.img}-seed.png`;
 
   seedJournalCard.innerHTML = `
     <img src="${imgSrc}" alt="${fName}" class="journal-img"/>
