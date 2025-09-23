@@ -92,10 +92,12 @@ const state = {
 };
 
 // Initialize seedInventory and waterGiven
-seeds.forEach(f => {
-  state.seedInventory[f] = 0;
-  state.waterGiven[f] = 0;
-});
+function giveWelcomeSeed() {
+  if (state.harvestedFlowers.length === 0 && state.seedInventory["daisy"] === 0) {
+    state.seedInventory["daisy"] = 1;
+    showPopupMessage("Welcome! 🌸 You got 1 free daisy seed!");
+  }
+}
 
 // ====== UTILITY ======
 function getRarityColor(rarity) {
@@ -287,6 +289,7 @@ function harvestFlower() {
 }
 
 // ====== BUY WATER ======
+const buyWaterPopup = getEl("buy-water-popup");
 function renderBuyWaterList() {
   if (!buyWaterListEl) return;
   buyWaterListEl.innerHTML = "";
@@ -415,6 +418,7 @@ window.plantSeed = plantSeed;
 // ====== INITIALIZATION ======
 function initGame() {
   loadState();
+  giveWelcomeSeed();
   updateLotusPoints();
   updateWaterCount();
   updateStreak();
@@ -427,7 +431,6 @@ function initGame() {
   checkDailyStreak();
   renderBuyWaterList();
 }
-
 
 // Prevent double widgets by checking if the container exists
 if(gardenWidget && !gardenWidget.dataset.initialized) {
