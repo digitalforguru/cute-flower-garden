@@ -281,12 +281,14 @@ function harvestFlower() {
 
 // ====== BUY WATER ======
 buyWaterBtn.addEventListener("click", () => {
-  buyWaterListEl.classList.toggle("hidden");
+  const popup = document.getElementById("buy-water-popup");
+  popup.classList.toggle("hidden");
   renderBuyWaterList();
 });
 
 function renderBuyWaterList() {
-  buyWaterListEl.innerHTML = "";
+  const listEl = document.getElementById("buy-water-list");
+  listEl.innerHTML = "";
   const options = [
     { qty: 5, cost: 5 },
     { qty: 10, cost: 9 },
@@ -307,14 +309,17 @@ function renderBuyWaterList() {
       saveState();
       showPopupMessage(`Bought ${opt.qty} water 💧`);
     });
-    buyWaterListEl.appendChild(li);
+    listEl.appendChild(li);
   });
 }
-const closeBuyWaterBtn = document.getElementById("close-buy-water-btn");
 
-closeBuyWaterBtn.addEventListener("click", () => {
-  buyWaterListEl.classList.add("hidden");
-});
+// Close button
+const closeBuyWaterBtn = document.getElementById("close-buy-water-btn");
+if (closeBuyWaterBtn) {
+  closeBuyWaterBtn.addEventListener("click", () => {
+    document.getElementById("buy-water-popup").classList.add("hidden");
+  });
+}
 // ====== BUY SEEDS ======
 function buySeed(fName) {
   const f = flowers[fName];
