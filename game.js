@@ -168,7 +168,7 @@ function updateSeedInventory() {
     div.className = "seed-item";
     div.dataset.seed = fName;
     div.innerHTML = `
-      <img src="assets/seedbags/${f.img}-seed.png" alt="${fName}" class="seed-img"/>
+      <img src="assets/seedbags/${f.img}-seedbag.png" alt="${fName}" class="seed-img"/>
       <p class="seed-name">${fName}</p>
       <p class="seed-rarity" style="color:${getRarityColor(f.rarity)}">${f.rarity}</p>
       <p class="seed-count">x${state.seedInventory[fName]}</p>
@@ -315,18 +315,15 @@ function updateSeedJournalCard() {
   const fName = seeds[idx];
   const f = flowers[fName];
 
-  // Locked if never bought or harvested
-  const isLocked = state.seedInventory[fName] === 0 && !state.harvestedFlowers.includes(fName);
+  // Unlocked if user has seeds OR has harvested before
+  const isLocked = !(state.seedInventory[fName] > 0 || state.harvestedFlowers.includes(fName));
 
-  // Choose image
-  let imgSrc = "";
-  if (isLocked) {
-    imgSrc = `assets/seedjournal/${f.img}-lockedseed.png`;
-  } else {
-    imgSrc = `assets/seedjournal/${f.img}-seed.png`;
-  }
+  // Choose image based on lock status
+  const imgSrc = isLocked 
+    ? `assets/seedjournal/${f.img}-locked.png` 
+    : `assets/seedjournal/${f.img}-seed.png`;
 
-  // Update card
+  // Update the journal card
   seedJournalCard.innerHTML = `
     <img src="${imgSrc}" alt="${fName}" class="journal-img"/>
     <p class="journal-name">${fName}</p>
