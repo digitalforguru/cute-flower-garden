@@ -205,23 +205,45 @@ function resetDailyWaterIfNeeded() {
 
 function waterFlower() {
   resetDailyWaterIfNeeded();
-  if (!state.currentFlower) return showPopupMessage("Plant a seed first 🌱");
-  if (dailyWaterCount >= 25) return showPopupMessage("Daily water limit reached");
 
-  const f = flowers[state.currentFlower];
-  state.waterGiven[state.currentFlower]++;
+  if (!state.currentFlower) return showPopup("Plant a seed first 🌱");
+  if (dailyWaterCount >= 25) return showPopup("Daily water limit reached");
+
+  const flowerName = state.currentFlower;
+  const flower = flowers[flowerName];
+
+  // Increment water
+  state.waterGiven[flowerName]++;
   dailyWaterCount++;
 
-  const stages = ["seedstage","sproutstage","midgrowth","matureflower"];
-  let idx = stages.indexOf(state.flowerStage);
-  if (idx < stages.length-1) state.flowerStage = stages[idx+1];
+  const totalWater = flower.water;
+  const stageCount = 4; // seed, sprout, midgrowth, mature
+  const waters = state.waterGiven[flowerName];
+
+  // Determine stage based on water thresholds
+  const threshold = totalWater / stageCount;
+
+  if (waters >= totalWater) {
+    state.flowerStage = "matureflower";
+  } else if (waters >= threshold * 3) {
+    state.flowerStage = "matureflower"; // second-to-last water shows mature
+  } else if (waters >= threshold * 2) {
+    state.flowerStage = "midgrowth";
+  } else if (waters >= threshold) {
+    state.flowerStage = "sproutstage";
+  } else {
+    state.flowerStage = "seedstage";
+  }
 
   updateGardenImage();
   updateSeedInventory();
   saveState();
 
-  if (state.waterGiven[state.currentFlower] >= f.water) showPopupMessage(`${state.currentFlower} is ready to harvest! 🌸`);
-  else showPopupMessage(`Watered ${state.currentFlower} 💧 (${state.waterGiven[state.currentFlower]}/${f.water})`);
+  if (waters >= flower.water) {
+    showPopup(`${flowerName} is ready to harvest! 🌸`);
+  } else {
+    showPopup(`Watered ${flowerName} 💧 (${waters}/${flower.water})`);
+  }
 }
 
 function harvestFlower() {
@@ -292,9 +314,19 @@ function updateSeedJournalCard() {
   const idx = state.seedJournalIndex;
   const fName = seeds[idx];
   const f = flowers[fName];
-  const isLocked = state.seedInventory[fName] === 0 && !state.harvestedFlowers.includes(fName);
-  const imgSrc = isLocked ? `assets/seedjournal/${f.img}-locked.png` : `assets/seedjournal/${f.img}-seed.png`;
 
+  // Locked if never bought or harvested
+  const isLocked = state.seedInventory[fName] === 0 && !state.harvestedFlowers.includes(fName);
+
+  // Choose image
+  let imgSrc = "";
+  if (isLocked) {
+    imgSrc = `assets/seedjournal/${f.img}-lockedseed.png`;
+  } else {
+    imgSrc = `assets/seedjournal/${f.img}-seed.png`;
+  }
+
+  // Update card
   seedJournalCard.innerHTML = `
     <img src="${imgSrc}" alt="${fName}" class="journal-img"/>
     <p class="journal-name">${fName}</p>
