@@ -134,6 +134,7 @@ function updateGardenImage() {
     gardenImage.alt = "empty garden";
   } else {
     const f = flowers[state.currentFlower];
+    if (!f) return console.error("Garden flower not found:", state.currentFlower);
     gardenImage.src = `assets/flowers/${f.img}-${state.flowerStage}.png`;
     gardenImage.alt = `${state.currentFlower} at ${state.flowerStage}`;
   }
@@ -146,9 +147,10 @@ function updateVaseCollection() {
     return;
   }
   state.harvestedFlowers.forEach(fName => {
-    const f = flowers[fName]; // get flower object
+    const f = flowers[fName];
+    if (!f) return console.error("Vase flower not found:", fName);
     const img = document.createElement("img");
-    img.src = `assets/vase/vase-${f.img}.png`; // use img property
+    img.src = `assets/vase/vase-${f.img}.png`;
     img.alt = fName;
     img.className = "vase-item";
     vaseCollectionEl.appendChild(img);
@@ -159,11 +161,15 @@ function updateVaseCollection() {
 function updateSeedInventory() {
   seedInventoryEl.innerHTML = "";
   const owned = seeds.filter(f => state.seedInventory[f] > 0);
-  if (!owned.length) { noSeedsText.style.display = "block"; return; }
+  if (!owned.length) {
+    noSeedsText.style.display = "block";
+    return;
+  }
   noSeedsText.style.display = "none";
 
   owned.forEach(fName => {
     const f = flowers[fName];
+    if (!f) return console.error("Seed inventory flower not found:", fName);
     const div = document.createElement("div");
     div.className = "seed-item";
     div.dataset.seed = fName;
@@ -183,6 +189,7 @@ function updateSeedJournalCard() {
   const idx = state.seedJournalIndex;
   const fName = seeds[idx];
   const f = flowers[fName];
+  if (!f) return console.error("Seed journal flower not found:", fName);
   const isLocked = !(state.seedInventory[fName] > 0 || state.harvestedFlowers.includes(fName));
   const imgSrc = isLocked ? `assets/seedjournal/${f.img}-lockedseed.png` : `assets/seedjournal/${f.img}-seed.png`;
 
@@ -198,7 +205,10 @@ function updateSeedJournalCard() {
 
 // ====== PLANT / WATER / HARVEST ======
 function plantSeed(fName) {
-  if (!state.seedInventory[fName] || state.seedInventory[fName] <= 0) { showPopupMessage(`No ${fName} seeds`); return; }
+  if (!state.seedInventory[fName] || state.seedInventory[fName] <= 0) {
+    showPopupMessage(`No ${fName} seeds`);
+    return;
+  }
   state.currentFlower = fName;
   state.flowerStage = "seedstage";
   state.seedInventory[fName]--;
@@ -211,7 +221,6 @@ function plantSeed(fName) {
 function resetDailyWaterIfNeeded() {
   const today = new Date().toDateString();
   if (state.lastWaterDate !== today) {
-    state.watersToday = 0;
     state.lastWaterDate = today;
     saveState();
   }
@@ -224,7 +233,6 @@ function waterFlower() {
 
   const flowerName = state.currentFlower;
   const flower = flowers[flowerName];
-
   state.waterGiven[flowerName]++;
   state.watersToday--;
 
@@ -250,9 +258,12 @@ function waterFlower() {
 }
 
 function harvestFlower() {
-  if (!state.currentFlower) return showPopupMessage("Plant a seed first 🌱");
+  if (!state.currentFlower) { showPopupMessage("Plant a seed first 🌱"); return; }
   const f = flowers[state.currentFlower];
-  if (state.waterGiven[state.currentFlower] < f.water) return showPopupMessage(`${state.currentFlower} needs more water`);
+  if (state.waterGiven[state.currentFlower] < f.water) {
+    showPopupMessage(`${state.currentFlower} needs more water`);
+    return;
+  }
 
   state.harvestedFlowers.push(state.currentFlower);
   state.lotusPoints += f.cost;
@@ -269,7 +280,10 @@ function harvestFlower() {
 }
 
 // ====== BUY WATER ======
-buyWaterBtn.addEventListener("click", () => { buyWaterListEl.classList.toggle("hidden"); renderBuyWaterList(); });
+buyWaterBtn.addEventListener("click", () => {
+  buyWaterListEl.classList.toggle("hidden");
+  renderBuyWaterList();
+});
 
 function renderBuyWaterList() {
   buyWaterListEl.innerHTML = "";
@@ -300,6 +314,7 @@ function renderBuyWaterList() {
 // ====== BUY SEEDS ======
 function buySeed(fName) {
   const f = flowers[fName];
+  if (!f) return console.error("Buy seed flower not found:", fName);
   if (state.lotusPoints < f.cost) return showPopupMessage(`Not enough lotus points`);
   state.lotusPoints -= f.cost;
   state.seedInventory[fName] = (state.seedInventory[fName] || 0) + 1;
@@ -314,6 +329,7 @@ function renderBuySeedsList() {
   buySeedsListEl.innerHTML = "";
   seeds.forEach(fName => {
     const f = flowers[fName];
+    if (!f) return console.error("Render seed list flower not found:", fName);
     const li = document.createElement("li");
     li.className = "buy-seed-item";
     li.tabIndex = 0;
@@ -360,19 +376,25 @@ function checkDailyStreak() {
 }
 
 // ====== POPUP BUTTONS ======
-seedJournalBtn.addEventListener("click", () => { seedJournalPopup.classList.toggle("hidden"); updateSeedJournalCard(); });
-buySeedListBtn.addEventListener("click", () => { buySeedsPopup.classList.toggle("hidden"); renderBuySeedsList(); });
+seedJournalBtn.addEventListener("click", () => {
+  seedJournalPopup.classList.toggle("hidden");
+  updateSeedJournalCard();
+});
+buySeedListBtn.addEventListener("click", () => {
+  buySeedsPopup.classList.toggle("hidden");
+  renderBuySeedsList();
+});
 closeJournalBtn.addEventListener("click", () => seedJournalPopup.classList.add("hidden"));
 closeBuySeedsBtn.addEventListener("click", () => buySeedsPopup.classList.add("hidden"));
 
 // ====== BUTTON EVENTS ======
 waterBtn.addEventListener("click", waterFlower);
-harvestBtn.addEventListener("click",harvestFlower);
+harvestBtn.addEventListener("click", harvestFlower);
 
 // ====== GLOBAL FUNCTIONS ======
 window.plantSeed = plantSeed;
 
-// ====== INITIALIZATION CONTINUED ======
+// ====== INITIALIZATION ======
 function initGame() {
   loadState();
   updateLotusPoints();
@@ -385,7 +407,7 @@ function initGame() {
   renderBuySeedsList();
   updateSeedJournalCard();
   checkDailyStreak();
-  renderBuyWaterList(); // ensure water options are visible if menu open
+  renderBuyWaterList();
 }
 
 initGame();
