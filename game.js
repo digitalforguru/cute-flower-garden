@@ -168,8 +168,8 @@ function updateSeedInventory() {
     div.className = "seed-item";
     div.dataset.seed = fName;
     div.innerHTML = `
-      <img src="assets/seedbags/${f.img}-seedbag.png" alt="${f.img}" class="seed-img"/>
-      <p class="seed-name">${f.img}</p>
+      <img src="assets/seedbags/${f.img}-seedbag.png" alt="${fName}" class="seed-img"/>
+      <p class="seed-name">${fName}</p>
       <p class="seed-rarity" style="color:${getRarityColor(f.rarity)}">${f.rarity}</p>
       <p class="seed-count">x${state.seedInventory[fName]}</p>
     `;
