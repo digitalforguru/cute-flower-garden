@@ -307,6 +307,10 @@ function harvestFlower() {
 }
 
 // ====== BUY WATER ======
+if (buyWaterBtn) buyWaterBtn.addEventListener("click", () => {
+  if (buyWaterPopup) buyWaterPopup.classList.toggle("hidden");
+  renderBuyWaterList();
+});
 const buyWaterPopup = getEl("buy-water-popup");
 function renderBuyWaterList() {
   if (!buyWaterListEl) return;
@@ -335,8 +339,6 @@ function renderBuyWaterList() {
   });
 }
 
-if (buyWaterBtn) buyWaterBtn.addEventListener("click", () => {
-  if (!buyWaterListEl) return;
 
   // Close other popups if open
   if (seedJournalPopup) seedJournalPopup.style.display = "none";
@@ -346,15 +348,8 @@ if (buyWaterBtn) buyWaterBtn.addEventListener("click", () => {
   buyWaterListEl.style.display = buyWaterListEl.style.display === "block" ? "none" : "block";
 
   // Render water options
-  renderBuyWaterList();
-});
-
 if (closeBuyWaterBtn) closeBuyWaterBtn.addEventListener("click", () => {
-  if (buyWaterListEl) buyWaterListEl.style.display = "none";
-});
-
-if(closeBuyWaterBtn) closeBuyWaterBtn.addEventListener("click", () => {
-  if(buyWaterListEl) buyWaterListEl.classList.add("hidden");
+  if (buyWaterPopup) buyWaterPopup.classList.add("hidden");
 });
 
 // ====== BUY SEEDS ======
