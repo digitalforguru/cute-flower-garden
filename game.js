@@ -1,32 +1,80 @@
-// ---------------------- Variables ----------------------
+// --------------------
+// Variables & DOM
+// --------------------
 const lotusPointsEl = document.getElementById("lotus-points-value");
 const gardenImage = document.getElementById("garden-image");
 const seedInventoryEl = document.getElementById("seed-inventory");
-const noSeedsText = document.getElementById("no-seeds-text");
 const streakCountEl = document.getElementById("streak-count");
+const vaseCollectionEl = document.getElementById("vase-collection");
+
 const waterBtn = document.getElementById("water-btn");
 const harvestBtn = document.getElementById("harvest-btn");
 const buyWaterBtn = document.getElementById("buy-water-btn");
+
 const seedJournalBtn = document.getElementById("seed-journal-btn");
 const buySeedListBtn = document.getElementById("buy-seed-list-btn");
 const seedJournalPopup = document.getElementById("seed-journal-popup");
 const buySeedsPopup = document.getElementById("buy-seeds-popup");
 const closeJournalBtn = document.getElementById("close-journal-btn");
 const closeBuySeedsBtn = document.getElementById("close-buy-seeds-btn");
+
 const seedJournalCard = document.getElementById("seed-journal-card");
 const prevSeedBtn = document.getElementById("prev-seed-btn");
 const nextSeedBtn = document.getElementById("next-seed-btn");
+
 const popupMessage = document.getElementById("popup-message");
-const vaseCollectionEl = document.getElementById("vase-collection");
+
 const themeDots = document.querySelectorAll(".theme-dot");
 const gardenWidget = document.getElementById("garden-widget");
 const vaseWidget = document.getElementById("vase-widget");
-const gardenSection = document.getElementById("garden-section");
-const buySeedsListEl = document.getElementById("buy-seeds-list");
 
 const STORAGE_KEY = "cuteGardenState";
 
-// ---------------------- State ----------------------
+// --------------------
+// Game State
+// --------------------
+const flowers = {
+  daisy: { rarity: "common", water: 15, cost: 50, img: "daisy" },
+  marigold: { rarity: "common", water: 20, cost: 75, img: "marigold" },
+  pansies: { rarity: "common", water: 25, cost: 100, img: "pansies" },
+  nasturtium: { rarity: "common", water: 30, cost: 125, img: "nasturtium" },
+  geranium: { rarity: "common", water: 35, cost: 150, img: "geranium" },
+  begonia: { rarity: "common", water: 40, cost: 175, img: "begonia" },
+  sunflowers: { rarity: "common", water: 45, cost: 200, img: "sunflower" },
+  cosmos: { rarity: "common", water: 50, cost: 225, img: "cosmos" },
+
+  bluebells: { rarity: "uncommon", water: 55, cost: 300, img: "bluebells" },
+  snapdragon: { rarity: "uncommon", water: 60, cost: 350, img: "snapdragon" },
+  morningglory: { rarity: "uncommon", water: 65, cost: 400, img: "morningglory" },
+  tulip: { rarity: "uncommon", water: 70, cost: 450, img: "tulip" },
+  freesia: { rarity: "uncommon", water: 75, cost: 500, img: "freesia" },
+  anemone: { rarity: "uncommon", water: 80, cost: 550, img: "anemone" },
+  lavender: { rarity: "uncommon", water: 90, cost: 600, img: "lavender" },
+  daffodil: { rarity: "uncommon", water: 100, cost: 650, img: "daffodil" },
+
+  cherryblossom: { rarity: "rare", water: 90, cost: 800, img: "cherryblossom" },
+  lily: { rarity: "rare", water: 100, cost: 900, img: "lily" },
+  rose: { rarity: "rare", water: 110, cost: 1000, img: "rose" },
+  dahlia: { rarity: "rare", water: 120, cost: 1100, img: "dahlia" },
+  hibiscus: { rarity: "rare", water: 130, cost: 1200, img: "hibiscus" },
+  peonies: { rarity: "rare", water: 140, cost: 1300, img: "peonies" },
+  gardenia: { rarity: "rare", water: 150, cost: 1400, img: "gardenia" },
+  orchid: { rarity: "rare", water: 160, cost: 1500, img: "orchid" },
+
+  dandelionsummer: { rarity: "epic", water: 150, cost: 2000, img: "dandelionsummer" },
+  maplesaplingfall: { rarity: "epic", water: 165, cost: 2200, img: "maplesaplingfall" },
+  helleborewinter: { rarity: "epic", water: 180, cost: 2400, img: "helleborewinter" },
+  irisflowerspring: { rarity: "epic", water: 195, cost: 2600, img: "irisflowerspring" },
+
+  bleedingheartsvalentines: { rarity: "legendary", water: 210, cost: 2800, img: "bleedingheartsvalentines" },
+  shamrockcloverstp: { rarity: "legendary", water: 225, cost: 3000, img: "shamrockcloverstp" },
+  ipheionstarflower4th: { rarity: "legendary", water: 250, cost: 5000, img: "ipheionstarflower4th" },
+  poinsettiacristmas: { rarity: "legendary", water: 300, cost: 5500, img: "poinsettiacristmas" },
+  taccabathalloween: { rarity: "legendary", water: 350, cost: 6000, img: "taccabathalloween" },
+};
+
+const seeds = Object.keys(flowers);
+
 const state = {
   lotusPoints: 20,
   streak: 0,
@@ -34,74 +82,43 @@ const state = {
   flowerStage: "seedstage",
   harvestedFlowers: [],
   seedInventory: {},
-  seedJournalIndex: 0,
+  waterGiven: {},
   theme: "pink",
-  lastLoginDate: null,
-  waterGiven: {}
+  seedJournalIndex: 0,
+  lastLoginDate: null
 };
 
 // Initialize waterGiven and seedInventory
-const flowers = {
-  // Common
-  daisy: { rarity: "common", water: 15, cost: 50, reward: 50 },
-  marigold: { rarity: "common", water: 20, cost: 75, reward: 75 },
-  pansies: { rarity: "common", water: 25, cost: 100, reward: 100 },
-  nasturtium: { rarity: "common", water: 30, cost: 125, reward: 125 },
-  geranium: { rarity: "common", water: 35, cost: 150, reward: 150 },
-  begonia: { rarity: "common", water: 40, cost: 175, reward: 175 },
-  sunflowers: { rarity: "common", water: 45, cost: 200, reward: 200 },
-  cosmos: { rarity: "common", water: 50, cost: 225, reward: 225 },
-  // Uncommon
-  bluebells: { rarity: "uncommon", water: 55, cost: 300, reward: 300 },
-  snapdragons: { rarity: "uncommon", water: 60, cost: 350, reward: 350 },
-  morningglory: { rarity: "uncommon", water: 65, cost: 400, reward: 400 },
-  tulips: { rarity: "uncommon", water: 70, cost: 450, reward: 450 },
-  freesia: { rarity: "uncommon", water: 75, cost: 500, reward: 500 },
-  anemone: { rarity: "uncommon", water: 80, cost: 550, reward: 550 },
-  lavender: { rarity: "uncommon", water: 90, cost: 600, reward: 600 },
-  daffodils: { rarity: "uncommon", water: 100, cost: 650, reward: 650 },
-  // Rare
-  cherryblossom: { rarity: "rare", water: 90, cost: 800, reward: 800 },
-  lily: { rarity: "rare", water: 100, cost: 900, reward: 900 },
-  rose: { rarity: "rare", water: 110, cost: 1000, reward: 1000 },
-  dahlia: { rarity: "rare", water: 120, cost: 1100, reward: 1100 },
-  hibiscus: { rarity: "rare", water: 130, cost: 1200, reward: 1200 },
-  peonies: { rarity: "rare", water: 140, cost: 1300, reward: 1300 },
-  gardenia: { rarity: "rare", water: 150, cost: 1400, reward: 1400 },
-  orchid: { rarity: "rare", water: 160, cost: 1500, reward: 1500 },
-  // Epic
-  dandelionsummer: { rarity: "epic", water: 150, cost: 2000, reward: 2000 },
-  maplesaplingfall: { rarity: "epic", water: 165, cost: 2200, reward: 2200 },
-  helleborewinter: { rarity: "epic", water: 180, cost: 2400, reward: 2400 },
-  irisflowerspring: { rarity: "epic", water: 195, cost: 2600, reward: 2600 },
-  // Legendary
-  bleedingheartsvalentines: { rarity: "legendary", water: 210, cost: 2800, reward: 2800 },
-  shamrockcloverstp: { rarity: "legendary", water: 225, cost: 3000, reward: 3000 },
-  ipheionstarflower4th: { rarity: "legendary", water: 250, cost: 5000, reward: 5000 },
-  poinsettiacristmas: { rarity: "legendary", water: 300, cost: 5500, reward: 5500 },
-  taccabathalloween: { rarity: "legendary", water: 350, cost: 6000, reward: 6000 }
-};
-
-const seeds = Object.keys(flowers);
-
 seeds.forEach(f => {
   state.waterGiven[f] = 0;
   state.seedInventory[f] = 0;
 });
 
-// ---------------------- LocalStorage ----------------------
+// --------------------
+// Save / Load State
+// --------------------
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
 function loadState() {
   const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved) {
-    Object.assign(state, JSON.parse(saved));
-  }
+  if (!saved) return;
+  const parsed = JSON.parse(saved);
+  Object.assign(state, parsed);
+  state.seedInventory = { ...parsed.seedInventory };
+  state.waterGiven = { ...parsed.waterGiven };
 }
 
-// ---------------------- UI Update ----------------------
+// --------------------
+// Utility Functions
+// --------------------
+function showPopup(message) {
+  popupMessage.textContent = message;
+  popupMessage.classList.add("visible");
+  setTimeout(() => popupMessage.classList.remove("visible"), 2000);
+}
+
 function updateLotusPoints() {
   lotusPointsEl.textContent = state.lotusPoints;
   saveState();
@@ -111,220 +128,206 @@ function updateStreak() {
   streakCountEl.textContent = state.streak;
 }
 
+function applyTheme() {
+  gardenWidget.className = `theme-${state.theme}`;
+  vaseWidget.className = `theme-${state.theme}`;
+  themeDots.forEach(dot => {
+    const isActive = dot.dataset.theme === state.theme;
+    dot.classList.toggle("active", isActive);
+    dot.setAttribute("aria-checked", isActive);
+    dot.tabIndex = isActive ? 0 : -1;
+  });
+}
+
+// --------------------
+// Garden Image
+// --------------------
 function updateGardenImage() {
   if (!state.currentFlower) {
     gardenImage.src = "assets/garden/vacant.png";
     gardenImage.alt = "empty garden";
   } else {
-    gardenImage.src = `assets/flowers/${state.currentFlower}-${state.flowerStage}.png`;
-    gardenImage.alt = `${state.currentFlower} at ${state.flowerStage}`;
+    const stage = state.flowerStage;
+    gardenImage.src = `assets/flowers/${state.currentFlower}-${stage}.png`;
+    gardenImage.alt = `${state.currentFlower} at ${stage}`;
   }
 }
 
+// --------------------
+// Vase Collection
+// --------------------
 function updateVaseCollection() {
   vaseCollectionEl.innerHTML = "";
-  if (!state.harvestedFlowers.length) {
+  if (state.harvestedFlowers.length === 0) {
     const p = document.createElement("p");
     p.textContent = "no harvested flowers yet";
-    p.style.fontSize = "11px";
-    p.style.color = "var(--primary-color)";
     vaseCollectionEl.appendChild(p);
     return;
   }
-  state.harvestedFlowers.forEach(flower => {
+  state.harvestedFlowers.forEach(f => {
     const img = document.createElement("img");
-    img.src = `assets/vase/vase-${flower}.png`;
-    img.alt = `vase with ${flower}`;
+    img.src = `assets/vase/vase-${f}.png`;
+    img.alt = f;
     img.className = "vase-item";
     vaseCollectionEl.appendChild(img);
   });
 }
 
-function getRarityColor(rarity) {
-  switch(rarity) {
-    case "common": return "lightgreen";
-    case "uncommon": return "lavender";
-    case "rare": return "darkred";
-    case "epic": return "purple";
-    case "legendary": return "gold";
-    default: return "white";
-  }
-}
-
-// ---------------------- Seed Inventory ----------------------
+// --------------------
+// Seed Inventory
+// --------------------
 function updateSeedInventory() {
   seedInventoryEl.innerHTML = "";
-  const ownedSeeds = Object.keys(state.seedInventory).filter(s => state.seedInventory[s] > 0);
-  if (!ownedSeeds.length) {
-    noSeedsText.style.display = "block";
-    return;
-  } else {
-    noSeedsText.style.display = "none";
-  }
-
-  ownedSeeds.forEach(seedName => {
-    const count = state.seedInventory[seedName];
-    const rarityColor = getRarityColor(flowers[seedName].rarity);
+  Object.keys(state.seedInventory).forEach(f => {
+    const count = state.seedInventory[f];
+    if (count <= 0) return;
+    const flower = flowers[f];
 
     const div = document.createElement("div");
     div.className = "seed-item";
-    div.dataset.seed = seedName;
+    div.dataset.seed = f;
     div.tabIndex = 0;
-
     div.innerHTML = `
-      <img src="assets/seedbags/${seedName}.png" alt="${seedName}" style="width:40px; height:40px;" />
-      <div style="text-align:center; font-size:10px;">${seedName}</div>
-      <div style="text-align:center; font-size:10px; color:${rarityColor}">${flowers[seedName].rarity}</div>
-      <div style="text-align:center; font-size:10px;">x${count}</div>
+      <img src="assets/seedbags/${flower.img}-seed.png" alt="${f}" class="seed-img"/>
+      <p class="seed-name">${f}</p>
+      <p class="seed-rarity rarity-${flower.rarity}">${flower.rarity}</p>
+      <p class="seed-count">x${count}</p>
     `;
+    div.addEventListener("click", () => plantSeed(f));
     seedInventoryEl.appendChild(div);
   });
 }
 
-// ---------------------- Seed Journal ----------------------
-let currentJournalIndex = 0;
+// --------------------
+// Plant / Water / Harvest
+// --------------------
+function plantSeed(f) {
+  if (state.seedInventory[f] <= 0) {
+    showPopup(`No ${f} seeds`);
+    return;
+  }
+  state.currentFlower = f;
+  state.flowerStage = "seedstage";
+  state.seedInventory[f]--;
+  updateGardenImage();
+  updateSeedInventory();
+  showPopup(`Planted ${f} 🌱`);
+  saveState();
+}
 
+let dailyWaterCount = 0;
+let lastWaterDate = null;
+function resetDailyWaterIfNeeded() {
+  const today = new Date().toDateString();
+  if (lastWaterDate !== today) {
+    dailyWaterCount = 0;
+    lastWaterDate = today;
+  }
+}
+
+function waterFlower() {
+  resetDailyWaterIfNeeded();
+  if (!state.currentFlower) return showPopup("Plant a seed first 🌱");
+  if (dailyWaterCount >= 25) return showPopup("Daily water limit reached");
+
+  state.waterGiven[state.currentFlower]++;
+  dailyWaterCount++;
+
+  const flower = flowers[state.currentFlower];
+  const progress = state.waterGiven[state.currentFlower];
+
+  if (progress >= flower.water) {
+    showPopup(`${state.currentFlower} fully watered 🌸`);
+  } else {
+    showPopup(`Watered ${state.currentFlower} 💧 (${progress}/${flower.water})`);
+  }
+
+  // Update growth stage
+  const stages = ["seedstage", "sproutstage", "midgrowth", "matureflower"];
+  let idx = stages.indexOf(state.flowerStage);
+  if (idx < stages.length - 1) state.flowerStage = stages[idx + 1];
+
+  updateGardenImage();
+  updateSeedInventory();
+  saveState();
+}
+
+function harvestFlower() {
+  if (!state.currentFlower) return showPopup("Plant a seed first 🌱");
+
+  const flower = flowers[state.currentFlower];
+  const water = state.waterGiven[state.currentFlower];
+  if (water < flower.water) return showPopup(`Needs ${flower.water - water} more water`);
+
+  // Harvest
+  state.harvestedFlowers.push(state.currentFlower);
+  state.lotusPoints += flower.cost;
+  state.waterGiven[state.currentFlower] = 0;
+  state.currentFlower = null;
+  state.flowerStage = "seedstage";
+  updateGardenImage();
+  updateVaseCollection();
+  updateLotusPoints();
+  updateSeedInventory();
+  showPopup("Harvested flower 🌸");
+  saveState();
+}
+
+// --------------------
+// Buy Water / Seeds
+// --------------------
+function buyWater() {
+  if (state.lotusPoints < 3) return showPopup("Need 3 lotus points to buy water");
+  state.lotusPoints -= 3;
+  updateLotusPoints();
+  showPopup("Bought water 💧");
+}
+
+function getSeedCost(f) {
+  return flowers[f].cost;
+}
+
+function buySeed(f) {
+  const cost = getSeedCost(f);
+  if (state.lotusPoints < cost) return showPopup(`Need ${cost} lotus points`);
+  state.lotusPoints -= cost;
+  state.seedInventory[f]++;
+  updateLotusPoints();
+  updateSeedInventory();
+  showPopup(`Bought 1 ${f} seed 🌱`);
+  saveState();
+}
+
+// --------------------
+// Seed Journal
+// --------------------
 function updateSeedJournalCard() {
-  const flowerName = seeds[currentJournalIndex];
-  const flower = flowers[flowerName];
-  const isLocked = state.seedInventory[flowerName] === 0 && !state.harvestedFlowers.includes(flowerName);
-  const imgSrc = isLocked ? `assets/seedjournal/${flowerName}-lockedseed.png` : `assets/seedjournal/${flowerName}-seed.png`;
-  const color = getRarityColor(flower.rarity);
-
+  const idx = state.seedJournalIndex;
+  const f = seeds[idx];
+  const flower = flowers[f];
+  const isLocked = state.seedInventory[f] === 0 && !state.harvestedFlowers.includes(f);
   seedJournalCard.innerHTML = `
-    <img src="${imgSrc}" alt="${flowerName}" style="width:80px; height:80px;" />
-    <h3>${flowerName}</h3>
-    <div style="font-size:12px; color:${color}">${flower.rarity}</div>
-    <p>Water Needed: ${flower.water}</p>
-    <p>Cost: ${flower.cost} lotus points</p>
+    <img src="assets/seedjournal/${flower.img}-seed${isLocked ? "-locked" : ""}.png" alt="${f}" />
+    <p>${f}</p>
+    <p class="rarity-${flower.rarity}">${flower.rarity}</p>
+    <p>Water: ${flower.water}</p>
+    <p>Cost: ${flower.cost}</p>
   `;
 }
 
-// ---------------------- Buy Seeds ----------------------
-function renderBuySeedsList() {
-  buySeedsListEl.innerHTML = "";
-  seeds.forEach(seedName => {
-    const flower = flowers[seedName];
-    const color = getRarityColor(flower.rarity);
-    const li = document.createElement("li");
-    li.innerHTML = `<button onclick="buySeed('${seedName}')">${seedName} <span style="color:${color}; font-size:10px;">${flower.rarity}</span> (Cost: ${flower.cost})</button>`;
-    buySeedsListEl.appendChild(li);
-  });
+function prevSeedJournal() {
+  if (state.seedJournalIndex > 0) state.seedJournalIndex--;
+  updateSeedJournalCard();
 }
 
-function buySeed(seedName) {
-  const flower = flowers[seedName];
-  if (!flower) return;
-  if (state.lotusPoints < flower.cost) {
-    showPopupMessage(`need ${flower.cost} lotus points to buy ${seedName}`);
-    return;
-  }
-  state.lotusPoints -= flower.cost;
-  state.seedInventory[seedName] = (state.seedInventory[seedName] ||   state.seedInventory[seedName] + 1;
-  updateLotusPoints();
-  updateSeedInventory();
-  showPopupMessage(`🌱 Bought 1 ${seedName} seed`);
-  saveState();
+function nextSeedJournal() {
+  if (state.seedJournalIndex < seeds.length - 1) state.seedJournalIndex++;
+  updateSeedJournalCard();
 }
 
-// ---------------------- Planting ----------------------
-gardenSection.addEventListener("click", () => {
-  if (!state.currentFlower) return;
-  const seedName = state.currentFlower;
-  if (state.seedInventory[seedName] > 0) {
-    state.seedInventory[seedName]--;
-    state.flowerStage = "planted";
-    updateSeedInventory();
-    updateGardenImage();
-    showPopupMessage(`🌱 Planted ${seedName}`);
-    saveState();
-  }
-});
-
-// Clicking a seed in inventory sets it as currentFlower
-seedInventoryEl.addEventListener("click", (e) => {
-  const seedItem = e.target.closest(".seed-item");
-  if (!seedItem) return;
-  state.currentFlower = seedItem.dataset.seed;
-  state.flowerStage = "seedstage";
-  updateGardenImage();
-  saveState();
-});
-
-// ---------------------- Watering ----------------------
-waterBtn.addEventListener("click", () => {
-  const f = state.currentFlower;
-  if (!f) return showPopupMessage("Select a flower to water");
-  state.waterGiven[f] = (state.waterGiven[f] || 0) + 1;
-  showPopupMessage(`💧 Watered ${f} (${state.waterGiven[f]}/${flowers[f].water})`);
-  if (state.waterGiven[f] >= flowers[f].water) {
-    state.flowerStage = "grown";
-    showPopupMessage(`🌸 ${f} is fully grown!`);
-  }
-  updateGardenImage();
-  saveState();
-});
-
-// ---------------------- Harvest ----------------------
-harvestBtn.addEventListener("click", () => {
-  const f = state.currentFlower;
-  if (!f) return showPopupMessage("No flower planted");
-  if (state.flowerStage !== "grown") return showPopupMessage(`${f} is not fully grown`);
-  state.harvestedFlowers.push(f);
-  state.currentFlower = null;
-  state.flowerStage = "seedstage";
-  state.waterGiven[f] = 0;
-  state.lotusPoints += flowers[f].reward;
-  updateLotusPoints();
-  updateVaseCollection();
-  updateGardenImage();
-  showPopupMessage(`🎉 Harvested ${f} (+${flowers[f].reward} lotus points)`);
-  saveState();
-});
-
-// ---------------------- Buy Water ----------------------
-buyWaterBtn.addEventListener("click", () => {
-  if (state.lotusPoints < 50) return showPopupMessage("Need 50 lotus points to buy water");
-  state.lotusPoints -= 50;
-  showPopupMessage("💧 Bought 1 extra water for your flowers");
-  updateLotusPoints();
-  saveState();
-});
-
-// ---------------------- Popups ----------------------
-function showPopupMessage(msg) {
-  popupMessage.textContent = msg;
-  popupMessage.classList.remove("hidden");
-  setTimeout(() => popupMessage.classList.add("hidden"), 2000);
-}
-
-// ---------------------- Seed Journal Navigation ----------------------
-nextSeedBtn.addEventListener("click", () => {
-  currentJournalIndex = (currentJournalIndex + 1) % seeds.length;
-  updateSeedJournalCard();
-});
-
-prevSeedBtn.addEventListener("click", () => {
-  currentJournalIndex = (currentJournalIndex - 1 + seeds.length) % seeds.length;
-  updateSeedJournalCard();
-});
-
-// ---------------------- Popup Buttons ----------------------
-seedJournalBtn.addEventListener("click", () => {
-  seedJournalPopup.classList.remove("hidden");
-  updateSeedJournalCard();
-});
-
-closeJournalBtn.addEventListener("click", () => seedJournalPopup.classList.add("hidden"));
-
-buySeedListBtn.addEventListener("click", () => {
-  buySeedsPopup.classList.remove("hidden");
-  renderBuySeedsList();
-});
-
-closeBuySeedsBtn.addEventListener("click", () => buySeedsPopup.classList.add("hidden"));
-
-// ---------------------- Theme Selector ----------------------
+// --------------------
+// Theme Buttons
+// --------------------
 themeDots.forEach(dot => {
   dot.addEventListener("click", () => {
     state.theme = dot.dataset.theme;
@@ -333,25 +336,80 @@ themeDots.forEach(dot => {
   });
 });
 
-function applyTheme() {
-  gardenWidget.className = `theme-${state.theme}`;
-  vaseWidget.className = `theme-${state.theme}`;
-  themeDots.forEach(dot => {
-    dot.classList.toggle("active", dot.dataset.theme === state.theme);
-    dot.setAttribute("aria-checked", dot.dataset.theme === state.theme);
-    dot.tabIndex = dot.dataset.theme === state.theme ? 0 : -1;
+// --------------------
+// Event Listeners
+// --------------------
+waterBtn.addEventListener("click", waterFlower);
+harvestBtn.addEventListener("click", harvestFlower);
+buyWaterBtn.addEventListener("click", buyWater);
+
+seedJournalBtn.addEventListener("click", () => {
+  seedJournalPopup.classList.toggle("hidden");
+  updateSeedJournalCard();
+});
+buySeedListBtn.addEventListener("click", () => {
+  buySeedsPopup.classList.toggle("hidden");
+  renderBuySeedsList();
+});
+
+closeJournalBtn.addEventListener("click", () => seedJournalPopup.classList.add("hidden"));
+closeBuySeedsBtn.addEventListener("click", () => buySeedsPopup.classList.add("hidden"));
+
+prevSeedBtn.addEventListener("click", prevSeedJournal);
+nextSeedBtn.addEventListener("click", nextSeedJournal);
+
+// Buy Seeds Popup
+const buySeedsListEl = document.getElementById("buy-seeds-list");
+function renderBuySeedsList() {
+  buySeedsListEl.innerHTML = "";
+  seeds.forEach(f => {
+    const li = document.createElement("li");
+    const flower = flowers[f];
+    li.innerHTML = `
+            <span class="seed-name">${f}</span>
+      <span class="rarity rarity-${flower.rarity}">${flower.rarity}</span>
+      <span class="seed-cost">Cost: ${flower.cost} LP</span>
+    `;
+    li.tabIndex = 0;
+    li.className = "buy-seed-item";
+    li.addEventListener("click", () => {
+      buySeed(f);
+      renderBuySeedsList(); // Update inventory in shop view
+    });
+    buySeedsListEl.appendChild(li);
   });
 }
 
-// ---------------------- Init ----------------------
-function init() {
+// --------------------
+// Daily Streak Logic
+// --------------------
+function checkDailyStreak() {
+  const today = new Date().toDateString();
+  if (state.lastLoginDate !== today) {
+    const yesterday = new Date(Date.now() - 86400000).toDateString();
+    if (state.lastLoginDate === yesterday) {
+      state.streak++;
+    } else {
+      state.streak = 1;
+    }
+    state.lastLoginDate = today;
+    updateStreak();
+    saveState();
+  }
+}
+
+// --------------------
+// Initialization
+// --------------------
+function initGame() {
   loadState();
   updateLotusPoints();
   updateStreak();
+  applyTheme();
+  updateGardenImage();
   updateSeedInventory();
   updateVaseCollection();
-  updateGardenImage();
-  applyTheme();
+  checkDailyStreak();
 }
 
-init();
+initGame();
