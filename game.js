@@ -217,22 +217,29 @@ function plantSeed(fName) {
   showPopupMessage(`Planted ${fName} 🌱`);
 }
 
-let dailyWaterCount = 0;
-let lastWaterDate = null;
+
 function resetDailyWaterIfNeeded() {
   const today = new Date().toDateString();
-  if (lastWaterDate !== today) {
-    dailyWaterCount = 0;
-    lastWaterDate = today;
+
+  if (state.lastWaterDate !== today) {
+    // ✅ only reset if a *new calendar day*
+    state.watersToday = 0;
+    state.lastWaterDate = today;
+    saveState();
   }
-}
+} 
 
 function waterFlower() {
-  resetDailyWaterIfNeeded();
+function resetDailyWaterIfNeeded() {
+  const today = new Date().toDateString();
 
-  if (!state.currentFlower) return showPopupMessage("Plant a seed first 🌱");
-  if (dailyWaterCount >= 25) return showPopupMessage("Daily water limit reached");
-
+  if (state.lastWaterDate !== today) {
+    // ✅ only reset if a *new calendar day*
+    state.watersToday = 0;
+    state.lastWaterDate = today;
+    saveState();
+  }
+} 
   const flowerName = state.currentFlower;
   const flower = flowers[flowerName];
 
@@ -310,11 +317,11 @@ function buySeed(fName) {
   const f = flowers[fName];
   if (state.lotusPoints < f.cost) return showPopupMessage(`Not enough lotus points`);
   state.lotusPoints -= f.cost;
-  state.seedInventory[fName]++;
-  updateLotusPoints();
-  updateSeedInventory();
-  renderBuySeedsList();
-  saveState();
+state.seedInventory[fName] = (state.seedInventory[fName] || 0) + 1; // ✅ safer increment
+updateLotusPoints();
+updateSeedInventory();
+renderBuySeedsList();
+saveState(); // ✅ make sure it saves after seed change
   showPopupMessage(`Bought 1 ${fName} seed 🌱`);
 }
 
