@@ -299,19 +299,47 @@ function harvestFlower() {
   showPopupMessage(`Harvested flower 🌸 +${f.cost} LP`);
 }
 
-// ====== BUY WATER ======
-function buyWater(quantity=1) {
-  if (state.lotusPoints < quantity) return showPopupMessage(`Need ${quantity} lotus points`);
-  state.lotusPoints -= quantity;
-  updateLotusPoints();
-  saveState();
-  showPopupMessage(`Bought ${quantity} water 💧`);
-}
+// ====== BUY WATER POPUP ======
+const buyWaterPopup = document.getElementById("buy-water-popup");
+const closeBuyWaterBtn = document.getElementById("close-buy-water-btn");
+const buyWaterListEl = document.getElementById("buy-water-list");
+const buyWaterMenuBtn = document.getElementById("buy-water-btn"); // main button in widget
 
-buyWaterBtns.forEach(btn => {
-  btn.addEventListener("click", () => buyWater(parseInt(btn.dataset.qty)));
+buyWaterMenuBtn.addEventListener("click", () => {
+  buyWaterPopup.classList.toggle("hidden");
+  renderBuyWaterList();
 });
 
+closeBuyWaterBtn.addEventListener("click", () => {
+  buyWaterPopup.classList.add("hidden");
+});
+
+// Renders the buy water options
+function renderBuyWaterList() {
+  buyWaterListEl.innerHTML = "";
+
+  const options = [
+    { qty: 5, cost: 5 },
+    { qty: 20, cost: 18 },
+    { qty: 50, cost: 40 }
+  ];
+
+  options.forEach(opt => {
+    const li = document.createElement("li");
+    li.className = "buy-water-item";
+    li.tabIndex = 0;
+    li.innerHTML = `💧 ${opt.qty} waters - Cost: ${opt.cost} LP`;
+    li.addEventListener("click", () => {
+      if (state.lotusPoints < opt.cost) return showPopupMessage(`Not enough lotus points`);
+      state.lotusPoints -= opt.cost;
+      state.watersToday += opt.qty;
+      updateLotusPoints();
+      saveState();
+      showPopupMessage(`Bought ${opt.qty} water 💧`);
+    });
+    buyWaterListEl.appendChild(li);
+  });
+}
 // ====== BUY SEEDS ======
 function buySeed(fName) {
   const f = flowers[fName];
