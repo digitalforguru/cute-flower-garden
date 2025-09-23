@@ -424,7 +424,6 @@ closeJournalBtn.addEventListener("click", () => seedJournalPopup.classList.add("
 closeBuySeedsBtn.addEventListener("click", () => buySeedsPopup.classList.add("hidden"));
 
 // ====== BUTTON EVENTS ======
-waterBtn.addEventListener("click", waterFlower);
 harvestBtn.addEventListener("click", harvestFlower);
 
 // ====== GLOBAL FUNCTIONS ======
