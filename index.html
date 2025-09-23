@@ -20,7 +20,7 @@
           <div id="lotus-points" aria-live="polite" aria-atomic="true" class="points-display">
             <img src="assets/UI/lotus-points-icon.png" alt="lotus points" class="icon-large" /> 
             <span id="lotus-points-value">0</span>
-            <span id=water-count-value">0</span>
+            <span id="water-count-value">0</span>
           </div>
         </div>
       </header>
@@ -114,18 +114,10 @@
       <div id="vase-collection"></div>
     </section>
 
-
-    if (state.lotusPoints < cost) return showPopupMessage(`Not enough lotus points`);
-    state.lotusPoints -= cost;
-    state.watersToday += qty;
-    updateLotusPoints();
-    saveState();
-    showPopupMessage(`bought ${qty} water 💧`);
-  });
-});
   </div>
 </div>
-  <!-- Buy Water UI -->
+
+<!-- Buy Water UI -->
 <button id="buy-water-btn">Buy Water</button>
 <div id="buy-water-menu" class="hidden">
   <ul id="buy-water-list"></ul>
