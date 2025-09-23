@@ -56,10 +56,11 @@
                 <span class="button-label">harvest</span>
               </button>
 
-              <button id="buy-water-btn" aria-label="buy water" style="width: 100%;">
-                <img src="assets/UI/buy-water.gif" alt="buy water" class="icon-large" />
-                <span class="button-label">buy water</span>
-              </button>
+              <button id="buy-water-btn">💧 Buy Water</button>
+<div id="buy-water-menu" class="hidden">
+  <button class="buy-water-option" data-qty="5" data-cost="5">Buy 5 waters (5 LP)</button>
+  <button class="buy-water-option" data-qty="20" data-cost="18">Buy 20 waters (18 LP)</button>
+</div>
             </section>
 
           </div>
@@ -117,7 +118,27 @@
       <h2>harvested flowers</h2>
       <div id="vase-collection"></div>
     </section>
+// ====== BUY WATER MENU ======
+const buyWaterBtn = document.getElementById("buy-water-btn");
+const buyWaterMenu = document.getElementById("buy-water-menu");
 
+buyWaterBtn.addEventListener("click", () => {
+  buyWaterMenu.classList.toggle("hidden");
+});
+
+document.querySelectorAll(".buy-water-option").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const qty = parseInt(btn.dataset.qty);
+    const cost = parseInt(btn.dataset.cost);
+
+    if (state.lotusPoints < cost) return showPopupMessage(`Not enough lotus points`);
+    state.lotusPoints -= cost;
+    state.watersToday += qty;
+    updateLotusPoints();
+    saveState();
+    showPopupMessage(`bought ${qty} water 💧`);
+  });
+});
   </div>
 </div>
 
