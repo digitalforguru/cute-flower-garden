@@ -38,8 +38,8 @@ const STORAGE_KEY = "cuteGardenState";
 
 // ====== FLOWERS DATA ======
 const flowers = {
-  "daisies": { rarity: "common", water: 15, cost: 50, img: "daisy" },
-  "marigolds": { rarity: "common", water: 20, cost: 75, img: "marigold" },
+  "daisy": { rarity: "common", water: 15, cost: 50, img: "daisy" },
+  "marigold": { rarity: "common", water: 20, cost: 75, img: "marigold" },
   "pansies": { rarity: "common", water: 25, cost: 100, img: "pansies" },
   "nasturtiums": { rarity: "common", water: 30, cost: 125, img: "nasturtium" },
   "geraniums": { rarity: "common", water: 35, cost: 150, img: "geranium" },
