@@ -310,7 +310,11 @@ function renderBuyWaterList() {
     buyWaterListEl.appendChild(li);
   });
 }
+const closeBuyWaterBtn = document.getElementById("close-buy-water-btn");
 
+closeBuyWaterBtn.addEventListener("click", () => {
+  buyWaterListEl.classList.add("hidden");
+});
 // ====== BUY SEEDS ======
 function buySeed(fName) {
   const f = flowers[fName];
