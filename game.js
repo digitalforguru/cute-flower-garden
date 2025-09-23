@@ -133,7 +133,8 @@ function updateGardenImage() {
     gardenImage.src = "assets/garden/vacant.png";
     gardenImage.alt = "empty garden";
   } else {
-    gardenImage.src = `assets/flowers/${state.currentFlower}-${state.flowerStage}.png`;
+    const f = flowers[state.currentFlower];
+    gardenImage.src = `assets/flowers/${f.img}-${state.flowerStage}.png`;
     gardenImage.alt = `${state.currentFlower} at ${state.flowerStage}`;
   }
 }
