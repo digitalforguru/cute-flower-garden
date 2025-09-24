@@ -96,7 +96,8 @@ const state = {
   seedJournalIndex: 0,
   lastLoginDate: null,
   watersToday: 0,
-  lastWaterDate: null
+  lastWaterDate: null,
+  boughtWaters: 0 // <--- NEW
 };
 
 // ====== INITIAL SEED ======
@@ -134,9 +135,16 @@ function updateLotusPoints() {
   if(lotusPointsEl) lotusPointsEl.textContent = ` ${state.lotusPoints} LP`; 
   saveState(); 
 }
-function updateWaterCount() { 
-  if(waterCountEl) waterCountEl.textContent = `💧 ${state.watersToday} total waters left`; 
-  saveState(); 
+// ====== WATER COUNT UI ======
+function updateWaterCount() {
+  if(!waterCountEl) return;
+
+  // total waters = daily waters left + any bought waters
+  const totalWaters = state.watersToday + (state.boughtWaters || 0);
+  const dailyWaters = state.watersToday;
+
+  waterCountEl.textContent = `💧 Total waters: ${totalWaters} | 💧 Daily waters left: ${dailyWaters}`;
+  saveState();
 }
 function updateStreak() { if(streakCountEl) streakCountEl.textContent = state.streak; saveState(); }
 
@@ -260,15 +268,23 @@ function resetDailyWaterIfNeeded() {
   }
 }
 
+// ====== WATER FLOW UPDATE ======
 function waterFlower() {
   resetDailyWaterIfNeeded();
   if(!state.currentFlower) return showPopupMessage("Plant a seed first 🌱");
-  if(state.watersToday<=0) return showPopupMessage("No water left! Buy more 💧");
+  
+  // Use daily waters first
+  if(state.watersToday <= 0 && (!state.boughtWaters || state.boughtWaters <= 0)) 
+    return showPopupMessage("No water left! Buy more 💧");
 
   const fName = state.currentFlower;
   const flower = flowers[normalizeFlowerKey(fName)];
+
+  // Prioritize daily waters
+  if(state.watersToday > 0) state.watersToday--;
+  else state.boughtWaters--;
+
   state.waterGiven[fName] = (state.waterGiven[fName]||0)+1;
-  state.watersToday--;
 
   const total = flower.water;
   const waters = state.waterGiven[fName];
@@ -298,7 +314,7 @@ function harvestFlower() {
   showPopupMessage(`Harvested flower 🌸 +${f.cost} LP`);
 }
 
-// ====== BUY WATER ======
+// ====== BUY WATER UPDATE ======
 function renderBuyWaterList() {
   if(!buyWaterListEl) return;
   buyWaterListEl.innerHTML="";
@@ -311,7 +327,7 @@ function renderBuyWaterList() {
     li.addEventListener("click",()=>{
       if(state.lotusPoints<opt.cost) return showPopupMessage("Not enough lotus points");
       state.lotusPoints-=opt.cost;
-      state.watersToday+=opt.qty;
+      state.boughtWaters = (state.boughtWaters || 0) + opt.qty;
       updateLotusPoints(); updateWaterCount(); saveState();
       showPopupMessage(`Bought ${opt.qty} water 💧`);
     });
