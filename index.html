@@ -24,51 +24,33 @@
         </div>
       </header>
 
-      <main class="widget-main">
-        <div style="display: flex; gap: 1rem;">
+     <main class="widget-main">
+  <div id="garden-buttons-wrapper">
+    
+    <!-- Garden Image -->
+    <section id="garden-section" aria-label="garden area" tabindex="0" role="button" aria-describedby="garden-info">
+      <img id="garden-image" src="assets/garden/vacant.png" alt="empty garden" />
+      <div id="garden-info" class="info-text">click garden to plant</div>
+    </section>
 
-          <!-- Garden area -->
-          <section id="garden-section" aria-label="garden area" tabindex="0" role="button" aria-describedby="garden-info" style="flex-shrink: 0; width: 180px; height: auto; position: relative; display:flex; flex-direction:column; align-items:center;">
-            
-            <img id="garden-image" src="assets/garden/vacant.png" alt="empty garden" style="width: 180px; height: 180px; object-fit: contain; pointer-events:auto; cursor:pointer; user-select:none;" />
-            <div id="garden-info" class="info-text" style="font-size:10px; user-select:none; pointer-events:none;">
-              click garden to plant
-            </div>
-          </section>
-          
-            <!-- Main action buttons OUTSIDE garden box -->
-            <div id="actions-section" aria-label="garden actions" class="button-row" style="display:flex; justify-content:center; gap:0.8rem; margin-top:0.5rem;"> 
-              <button id="water-btn" aria-label="water flower" style="width: 70px;">
-                <img src="assets/UI/watercan.png" alt="water can" class="icon-large" />
-                <span class="button-label">water</span>
-              </button>
-              <button id="harvest-btn" aria-label="harvest flower" style="width: 70px;">
-                <img src="assets/UI/harvestbasket.png" alt="harvest basket" class="icon-large" />
-                <span class="button-label">harvest</span>
-              </button>
-            </div>
-          <!-- Buttons column -->
-          <div style="display: flex; flex-direction: column; justify-content: flex-start; gap: 1rem;">
+    <!-- Buttons Column -->
+    <div class="button-col">
+      <button id="seed-journal-btn" class="small-btn">📖 journal</button>
+      <button id="buy-seed-list-btn" class="small-btn">🛒 buy seeds</button>
+      <button id="buy-water-btn" class="small-btn">💧 buy water</button>
+      <button id="water-btn" class="small-btn">🌱 water</button>
+      <button id="harvest-btn" class="small-btn">🌸 harvest</button>
+    </div>
+  </div>
 
-            <!-- Seed journal & seed shop buttons -->
-            <section id="seed-journal-section" aria-label="seed journal and seed shop" class="button-row" style="gap: 0.5rem;">
-              <button id="seed-journal-btn" aria-haspopup="dialog" aria-controls="seed-journal-popup" aria-expanded="false" title="Open seed journal" style="padding: 0.3rem 0.5rem; font-size: 10px; width: auto;">📖 seed journal</button>
-              <button id="buy-seed-list-btn" aria-haspopup="dialog" aria-controls="buy-seeds-popup" aria-expanded="false" title="Buy new seeds" style="padding: 0.3rem 0.5rem; font-size: 10px; width: auto;">🛒 buy seeds</button>
-            </section>
-
-            <!-- Buy Water Button -->
-            <button id="buy-water-btn" aria-label="buy water" style="width: auto; font-size:10px; padding:0.3rem 0.5rem;">
-              💧 buy water
-            </button>
-          </div>
-        </div>
-
-        <!-- Daily streak -->
-        <section id="daily-streak-section" aria-label="daily login streak" tabindex="0" style="margin-top: 0.8rem;">
-          <p>daily login streak: <span id="streak-count">0</span> ⟢</p>
-        </section>
-
-      </main>
+  <!-- Stats below garden -->
+  <div id="widget-stats">
+    <p> <span id="lotus-points-value">28</span> LP</p>
+    <p>💧 <span id="water-count-value">10</span> waters left</p>
+    <p>⟢ <span id="streak-count">3</span> streak</p>
+  </div>
+</main>
+       
 
       <!-- Popups -->
 
