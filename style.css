@@ -241,8 +241,11 @@ body, html {
 #seed-journal-card {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center;       /* center horizontally */
+  justify-content: center;   /* center vertically */
+  text-align: center;
   width: 100%;
+  height: 100%;              /* fill popup space */
   box-sizing: border-box;
   padding: 10px;
 }
