@@ -34,21 +34,19 @@
             <div id="garden-info" class="info-text" style="font-size:10px; user-select:none; pointer-events:none;">
               click garden to plant
             </div>
-
-            <!-- Main action buttons UNDER garden -->
-            <div id="actions-section" aria-label="garden actions" class="button-row" style="display:flex; justify-content:center; gap:0.8rem; margin-top:0.5rem;">
+          </section>
+          
+            <!-- Main action buttons OUTSIDE garden box -->
+            <div id="actions-section" aria-label="garden actions" class="button-row" style="display:flex; justify-content:center; gap:0.8rem; margin-top:0.5rem;"> 
               <button id="water-btn" aria-label="water flower" style="width: 70px;">
                 <img src="assets/UI/watercan.png" alt="water can" class="icon-large" />
                 <span class="button-label">water</span>
               </button>
-
               <button id="harvest-btn" aria-label="harvest flower" style="width: 70px;">
                 <img src="assets/UI/harvestbasket.png" alt="harvest basket" class="icon-large" />
                 <span class="button-label">harvest</span>
               </button>
             </div>
-          </section>
-
           <!-- Buttons column -->
           <div style="display: flex; flex-direction: column; justify-content: flex-start; gap: 1rem;">
 
@@ -91,6 +89,12 @@
         <button id="close-buy-seeds-btn" aria-label="close buy seeds list">✕</button>
         <ul id="buy-seeds-list" role="listbox" tabindex="0" aria-live="polite"></ul>
       </div>
+          <!-- Seed Inventory Popup -->
+          <div id="seed-inventory-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-inventory-title" tabindex="-1">
+            <h3 id="seed-inventory-title">🌱 choose a seed to plant</h3>
+            <button id="close-seed-inventory-btn" aria-label="close seed inventory">✕</button>
+            <div id="seed-inventory-popup-list" tabindex="0" aria-live="polite"></div>
+          </div>
 
       <!-- Buy Water Popup -->
       <div id="buy-water-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="buy-water-title" tabindex="-1">
