@@ -33,6 +33,11 @@ const buySeedsListEl = getEl("buy-seeds-list");
 const buyWaterBtn = getEl("buy-water-btn");
 const buyWaterListEl = getEl("buy-water-list");
 const closeBuyWaterBtn = getEl("close-buy-water-btn");
+const buyWaterPopup = getEl("buy-water-popup");
+
+const seedInventoryPopup = getEl("seed-inventory-popup");
+const closeSeedInventoryBtn = getEl("close-seed-inventory-btn");
+const seedInventoryPopupList = getEl("seed-inventory-popup-list");
 
 const STORAGE_KEY = "cuteGardenState";
 const DAILY_WATER_BY_RARITY = {
@@ -42,6 +47,7 @@ const DAILY_WATER_BY_RARITY = {
   epic: 35,
   legendary: 40
 };
+
 // ====== FLOWERS DATA ======
 const flowers = {
   "daisy": { rarity: "common", water: 15, cost: 50, img: "daisy" },
@@ -174,6 +180,7 @@ function updateVaseCollection() {
     vaseCollectionEl.appendChild(img);
   });
 }
+
 const seedInventoryPopup = getEl("seed-inventory-popup");
 const closeSeedInventoryBtn = getEl("close-seed-inventory-btn");
 const seedInventoryPopupList = getEl("seed-inventory-popup-list");
@@ -202,6 +209,7 @@ function renderSeedInventoryPopup() {
     }
   });
 }
+
 // ====== SEED INVENTORY ======
 function updateSeedInventory() {
   if (!seedInventoryEl) return;
@@ -286,6 +294,7 @@ function resetDailyWaterIfNeeded() {
     saveState();
   }
 }
+
 function waterFlower() {
   resetDailyWaterIfNeeded();
   if (!state.currentFlower) return showPopupMessage("Plant a seed first 🌱");
@@ -293,7 +302,7 @@ function waterFlower() {
 
   const flowerName = state.currentFlower;
   const flower = flowers[normalizeFlowerKey(flowerName)];
-  state.waterGiven[flowerName]++;
+  state.waterGiven[flowerName] = (state.waterGiven[flowerName] || 0) + 1;
   state.watersToday--;
 
   const totalWater = flower.water;
@@ -320,7 +329,7 @@ function waterFlower() {
 function harvestFlower() {
   if (!state.currentFlower) return showPopupMessage("Plant a seed first 🌱");
   const f = flowers[normalizeFlowerKey(state.currentFlower)];
-  if (state.waterGiven[state.currentFlower] < f.water) return showPopupMessage(`${state.currentFlower} needs more water`);
+  if ((state.waterGiven[state.currentFlower] || 0) < f.water) return showPopupMessage(`${state.currentFlower} needs more water`);
 
   state.harvestedFlowers.push(state.currentFlower);
   state.lotusPoints += f.cost;
@@ -338,10 +347,18 @@ function harvestFlower() {
 
 // ====== BUY WATER ======
 if (buyWaterBtn) buyWaterBtn.addEventListener("click", () => {
-  if (buyWaterPopup) buyWaterPopup.classList.toggle("hidden");
-  renderBuyWaterList();
+  const isHidden = buyWaterPopup.classList.contains("hidden");
+
+  seedJournalPopup.classList.add("hidden");
+  buySeedsPopup.classList.add("hidden");
+  buyWaterPopup.classList.add("hidden");
+
+  if(isHidden) {
+    buyWaterPopup.classList.remove("hidden");
+    renderBuyWaterList();
+  }
 });
-const buyWaterPopup = getEl("buy-water-popup");
+
 function renderBuyWaterList() {
   if (!buyWaterListEl) return;
   buyWaterListEl.innerHTML = "";
@@ -357,7 +374,7 @@ function renderBuyWaterList() {
     li.tabIndex = 0;
     li.textContent = `💧 ${opt.qty} waters - Cost: ${opt.cost} LP`;
     li.addEventListener("click", () => {
-      if (state.lotusPoints < opt.cost) return showPopupMessage("Not enough lotus points");
+          if (state.lotusPoints < opt.cost) return showPopupMessage("Not enough lotus points");
       state.lotusPoints -= opt.cost;
       state.watersToday += opt.qty;
       updateLotusPoints();
@@ -368,19 +385,6 @@ function renderBuyWaterList() {
     buyWaterListEl.appendChild(li);
   });
 }
-
-
-  // Close other popups if open
-  if (seedJournalPopup) seedJournalPopup.style.display = "none";
-  if (buySeedsPopup) buySeedsPopup.style.display = "none";
-
-  // Toggle water menu
-  buyWaterListEl.style.display = buyWaterListEl.style.display === "block" ? "none" : "block";
-
-  // Render water options
-if (closeBuyWaterBtn) closeBuyWaterBtn.addEventListener("click", () => {
-  if (buyWaterPopup) buyWaterPopup.classList.add("hidden");
-});
 
 // ====== BUY SEEDS ======
 function buySeed(fName) {
@@ -449,19 +453,28 @@ function checkDailyStreak() {
 }
 
 // ====== POPUP BUTTONS ======
-if (seedJournalBtn) seedJournalBtn.addEventListener("click", () => {
-  if(seedJournalPopup) seedJournalPopup.classList.toggle("hidden");
-  updateSeedJournalCard();
+[ 
+  { btn: seedJournalBtn, popup: seedJournalPopup, update: updateSeedJournalCard },
+  { btn: buySeedListBtn, popup: buySeedsPopup, update: renderBuySeedsList },
+  { btn: buyWaterBtn, popup: buyWaterPopup, update: renderBuyWaterList }
+].forEach(({btn, popup, update}) => {
+  if(!btn) return;
+  btn.addEventListener("click", () => {
+    const isHidden = popup.classList.contains("hidden");
+    [seedJournalPopup, buySeedsPopup, buyWaterPopup].forEach(p => p.classList.add("hidden"));
+    if(isHidden) {
+      popup.classList.remove("hidden");
+      if(update) update();
+    }
+  });
 });
-if (buySeedListBtn) buySeedListBtn.addEventListener("click", () => {
-  if(buySeedsPopup) buySeedsPopup.classList.toggle("hidden");
-  renderBuySeedsList();
-});
-if (closeJournalBtn) closeJournalBtn.addEventListener("click", () => {
-  if(seedJournalPopup) seedJournalPopup.classList.add("hidden");
-});
-if (closeBuySeedsBtn) closeBuySeedsBtn.addEventListener("click", () => {
-  if(buySeedsPopup) buySeedsPopup.classList.add("hidden");
+
+[ 
+  { btn: closeJournalBtn, popup: seedJournalPopup },
+  { btn: closeBuySeedsBtn, popup: buySeedsPopup },
+  { btn: closeBuyWaterBtn, popup: buyWaterPopup }
+].forEach(({btn, popup}) => {
+  if(btn) btn.addEventListener("click", () => popup.classList.add("hidden"));
 });
 
 // ====== BUTTON EVENTS ======
@@ -470,52 +483,7 @@ if (harvestBtn) harvestBtn.addEventListener("click", harvestFlower);
 
 // ====== GLOBAL FUNCTIONS ======
 window.plantSeed = plantSeed;
-// === SEED JOURNAL BUTTON ===
-if (seedJournalBtn) {
-  seedJournalBtn.addEventListener("click", () => {
-    const isHidden = seedJournalPopup.classList.contains("hidden");
 
-    // hide all popups first
-    seedJournalPopup.classList.add("hidden");
-    buySeedsPopup.classList.add("hidden");
-    buyWaterPopup.classList.add("hidden");
-
-    // toggle correctly
-    if (isHidden) {
-      seedJournalPopup.classList.remove("hidden");
-      updateSeedJournalCard();
-    }
-  });
-}
-
-// === BUY SEEDS BUTTON ===
-if (buySeedListBtn) {
-  buySeedListBtn.addEventListener("click", () => {
-    const isHidden = buySeedsPopup.classList.contains("hidden");
-
-    // hide all popups first
-    seedJournalPopup.classList.add("hidden");
-    buySeedsPopup.classList.add("hidden");
-    buyWaterPopup.classList.add("hidden");
-
-    // toggle correctly
-    if (isHidden) {
-      buySeedsPopup.classList.remove("hidden");
-      renderBuySeedsList();
-    }
-  });
-}// === CLOSE BUTTONS ===
-getEl("close-seed-journal-btn")?.addEventListener("click", () => {
-  seedJournalPopup.classList.add("hidden");
-});
-
-getEl("close-buy-seeds-btn")?.addEventListener("click", () => {
-  buySeedsPopup.classList.add("hidden");
-});
-
-getEl("close-buy-water-btn")?.addEventListener("click", () => {
-  buyWaterPopup.classList.add("hidden");
-});
 // ====== INITIALIZATION ======
 function initGame() {
   loadState();
