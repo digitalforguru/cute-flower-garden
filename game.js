@@ -146,6 +146,7 @@ function updateLotusPoints() {
   if(lotusPointsEl) lotusPointsEl.textContent = ` ${state.lotusPoints} LP`; 
   saveState(); 
 }
+
 function openSeedZoom(fName) {
   const f = flowers[fName];
   if (!f) return;
@@ -182,13 +183,9 @@ function openSeedZoom(fName) {
   seedZoomImg.style.height = `${gardenRect.height}px`;
 }
 
-if (closeSeedZoomBtn) closeSeedZoomBtn.addEventListener("click", () => {
-  const fName = seedZoomName.textContent.replace(" 🔒","");  
-  const cardImg = document.querySelector(`.seed-item[data-seed="${fName}"] img`) || document.querySelector(".journal-img");
-  if (!cardImg) {
-    seedZoomPopup.classList.add("hidden");
-    return;
-  }
+if(closeSeedZoomBtn) closeSeedZoomBtn.addEventListener("click", () => {
+  seedZoomPopup.classList.add("hidden");
+});
 
   const cardRect = cardImg.getBoundingClientRect();
 
