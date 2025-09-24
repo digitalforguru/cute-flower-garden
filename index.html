@@ -27,29 +27,34 @@
      <main class="widget-main">
   <div id="garden-buttons-wrapper">
     
-    <!-- Garden Image -->
-    <section id="garden-section" aria-label="garden area" tabindex="0" role="button" aria-describedby="garden-info">
-      <img id="garden-image" src="assets/garden/vacant.png" alt="empty garden" />
-      <div id="garden-info" class="info-text">click garden to plant</div>
-    </section>
+   <div id="garden-main-row">
+  <!-- Garden -->
+  <div>
+    <div id="garden-section">
+      <img id="garden-image" src="assets/garden/vacant.png" alt="Garden Plot">
+    </div>
 
-    <!-- Buttons Column -->
-    <div class="button-col">
-      <button id="seed-journal-btn" class="small-btn">📖 journal</button>
-      <button id="buy-seed-list-btn" class="small-btn">🛒 buy seeds</button>
-      <button id="buy-water-btn" class="small-btn">💧 buy water</button>
-      <button id="water-btn" class="small-btn">🌱 water</button>
-      <button id="harvest-btn" class="small-btn">🌸 harvest</button>
+    <!-- Water + Harvest under garden -->
+    <div id="garden-action-buttons">
+      <button id="water-btn">💦 Water</button>
+      <button id="harvest-btn">🌸 Harvest</button>
     </div>
   </div>
+
+  <!-- Shop/Journal buttons to the right -->
+  <div id="shop-buttons-col">
+    <button id="open-journal-btn">📔 Journal</button>
+    <button id="open-buy-seeds-btn">🌱 Buy Seeds</button>
+    <button id="open-buy-water-btn">💧 Buy Water</button>
+  </div>
+</div>
 
   <!-- Stats below garden -->
   <div id="widget-stats">
     <p>⟢ <span id="streak-count">3</span> login streak</p>
   </div>
-</main>
-       
-
+     </main>
+      
       <!-- Popups -->
 
       <!-- Seed Journal Popup -->
