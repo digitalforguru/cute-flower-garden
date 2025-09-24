@@ -35,9 +35,7 @@ const buyWaterListEl = getEl("buy-water-list");
 const closeBuyWaterBtn = getEl("close-buy-water-btn");
 const buyWaterPopup = getEl("buy-water-popup");
 
-const seedInventoryPopup = getEl("seed-inventory-popup");
-const closeSeedInventoryBtn = getEl("close-seed-inventory-btn");
-const seedInventoryPopupList = getEl("seed-inventory-popup-list");
+
 
 const STORAGE_KEY = "cuteGardenState";
 const DAILY_WATER_BY_RARITY = {
