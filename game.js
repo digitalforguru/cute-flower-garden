@@ -203,18 +203,25 @@ function updateSeedInventory() {
   if(!owned.length){ if(noSeedsText) noSeedsText.style.display="block"; return; }
   if(noSeedsText) noSeedsText.style.display="none";
 
-  owned.forEach(fName => {
-    const f = flowers[fName]; if(!f) return;
-    const div = document.createElement("div");
-    div.className="seed-item";
-    div.dataset.seed=fName;
-    div.innerHTML=`<img src="assets/seedbags/${f.img}-seedbag.png" alt="${fName}" class="seed-img"/>
-                   <p class="seed-name">${fName}</p>
-                   <p class="seed-rarity" style="color:${getRarityColor(f.rarity)}">${f.rarity}</p>
-                   <p class="seed-count">x${state.seedInventory[fName]}</p>`;
-    div.addEventListener("click", ()=>plantSeed(fName));
-    seedInventoryEl.appendChild(div);
-  });
+ owned.forEach(fName => {
+  const f = flowers[fName]; if(!f) return;
+  const isLocked = state.seedInventory[fName] <= 0;
+  const rarityColor = getRarityColor(f.rarity);
+  const glowColor = isLocked ? `${rarityColor}50` : rarityColor;
+
+  const div = document.createElement("div");
+  div.className = "seed-item seed-glow";
+  div.dataset.seed = fName;
+  div.style.color = glowColor;
+  div.innerHTML = `
+    <img src="assets/seedbags/${f.img}-seedbag.png" alt="${fName}" class="seed-img"/>
+    <p class="seed-name">${fName}</p>
+    <p class="seed-rarity">${f.rarity}</p>
+    <p class="seed-count">x${state.seedInventory[fName]}</p>
+  `;
+  div.addEventListener("click", ()=>plantSeed(fName));
+  seedInventoryEl.appendChild(div);
+});
 }
 
 // ====== SEED JOURNAL ======
