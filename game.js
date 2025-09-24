@@ -130,8 +130,14 @@ function loadState() { const saved = localStorage.getItem(STORAGE_KEY); if(saved
 function normalizeFlowerKey(name) { return seeds.find(f => f.toLowerCase() === name.toLowerCase()) || name; }
 
 // ====== UI UPDATES ======
-function updateLotusPoints() { if(lotusPointsEl) lotusPointsEl.textContent = state.lotusPoints; saveState(); }
-function updateWaterCount() { if(waterCountEl) waterCountEl.textContent = state.watersToday; saveState(); }
+function updateLotusPoints() { 
+  if(lotusPointsEl) lotusPointsEl.textContent = ` ${state.lotusPoints} LP`; 
+  saveState(); 
+}
+function updateWaterCount() { 
+  if(waterCountEl) waterCountEl.textContent = `💧 ${state.watersToday} waters left`; 
+  saveState(); 
+}
 function updateStreak() { if(streakCountEl) streakCountEl.textContent = state.streak; saveState(); }
 
 function updateGardenImage() {
