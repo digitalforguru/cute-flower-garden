@@ -135,7 +135,7 @@ function updateLotusPoints() {
   saveState(); 
 }
 function updateWaterCount() { 
-  if(waterCountEl) waterCountEl.textContent = `💧 ${state.watersToday} waters left`; 
+  if(waterCountEl) waterCountEl.textContent = `💧 ${state.watersToday} total waters left`; 
   saveState(); 
 }
 function updateStreak() { if(streakCountEl) streakCountEl.textContent = state.streak; saveState(); }
@@ -149,7 +149,7 @@ function updateGardenImage() {
     const f = flowers[normalizeFlowerKey(state.currentFlower)];
     if(!f) return console.error("Garden flower not found:", state.currentFlower);
     gardenImage.src = `assets/flowers/${f.img}-${state.flowerStage}.png`;
-    gardenImage.alt = `${state.currentFlower} at ${state.flowerStage}`;
+    gardenImage.alt = `    ${state.flowerStage}`;
   }
 }
 
@@ -237,15 +237,25 @@ function plantSeed(fName){
   showPopupMessage(`Planted ${fName} 🌱`);
 }
 
+// ====== DAILY WATER LOGIC ======
 function resetDailyWaterIfNeeded() {
   const today = new Date().toDateString();
-  if(state.lastWaterDate!==today){
-    state.lastWaterDate=today;
+  if(state.lastWaterDate !== today) {
+    state.lastWaterDate = today;
+
+    // Determine highest rarity owned
     const rarities=["common","uncommon","rare","epic","legendary"];
     let highest="common";
-    seeds.forEach(fName=>{ if(state.seedInventory[fName]>0){ const r=flowers[fName].rarity; if(rarities.indexOf(r)>rarities.indexOf(highest)) highest=r; }});
-    state.watersToday=DAILY_WATER_BY_RARITY[highest]||10;
-    showPopupMessage(`+${state.watersToday} daily waters for your ${highest} plants 💧`);
+    seeds.forEach(fName=>{
+      if(state.seedInventory[fName]>0){
+        const r=flowers[fName].rarity;
+        if(rarities.indexOf(r)>rarities.indexOf(highest)) highest=r;
+      }
+    });
+
+    const newDailyWater = DAILY_WATER_BY_RARITY[highest] || 10;
+    state.watersToday += newDailyWater; // add to leftover if any
+    showPopupMessage(`+${newDailyWater} daily waters for your ${highest} plants 💧`);
     saveState();
   }
 }
