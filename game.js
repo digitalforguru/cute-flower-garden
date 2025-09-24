@@ -220,21 +220,47 @@ function updateSeedInventory() {
 // ====== SEED JOURNAL ======
 function updateSeedJournalCard() {
   if(!seedJournalCard) return;
-  const idx=state.seedJournalIndex;
-  const fName=seeds[idx];
-  const f=flowers[fName];
-  if(!f) return;
-  const isLocked = !(state.seedInventory[fName]>0 || state.harvestedFlowers.includes(fName));
-  const imgSrc = isLocked ? `assets/seedjournal/${f.img}-lockedseed.png` : `assets/seedjournal/${f.img}-seed.png`;
-  seedJournalCard.innerHTML=`
-    <img src="${imgSrc}" alt="${fName}" class="journal-img"/>
-    <p class="journal-name">${fName}</p>
-    <p class="journal-rarity" style="color:${getRarityColor(f.rarity)}">${f.rarity}</p>
-    <p>Water Needed: 💧 ${f.water}</p>
-    <p>Cost: 🌸 ${f.cost}</p>
-    <p>Status: ${isLocked ? "🔒 Locked" : "✅ Unlocked"}</p>`;
-}
 
+  const idx = state.seedJournalIndex;
+  const fName = seeds[idx];
+  const f = flowers[fName];
+  if(!f) return;
+
+  const isLocked = !(state.seedInventory[fName] > 0 || state.harvestedFlowers.includes(fName));
+  const imgSrc = isLocked 
+    ? `assets/seedjournal/${f.img}-lockedseed.png` 
+    : `assets/seedjournal/${f.img}-seed.png`;
+
+  seedJournalCard.innerHTML = `
+    <div class="journal-container">
+      <div class="journal-img-wrapper">
+        <button id="prev-seed-btn-small" class="nav-btn nav-left">◀</button>
+        <img src="${imgSrc}" alt="${fName}" class="journal-img"/>
+        <button id="next-seed-btn-small" class="nav-btn nav-right">▶</button>
+      </div>
+      <div class="journal-info">
+        <p class="journal-name">${fName}</p>
+        <p class="journal-rarity" style="color:${getRarityColor(f.rarity)}">${f.rarity}</p>
+        <p class="journal-water">Water Needed: 💧 ${f.water}</p>
+        <p class="journal-cost">Cost: 🌸 ${f.cost}</p>
+        <p class="journal-status">${isLocked ? "🔒 Locked" : "✅ Unlocked"}</p>
+      </div>
+    </div>
+  `;
+
+  // Add arrow functionality
+  const prevSmall = document.getElementById("prev-seed-btn-small");
+  const nextSmall = document.getElementById("next-seed-btn-small");
+
+  if(prevSmall) prevSmall.addEventListener("click", () => {
+    state.seedJournalIndex = (state.seedJournalIndex - 1 + seeds.length) % seeds.length;
+    updateSeedJournalCard();
+  });
+  if(nextSmall) nextSmall.addEventListener("click", () => {
+    state.seedJournalIndex = (state.seedJournalIndex + 1) % seeds.length;
+    updateSeedJournalCard();
+  });
+}
 // ====== PLANT/WATER/HARVEST ======
 function plantSeed(fName){
   if(!state.seedInventory[fName]||state.seedInventory[fName]<=0) return showPopupMessage(`No ${fName} seeds`);
