@@ -99,9 +99,10 @@ const state = {
 
 // Initialize seedInventory and waterGiven
 function giveWelcomeSeed() {
-  if (state.harvestedFlowers.length === 0 && state.seedInventory["daisy"] === 0) {
+  if (!state.seedInventory["daisy"]) {
     state.seedInventory["daisy"] = 1;
     showPopupMessage("Welcome! 🌸 You got 1 free daisy seed!");
+    saveState();
   }
 }
 
@@ -173,7 +174,34 @@ function updateVaseCollection() {
     vaseCollectionEl.appendChild(img);
   });
 }
+const seedInventoryPopup = getEl("seed-inventory-popup");
+const closeSeedInventoryBtn = getEl("close-seed-inventory-btn");
+const seedInventoryPopupList = getEl("seed-inventory-popup-list");
 
+if (gardenImage) gardenImage.addEventListener("click", () => {
+  seedInventoryPopup.classList.toggle("hidden");
+  renderSeedInventoryPopup();
+});
+
+if (closeSeedInventoryBtn) closeSeedInventoryBtn.addEventListener("click", () => {
+  seedInventoryPopup.classList.add("hidden");
+});
+
+// Render seeds inside popup
+function renderSeedInventoryPopup() {
+  seedInventoryPopupList.innerHTML = "";
+  Object.entries(state.seedInventory).forEach(([name, qty]) => {
+    if (qty > 0) {
+      const btn = document.createElement("button");
+      btn.textContent = `${name} (${qty})`;
+      btn.onclick = () => {
+        plantSeed(name);
+        seedInventoryPopup.classList.add("hidden");
+      };
+      seedInventoryPopupList.appendChild(btn);
+    }
+  });
+}
 // ====== SEED INVENTORY ======
 function updateSeedInventory() {
   if (!seedInventoryEl) return;
@@ -241,21 +269,23 @@ function resetDailyWaterIfNeeded() {
   if (state.lastWaterDate !== today) {
     state.lastWaterDate = today;
 
-    // Determine highest rarity of unlocked seeds
-    let highestRarity = "common";
     const rarities = ["common", "uncommon", "rare", "epic", "legendary"];
+    let highestRarity = "common";
+
     for (const fName of seeds) {
       if (state.seedInventory[fName] > 0) {
         const r = flowers[fName].rarity;
-        if (rarities.indexOf(r) > rarities.indexOf(highestRarity)) highestRarity = r;
+        if (rarities.indexOf(r) > rarities.indexOf(highestRarity)) {
+          highestRarity = r;
+        }
       }
     }
-    state.watersToday = DAILY_WATER_BY_RARITY[highestRarity] || 10;
 
+    state.watersToday = DAILY_WATER_BY_RARITY[highestRarity] || 10;
+    showPopupMessage(`+${state.watersToday} daily waters for your ${highestRarity} plants 💧`);
     saveState();
   }
 }
-
 function waterFlower() {
   resetDailyWaterIfNeeded();
   if (!state.currentFlower) return showPopupMessage("Plant a seed first 🌱");
@@ -440,7 +470,52 @@ if (harvestBtn) harvestBtn.addEventListener("click", harvestFlower);
 
 // ====== GLOBAL FUNCTIONS ======
 window.plantSeed = plantSeed;
+// === SEED JOURNAL BUTTON ===
+if (seedJournalBtn) {
+  seedJournalBtn.addEventListener("click", () => {
+    const isHidden = seedJournalPopup.classList.contains("hidden");
 
+    // hide all popups first
+    seedJournalPopup.classList.add("hidden");
+    buySeedsPopup.classList.add("hidden");
+    buyWaterPopup.classList.add("hidden");
+
+    // toggle correctly
+    if (isHidden) {
+      seedJournalPopup.classList.remove("hidden");
+      updateSeedJournalCard();
+    }
+  });
+}
+
+// === BUY SEEDS BUTTON ===
+if (buySeedListBtn) {
+  buySeedListBtn.addEventListener("click", () => {
+    const isHidden = buySeedsPopup.classList.contains("hidden");
+
+    // hide all popups first
+    seedJournalPopup.classList.add("hidden");
+    buySeedsPopup.classList.add("hidden");
+    buyWaterPopup.classList.add("hidden");
+
+    // toggle correctly
+    if (isHidden) {
+      buySeedsPopup.classList.remove("hidden");
+      renderBuySeedsList();
+    }
+  });
+}// === CLOSE BUTTONS ===
+getEl("close-seed-journal-btn")?.addEventListener("click", () => {
+  seedJournalPopup.classList.add("hidden");
+});
+
+getEl("close-buy-seeds-btn")?.addEventListener("click", () => {
+  buySeedsPopup.classList.add("hidden");
+});
+
+getEl("close-buy-water-btn")?.addEventListener("click", () => {
+  buyWaterPopup.classList.add("hidden");
+});
 // ====== INITIALIZATION ======
 function initGame() {
   loadState();
