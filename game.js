@@ -148,18 +148,60 @@ function updateLotusPoints() {
 }
 function openSeedZoom(fName) {
   const f = flowers[fName];
-  if(!f) return;
+  if (!f) return;
   const isLocked = !(state.seedInventory[fName] > 0 || state.harvestedFlowers.includes(fName));
+
+  seedZoomName.textContent = fName + (isLocked ? " 🔒" : "");
+
   seedZoomImg.src = isLocked 
       ? `assets/seedjournal/${f.img}-lockedseed.png` 
       : `assets/seedjournal/${f.img}-seed.png`;
-  seedZoomName.textContent = fName + (isLocked ? " 🔒" : "");
+
   seedZoomPopup.classList.remove("hidden");
+
+  // --- ANIMATION START ---
+  const cardImg = document.querySelector(`.seed-item[data-seed="${fName}"] img`) || document.querySelector(".journal-img");
+  if (!cardImg) return;
+
+  const cardRect = cardImg.getBoundingClientRect();
+  const gardenRect = gardenWidget.getBoundingClientRect();
+
+  // start position = card image
+  seedZoomImg.style.top = `${cardRect.top}px`;
+  seedZoomImg.style.left = `${cardRect.left}px`;
+  seedZoomImg.style.width = `${cardRect.width}px`;
+  seedZoomImg.style.height = `${cardRect.height}px`;
+
+  // force reflow
+  seedZoomImg.getBoundingClientRect();
+
+  // end position = garden widget size
+  seedZoomImg.style.top = `${gardenRect.top}px`;
+  seedZoomImg.style.left = `${gardenRect.left}px`;
+  seedZoomImg.style.width = `${gardenRect.width}px`;
+  seedZoomImg.style.height = `${gardenRect.height}px`;
 }
 
-if(closeSeedZoomBtn) closeSeedZoomBtn.addEventListener("click", () => {
-  seedZoomPopup.classList.add("hidden");
+if (closeSeedZoomBtn) closeSeedZoomBtn.addEventListener("click", () => {
+  const fName = seedZoomName.textContent.replace(" 🔒","");  
+  const cardImg = document.querySelector(`.seed-item[data-seed="${fName}"] img`) || document.querySelector(".journal-img");
+  if (!cardImg) {
+    seedZoomPopup.classList.add("hidden");
+    return;
+  }
+
+  const cardRect = cardImg.getBoundingClientRect();
+
+  // animate back
+  seedZoomImg.style.top = `${cardRect.top}px`;
+  seedZoomImg.style.left = `${cardRect.left}px`;
+  seedZoomImg.style.width = `${cardRect.width}px`;
+  seedZoomImg.style.height = `${cardRect.height}px`;
+
+  // hide popup after animation
+  setTimeout(() => seedZoomPopup.classList.add("hidden"), 350);
 });
+
 // ====== WATER COUNT UI ======
 function updateWaterCount() {
   if(!waterCountEl) return;
