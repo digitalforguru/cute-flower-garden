@@ -247,24 +247,20 @@ function updateSeedInventory() {
 
 // ====== SEED JOURNAL ======
 function updateSeedJournalCard() {
-  if(!seedJournalCard) return;
+  if (!seedJournalCard) return;
 
   const idx = state.seedJournalIndex;
   const fName = seeds[idx];
   const f = flowers[fName];
-  if(!f) return;
+  if (!f) return;
 
   const isLocked = !(state.seedInventory[fName] > 0 || state.harvestedFlowers.includes(fName));
   const imgSrc = isLocked 
     ? `assets/seedjournal/${f.img}-lockedseed.png` 
     : `assets/seedjournal/${f.img}-seed.png`;
 
+  // --- Set the card HTML ---
   seedJournalCard.innerHTML = `
-    // zoom functionality
-const journalImg = seedJournalCard.querySelector(".journal-img");
-if(journalImg){
-  journalImg.addEventListener("click", () => openSeedZoom(fName));
-}
     <div class="journal-container">
       <div class="journal-img-wrapper" style="display:flex;align-items:center;gap:6px;">
         <button id="prev-seed-btn-small" class="nav-btn nav-left" aria-label="prev">◀</button>
@@ -283,18 +279,31 @@ if(journalImg){
     </div>
   `;
 
-  // small nav buttons (keeps your small squares)
+  // --- Attach event listeners after HTML exists ---
+
+  // Zoom on image click
+  const journalImg = seedJournalCard.querySelector(".journal-img");
+  if (journalImg) {
+    journalImg.addEventListener("click", () => openSeedZoom(fName));
+  }
+
+  // Small nav buttons
   const prevSmall = document.getElementById("prev-seed-btn-small");
   const nextSmall = document.getElementById("next-seed-btn-small");
 
-  if(prevSmall) prevSmall.addEventListener("click", () => {
-    state.seedJournalIndex = (state.seedJournalIndex - 1 + seeds.length) % seeds.length;
-    updateSeedJournalCard();
-  });
-  if(nextSmall) nextSmall.addEventListener("click", () => {
-    state.seedJournalIndex = (state.seedJournalIndex + 1) % seeds.length;
-    updateSeedJournalCard();
-  });
+  if (prevSmall) {
+    prevSmall.addEventListener("click", () => {
+      state.seedJournalIndex = (state.seedJournalIndex - 1 + seeds.length) % seeds.length;
+      updateSeedJournalCard();
+    });
+  }
+
+  if (nextSmall) {
+    nextSmall.addEventListener("click", () => {
+      state.seedJournalIndex = (state.seedJournalIndex + 1) % seeds.length;
+      updateSeedJournalCard();
+    });
+  }
 }
 
 // ====== PLANT/WATER/HARVEST ======
