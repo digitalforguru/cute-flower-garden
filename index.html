@@ -9,7 +9,6 @@
 <body>
 
 <div id="app-container" role="application" aria-label="Cute garden widget and vase shelf" style="background: transparent;">
-
   <div id="garden-vase-wrapper">
 
     <!-- Garden widget -->
@@ -29,10 +28,24 @@
         <div style="display: flex; gap: 1rem;">
 
           <!-- Garden area -->
-          <section id="garden-section" aria-label="garden area" tabindex="0" role="button" aria-describedby="garden-info" style="flex-shrink: 0; width: 180px; height: 180px; position: relative;">
-            <img id="garden-image" src="assets/garden/vacant.png" alt="empty garden" style="width: 100%; height: 100%; object-fit: contain; pointer-events:none; user-select:none;" />
-            <div id="garden-info" class="info-text" style="position:absolute; bottom:6px; left:6px; font-size:10px; user-select:none; pointer-events:none;">
-              click to see flower details
+          <section id="garden-section" aria-label="garden area" tabindex="0" role="button" aria-describedby="garden-info" style="flex-shrink: 0; width: 180px; height: auto; position: relative; display:flex; flex-direction:column; align-items:center;">
+            
+            <img id="garden-image" src="assets/garden/vacant.png" alt="empty garden" style="width: 180px; height: 180px; object-fit: contain; pointer-events:auto; cursor:pointer; user-select:none;" />
+            <div id="garden-info" class="info-text" style="font-size:10px; user-select:none; pointer-events:none;">
+              click garden to plant
+            </div>
+
+            <!-- Main action buttons UNDER garden -->
+            <div id="actions-section" aria-label="garden actions" class="button-row" style="display:flex; justify-content:center; gap:0.8rem; margin-top:0.5rem;">
+              <button id="water-btn" aria-label="water flower" style="width: 70px;">
+                <img src="assets/UI/watercan.png" alt="water can" class="icon-large" />
+                <span class="button-label">water</span>
+              </button>
+
+              <button id="harvest-btn" aria-label="harvest flower" style="width: 70px;">
+                <img src="assets/UI/harvestbasket.png" alt="harvest basket" class="icon-large" />
+                <span class="button-label">harvest</span>
+              </button>
             </div>
           </section>
 
@@ -40,40 +53,17 @@
           <div style="display: flex; flex-direction: column; justify-content: flex-start; gap: 1rem;">
 
             <!-- Seed journal & seed shop buttons -->
-            <section id="seed-journal-section" aria-label="seed journal and seed shop" class="button-row" style="gap: 0.5rem; margin-bottom: 1rem;">
+            <section id="seed-journal-section" aria-label="seed journal and seed shop" class="button-row" style="gap: 0.5rem;">
               <button id="seed-journal-btn" aria-haspopup="dialog" aria-controls="seed-journal-popup" aria-expanded="false" title="Open seed journal" style="padding: 0.3rem 0.5rem; font-size: 10px; width: auto;">📖 seed journal</button>
               <button id="buy-seed-list-btn" aria-haspopup="dialog" aria-controls="buy-seeds-popup" aria-expanded="false" title="Buy new seeds" style="padding: 0.3rem 0.5rem; font-size: 10px; width: auto;">🛒 buy seeds</button>
             </section>
 
-            <!-- Main action buttons -->
-            <section id="actions-section" aria-label="garden actions" class="button-row" style="flex-direction: column; gap: 0.8rem; width: 80px;">
-              <button id="water-btn" aria-label="water flower" style="width: 100%;">
-                <img src="assets/UI/watercan.png" alt="water can" class="icon-large" />
-                <span class="button-label">water</span>
-              </button>
-
-              <button id="harvest-btn" aria-label="harvest flower" style="width: 100%;">
-                <img src="assets/UI/harvestbasket.png" alt="harvest basket" class="icon-large" />
-                <span class="button-label">harvest</span>
-              </button>
-
-              <!-- Buy Water Button (styled like other action buttons) -->
-              <button id="buy-water-btn" aria-label="buy water" style="width: 100%;">
-                💧 buy water
-              </button>
-            </section>
-
+            <!-- Buy Water Button -->
+            <button id="buy-water-btn" aria-label="buy water" style="width: auto; font-size:10px; padding:0.3rem 0.5rem;">
+              💧 buy water
+            </button>
           </div>
-
         </div>
-
-        <!-- Seed inventory -->
-        <section id="seed-inventory-section" aria-label="seed inventory" style="margin-top: 1rem;">
-          <h2>seed inventory</h2>
-          <small class="info-text">click a seed to plant</small>
-          <div id="seed-inventory" tabindex="0" role="list" aria-live="polite" aria-label="Available seeds" style="display: flex; flex-wrap: wrap; gap: 8px; overflow-x: auto; min-height: 36px; padding-bottom: 4px;"></div>
-          <div id="no-seeds-text" class="no-seeds">no seeds yet</div>
-        </section>
 
         <!-- Daily streak -->
         <section id="daily-streak-section" aria-label="daily login streak" tabindex="0" style="margin-top: 0.8rem;">
@@ -81,6 +71,8 @@
         </section>
 
       </main>
+
+      <!-- Popups -->
 
       <!-- Seed Journal Popup -->
       <div id="seed-journal-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-journal-title" tabindex="-1">
@@ -100,11 +92,19 @@
         <ul id="buy-seeds-list" role="listbox" tabindex="0" aria-live="polite"></ul>
       </div>
 
-      <!-- Buy Water Popup (centered & theme matching) -->
+      <!-- Buy Water Popup -->
       <div id="buy-water-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="buy-water-title" tabindex="-1">
         <h3 id="buy-water-title">buy water 💧</h3>
         <button id="close-buy-water-btn" aria-label="close buy water popup">✕</button>
         <ul id="buy-water-list" role="listbox" tabindex="0" aria-live="polite"></ul>
+      </div>
+
+      <!-- Seed Inventory Popup (NEW instead of inline seeds) -->
+      <div id="seed-inventory-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-inventory-title" tabindex="-1">
+        <h3 id="seed-inventory-title">choose a seed to plant</h3>
+        <button id="close-seed-inventory-btn" aria-label="close seed inventory">✕</button>
+        <div id="seed-inventory" tabindex="0" role="list" aria-live="polite" aria-label="Available seeds" style="display: flex; flex-wrap: wrap; gap: 8px; min-height: 36px;"></div>
+        <div id="no-seeds-text" class="no-seeds">no seeds yet</div>
       </div>
 
       <!-- Popup Message -->
@@ -127,7 +127,6 @@
     </section>
 
   </div>
-
 </div>
 
 <script src="game.js"></script>
