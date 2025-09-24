@@ -41,6 +41,11 @@ const buyWaterListEl = getEl("buy-water-list");
 const seedInventoryPopup = getEl("seed-inventory-popup");
 const closeSeedInventoryBtn = getEl("close-seed-inventory-btn");
 const seedInventoryPopupList = getEl("seed-inventory-popup-list");
+// ====== SEED ZOOM POPUP ======
+const seedZoomPopup = getEl("seed-zoom-popup");
+const seedZoomImg = getEl("seed-zoom-img");
+const seedZoomName = getEl("seed-zoom-name");
+const closeSeedZoomBtn = getEl("close-seed-zoom-btn");
 
 // ====== STORAGE & CONSTANTS ======
 const STORAGE_KEY = "cuteGardenState";
@@ -141,7 +146,20 @@ function updateLotusPoints() {
   if(lotusPointsEl) lotusPointsEl.textContent = ` ${state.lotusPoints} LP`; 
   saveState(); 
 }
+function openSeedZoom(fName) {
+  const f = flowers[fName];
+  if(!f) return;
+  const isLocked = !(state.seedInventory[fName] > 0 || state.harvestedFlowers.includes(fName));
+  seedZoomImg.src = isLocked 
+      ? `assets/seedjournal/${f.img}-lockedseed.png` 
+      : `assets/seedjournal/${f.img}-seed.png`;
+  seedZoomName.textContent = fName + (isLocked ? " 🔒" : "");
+  seedZoomPopup.classList.remove("hidden");
+}
 
+if(closeSeedZoomBtn) closeSeedZoomBtn.addEventListener("click", () => {
+  seedZoomPopup.classList.add("hidden");
+});
 // ====== WATER COUNT UI ======
 function updateWaterCount() {
   if(!waterCountEl) return;
@@ -242,6 +260,11 @@ function updateSeedJournalCard() {
     : `assets/seedjournal/${f.img}-seed.png`;
 
   seedJournalCard.innerHTML = `
+    // zoom functionality
+const journalImg = seedJournalCard.querySelector(".journal-img");
+if(journalImg){
+  journalImg.addEventListener("click", () => openSeedZoom(fName));
+}
     <div class="journal-container">
       <div class="journal-img-wrapper" style="display:flex;align-items:center;gap:6px;">
         <button id="prev-seed-btn-small" class="nav-btn nav-left" aria-label="prev">◀</button>
