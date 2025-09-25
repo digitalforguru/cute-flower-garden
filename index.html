@@ -54,7 +54,7 @@
         </div>
       </main>
 
-      <!-- Seed Journal Popup -->
+<!-- Seed Journal Popup -->
 <div id="seed-journal-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-journal-title" tabindex="-1">
   <h3 id="seed-journal-title">Seed Journal</h3>
   <button id="close-journal-btn" aria-label="close seed journal">✕</button>
@@ -66,33 +66,34 @@
     <button id="next-seed-btn" aria-label="next seed">→</button>
   </nav>
 
-  <!-- Seed Zoom Popup -->
-  <div id="seed-zoom-popup" class="popup hidden" style="display:flex;justify-content:center;align-items:center;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:calc(100% - 40px);max-width:360px;height:auto;z-index:1500;background:rgba(255,255,255,0.95);border:2px dashed pink;border-radius:16px;padding:12px;box-shadow:0 8px 20px rgba(0,0,0,0.2);">
+  <!-- Seed Zoom Popup (inside journal, NO "popup" class) -->
+  <div id="seed-zoom-popup" class="hidden" style="display:flex;justify-content:center;align-items:center;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:calc(100% - 40px);max-width:360px;height:auto;z-index:1500;background:rgba(255,255,255,0.95);border:2px dashed pink;border-radius:16px;padding:12px;box-shadow:0 8px 20px rgba(0,0,0,0.2);">
     <img id="seed-zoom-img" src="" alt="seed" style="width:100%;height:auto;object-fit:contain;border-radius:12px;">
     <button id="close-seed-zoom-btn" style="position:absolute;top:8px;right:8px;border:none;background:transparent;font-size:20px;cursor:pointer;">✖</button>
   </div>
 </div>
-      <!-- Buy Seeds Popup -->
-      <div id="buy-seeds-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="buy-seeds-title" tabindex="-1">
-        <h3 id="buy-seeds-title">Buy Seeds</h3>
-        <button id="close-buy-seeds-btn" aria-label="close buy seeds list">✕</button>
-        <ul id="buy-seeds-list" role="listbox" tabindex="0" aria-live="polite"></ul>
-      </div>
 
-      <!-- Seed Inventory Popup -->
-      <div id="seed-inventory-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-inventory-title" tabindex="-1">
-        <h3 id="seed-inventory-title">Choose a seed to plant</h3>
-        <button id="close-seed-inventory-btn" aria-label="close seed inventory">✕</button>
-        <div id="seed-inventory" tabindex="0" role="list" aria-live="polite" aria-label="Available seeds" style="display: flex; flex-wrap: wrap; gap: 8px; min-height: 36px;"></div>
-        <div id="no-seeds-text" class="no-seeds">No seeds yet</div>
-      </div>
+<!-- Buy Seeds Popup -->
+<div id="buy-seeds-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="buy-seeds-title" tabindex="-1">
+  <h3 id="buy-seeds-title">Buy Seeds</h3>
+  <button id="close-buy-seeds-btn" aria-label="close buy seeds list">✕</button>
+  <ul id="buy-seeds-list" role="listbox" tabindex="0" aria-live="polite"></ul>
+</div>
 
-      <!-- Buy Water Popup -->
-      <div id="buy-water-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="buy-water-title" tabindex="-1">
-        <h3 id="buy-water-title">Buy Water 💧</h3>
-        <button id="close-buy-water-btn" aria-label="close buy water popup">✕</button>
-        <ul id="buy-water-list" role="listbox" tabindex="0" aria-live="polite"></ul>
-      </div>
+<!-- Seed Inventory Popup -->
+<div id="seed-inventory-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-inventory-title" tabindex="-1">
+  <h3 id="seed-inventory-title">Choose a seed to plant</h3>
+  <button id="close-seed-inventory-btn" aria-label="close seed inventory">✕</button>
+  <div id="seed-inventory" tabindex="0" role="list" aria-live="polite" aria-label="Available seeds" style="display: flex; flex-wrap: wrap; gap: 8px; min-height: 36px;"></div>
+  <div id="no-seeds-text" class="no-seeds">No seeds yet</div>
+</div>
+
+<!-- Buy Water Popup -->
+<div id="buy-water-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="buy-water-title" tabindex="-1">
+  <h3 id="buy-water-title">Buy Water 💧</h3>
+  <button id="close-buy-water-btn" aria-label="close buy water popup">✕</button>
+  <ul id="buy-water-list" role="listbox" tabindex="0" aria-live="polite"></ul>
+</div>
 
       <!-- Popup Message -->
       <div id="popup-message" class="popup-message hidden" role="alert" aria-live="assertive"></div>
