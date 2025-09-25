@@ -261,9 +261,13 @@ function updateSeedJournalCard() {
         <p class="journal-water">Water Needed: 💧 ${f.water}</p>
         <p class="journal-cost">Cost: 🌸 ${f.cost}</p>
         <p class="journal-status">${isLocked ? "🔒 Locked" : "✅ Unlocked"}</p>
-      </div>
-    </div>
-  `;
+      `;
+  // Attach zoom click
+  const journalImg = seedJournalCard.querySelector(".journal-img");
+  if (journalImg) {
+    journalImg.addEventListener("click", () => openSeedZoom(fname));
+  }
+}
 // Open seed zoom
 function openSeedZoom(fname) {
   const popup = document.getElementById("seed-zoom-popup");
