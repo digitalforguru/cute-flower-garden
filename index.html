@@ -8,10 +8,10 @@
 </head>
 <body>
 
-<div id="app-container" role="application" aria-label="Cute garden widget and vase shelf" style="background: transparent;">
+<div id="app-container" role="application" aria-label="Cute garden widget and vase shelf">
   <div id="garden-vase-wrapper">
 
-    <!-- Garden widget -->
+    <!-- Garden Widget -->
     <section id="garden-widget" class="theme-pink" aria-label="My mini garden">
       <header class="widget-header">
         <h1>⋆˚✿ my lil flowers ✿˖°</h1>
@@ -32,15 +32,14 @@
               <div id="garden-section">
                 <img id="garden-image" src="assets/garden/vacant.png" alt="Garden Plot">
               </div>
-
-              <!-- Water + Harvest under garden -->
+              <!-- Water + Harvest -->
               <div id="garden-action-buttons">
                 <button id="water-btn">💦 Water</button>
                 <button id="harvest-btn">🌸 Harvest</button>
               </div>
             </div>
 
-            <!-- Shop/Journal buttons to the right -->
+            <!-- Shop/Journal -->
             <div id="shop-buttons-col">
               <button id="seed-journal-btn">📔 Journal</button>
               <button id="buy-seed-list-btn">🌱 Buy Seeds</button>
@@ -48,7 +47,7 @@
             </div>
           </div>
 
-          <!-- Stats below garden -->
+          <!-- Stats -->
           <div id="widget-stats">
             <p>⟢ <span id="streak-count">3</span> login streak</p>
           </div>
@@ -57,33 +56,39 @@
 
       <!-- Seed Journal Popup -->
       <div id="seed-journal-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-journal-title" tabindex="-1">
-        <h3 id="seed-journal-title">seed journal</h3>
+        <h3 id="seed-journal-title">Seed Journal</h3>
         <button id="close-journal-btn" aria-label="close seed journal">✕</button>
         <div id="seed-journal-card" tabindex="0" aria-live="polite"></div>
         <nav class="popup-nav">
           <button id="prev-seed-btn" aria-label="previous seed">←</button>
           <button id="next-seed-btn" aria-label="next seed">→</button>
         </nav>
-      </div>
-
-      <!-- Seed Inventory Popup -->
-      <div id="seed-inventory-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-inventory-title" tabindex="-1">
-        <h3 id="seed-inventory-title">choose a seed to plant</h3>
-        <button id="close-seed-inventory-btn" aria-label="close seed inventory">✕</button>
-        <div id="seed-inventory" tabindex="0" role="list" aria-live="polite" aria-label="Available seeds" style="display: flex; flex-wrap: wrap; gap: 8px; min-height: 36px;"></div>
-        <div id="no-seeds-text" class="no-seeds">no seeds yet</div>
+        <!-- Seed Zoom Popup -->
+        <div id="seed-zoom-popup" class="popup hidden">
+          <img id="seed-zoom-img" src="" alt="seed"/>
+          <span id="seed-zoom-name"></span>
+          <button id="close-seed-zoom-btn">✖</button>
+        </div>
       </div>
 
       <!-- Buy Seeds Popup -->
       <div id="buy-seeds-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="buy-seeds-title" tabindex="-1">
-        <h3 id="buy-seeds-title">buy seeds</h3>
+        <h3 id="buy-seeds-title">Buy Seeds</h3>
         <button id="close-buy-seeds-btn" aria-label="close buy seeds list">✕</button>
         <ul id="buy-seeds-list" role="listbox" tabindex="0" aria-live="polite"></ul>
       </div>
 
+      <!-- Seed Inventory Popup -->
+      <div id="seed-inventory-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-inventory-title" tabindex="-1">
+        <h3 id="seed-inventory-title">Choose a seed to plant</h3>
+        <button id="close-seed-inventory-btn" aria-label="close seed inventory">✕</button>
+        <div id="seed-inventory" tabindex="0" role="list" aria-live="polite" aria-label="Available seeds" style="display: flex; flex-wrap: wrap; gap: 8px; min-height: 36px;"></div>
+        <div id="no-seeds-text" class="no-seeds">No seeds yet</div>
+      </div>
+
       <!-- Buy Water Popup -->
       <div id="buy-water-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="buy-water-title" tabindex="-1">
-        <h3 id="buy-water-title">buy water 💧</h3>
+        <h3 id="buy-water-title">Buy Water 💧</h3>
         <button id="close-buy-water-btn" aria-label="close buy water popup">✕</button>
         <ul id="buy-water-list" role="listbox" tabindex="0" aria-live="polite"></ul>
       </div>
@@ -91,7 +96,7 @@
       <!-- Popup Message -->
       <div id="popup-message" class="popup-message hidden" role="alert" aria-live="assertive"></div>
 
-      <!-- Theme selector -->
+      <!-- Theme Selector -->
       <div id="theme-selector" aria-label="choose theme" role="radiogroup">
         <button class="theme-dot active" data-theme="pink" aria-label="pink theme" role="radio" aria-checked="true" tabindex="0" title="pink theme"></button>
         <button class="theme-dot" data-theme="beige" aria-label="beige theme" role="radio" aria-checked="false" tabindex="-1" title="beige theme"></button>
@@ -101,19 +106,13 @@
       </div>
     </section>
 
-    <!-- Vase shelf widget -->
+    <!-- Vase Widget -->
     <section id="vase-widget" aria-label="harvested flower vase shelf" tabindex="0" role="list">
-      <h2>harvested flowers</h2>
+      <h2>Harvested Flowers</h2>
       <div id="vase-collection"></div>
     </section>
 
   </div>
-</div>
-
-<!-- Seed Zoom Popup (moved outside journal) -->
-<div id="seed-zoom-popup" class="hidden" role="dialog" aria-modal="true">
-  <img id="seed-zoom-img" src="" alt="seed"/>
-  <button id="close-seed-zoom-btn" aria-label="close zoom">✖</button>
 </div>
 
 <script src="game.js"></script>
