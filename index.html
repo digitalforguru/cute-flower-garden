@@ -55,23 +55,23 @@
         </div>
       </main>
 
-      <!-- Seed Journal Popup -->
-      <div id="seed-journal-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-journal-title" tabindex="-1">
-        <h3 id="seed-journal-title">seed journal</h3>
-        <button id="close-journal-btn" aria-label="close seed journal">✕</button>
-        <div id="seed-journal-card" tabindex="0" aria-live="polite"></div>
-        <nav class="popup-nav">
-          <button id="prev-seed-btn" aria-label="previous seed">←</button>
-          <button id="next-seed-btn" aria-label="next seed">→</button>
-        </nav>
-      </div>
+     <!-- Seed Journal Popup -->
+<div id="seed-journal-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-journal-title" tabindex="-1">
+  <h3 id="seed-journal-title">seed journal</h3>
+  <button id="close-journal-btn" aria-label="close seed journal">✕</button>
+  <div id="seed-journal-card" tabindex="0" aria-live="polite"></div>
+  <nav class="popup-nav">
+    <button id="prev-seed-btn" aria-label="previous seed">←</button>
+    <button id="next-seed-btn" aria-label="next seed">→</button>
+  </nav>
 
-      <!-- Seed Zoom Popup -->
-      <div id="seed-zoom-popup" class="hidden">
-        <img id="seed-zoom-img" src="" alt="seed"/>
-        <p id="seed-zoom-name"></p>
-        <button id="close-seed-zoom-btn">✖</button>
-      </div>
+  <!-- ✅ zoom popup is now nested inside the journal -->
+  <div id="seed-zoom-popup" class="hidden">
+    <img id="seed-zoom-img" src="" alt="seed"/>
+    <p id="seed-zoom-name"></p>
+    <button id="close-seed-zoom-btn">✖</button>
+  </div>
+</div>
 
       <!-- Buy Seeds Popup -->
       <div id="buy-seeds-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="buy-seeds-title" tabindex="-1">
