@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Cute Garden Widget</title>
-<link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cute Garden Widget</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
@@ -24,37 +24,37 @@
         </div>
       </header>
 
-     <main class="widget-main">
-  <div id="garden-buttons-wrapper">
-    
-   <div id="garden-main-row">
-  <!-- Garden -->
-  <div>
-    <div id="garden-section">
-      <img id="garden-image" src="assets/garden/vacant.png" alt="Garden Plot">
-    </div>
+      <main class="widget-main">
+        <div id="garden-buttons-wrapper">
+          <div id="garden-main-row">
+            <!-- Garden -->
+            <div>
+              <div id="garden-section">
+                <img id="garden-image" src="assets/garden/vacant.png" alt="Garden Plot">
+              </div>
 
-    <!-- Water + Harvest under garden -->
-    <div id="garden-action-buttons">
-      <button id="water-btn">💦 Water</button>
-      <button id="harvest-btn">🌸 Harvest</button>
-    </div>
-  </div>
+              <!-- Water + Harvest under garden -->
+              <div id="garden-action-buttons">
+                <button id="water-btn">💦 Water</button>
+                <button id="harvest-btn">🌸 Harvest</button>
+              </div>
+            </div>
 
-  <!-- Shop/Journal buttons to the right -->
-  <div id="shop-buttons-col">
-    <button id="seed-journal-btn">📔 Journal</button>
-    <button id="buy-seed-list-btn">🌱 Buy Seeds</button>
-    <button id="buy-water-btn">💧 Buy Water</button>
-  </div>
-</div>
+            <!-- Shop/Journal buttons to the right -->
+            <div id="shop-buttons-col">
+              <button id="seed-journal-btn">📔 Journal</button>
+              <button id="buy-seed-list-btn">🌱 Buy Seeds</button>
+              <button id="buy-water-btn">💧 Buy Water</button>
+            </div>
+          </div>
 
-  <!-- Stats below garden -->
-  <div id="widget-stats">
-    <p>⟢ <span id="streak-count">3</span> login streak</p>
-  </div>
-     </main>
-      
+          <!-- Stats below garden -->
+          <div id="widget-stats">
+            <p>⟢ <span id="streak-count">3</span> login streak</p>
+          </div>
+        </div>
+      </main>
+
       <!-- Seed Journal Popup -->
       <div id="seed-journal-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-journal-title" tabindex="-1">
         <h3 id="seed-journal-title">seed journal</h3>
@@ -65,25 +65,27 @@
           <button id="next-seed-btn" aria-label="next seed">→</button>
         </nav>
       </div>
-<div id="seed-zoom-popup">
-    <img id="seed-zoom-img" src="" alt="seed"/>
-    <p id="seed-zoom-name"></p>
-    <button id="close-seed-zoom-btn">✖</button>
-  </div>
-</div>
-  
+
+      <!-- Seed Zoom Popup -->
+      <div id="seed-zoom-popup" class="hidden">
+        <img id="seed-zoom-img" src="" alt="seed"/>
+        <p id="seed-zoom-name"></p>
+        <button id="close-seed-zoom-btn">✖</button>
+      </div>
+
       <!-- Buy Seeds Popup -->
       <div id="buy-seeds-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="buy-seeds-title" tabindex="-1">
         <h3 id="buy-seeds-title">buy seeds</h3>
         <button id="close-buy-seeds-btn" aria-label="close buy seeds list">✕</button>
         <ul id="buy-seeds-list" role="listbox" tabindex="0" aria-live="polite"></ul>
       </div>
-          <!-- Seed Inventory Popup -->
-          <div id="seed-inventory-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-inventory-title" tabindex="-1">
-            <h3 id="seed-inventory-title">🌱 choose a seed to plant</h3>
-            <button id="close-seed-inventory-btn" aria-label="close seed inventory">✕</button>
-            <div id="seed-inventory-popup-list" tabindex="0" aria-live="polite"></div>
-          </div>
+
+      <!-- Seed Inventory Popup -->
+      <div id="seed-inventory-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-inventory-title" tabindex="-1">
+        <h3 id="seed-inventory-title">🌱 choose a seed to plant</h3>
+        <button id="close-seed-inventory-btn" aria-label="close seed inventory">✕</button>
+        <div id="seed-inventory-popup-list" tabindex="0" aria-live="polite"></div>
+      </div>
 
       <!-- Buy Water Popup -->
       <div id="buy-water-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="buy-water-title" tabindex="-1">
@@ -91,8 +93,6 @@
         <button id="close-buy-water-btn" aria-label="close buy water popup">✕</button>
         <ul id="buy-water-list" role="listbox" tabindex="0" aria-live="polite"></ul>
       </div>
-      
-      
 
       <!-- Seed Inventory Popup (NEW instead of inline seeds) -->
       <div id="seed-inventory-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-inventory-title" tabindex="-1">
