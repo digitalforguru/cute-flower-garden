@@ -358,31 +358,34 @@ body, html {
   background: var(--primary-color, #e75480);
   color: white;
 }
-/* Zoom popup inside the garden widget */
+/* Seed Zoom Popup Fix */
 #seed-zoom-popup {
-  position: absolute;
+  position: fixed;      /* FIXED: overlays entire viewport */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0.8);
-  width: 90%; /* 90% of journal, scales with widget */
-  max-width: 900px; 
-  height: auto;
+  width: 90%;
+  max-width: 600px;
   max-height: 90%;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 8px dotted var(--theme-color, pink); /* theme border */
+  border: 8px dotted var(--theme-color, pink);
   border-radius: 20px;
   background: var(--theme-bg, #fff);
   box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-  z-index: 20;
+  z-index: 9999;         /* ABOVE all other popups */
   opacity: 0;
+  pointer-events: none;   /* prevent invisible popup blocking clicks */
   transition: opacity 0.25s ease, transform 0.25s ease;
+  flex-direction: column;
+  padding: 10px;
 }
 
 #seed-zoom-popup.show {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
+  pointer-events: auto;  /* enable interaction when visible */
 }
 
 #seed-zoom-popup img {
@@ -390,12 +393,14 @@ body, html {
   max-height: 100%;
   border-radius: 12px;
 }
+
 #seed-zoom-popup button {
   background: none;
   border: none;
   font-size: 18px;
   cursor: pointer;
   align-self: flex-end;
+  margin-bottom: 8px;
 }
 /* ================= Theme Selector ================= */
 #theme-selector {
