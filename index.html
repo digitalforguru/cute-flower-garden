@@ -55,21 +55,23 @@
       </main>
 
       <!-- Seed Journal Popup -->
-      <div id="seed-journal-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-journal-title" tabindex="-1">
-        <h3 id="seed-journal-title">Seed Journal</h3>
-        <button id="close-journal-btn" aria-label="close seed journal">✕</button>
-        <div id="seed-journal-card" tabindex="0" aria-live="polite"></div>
-        <nav class="popup-nav">
-          <button id="prev-seed-btn" aria-label="previous seed">←</button>
-          <button id="next-seed-btn" aria-label="next seed">→</button>
-        </nav>
-        <!-- Seed Zoom Popup -->
-        <div id="seed-zoom-popup" class="popup hidden">
-          <img id="seed-zoom-img" src="" alt="seed"/>
-          <button id="close-seed-zoom-btn">✖</button>
-        </div>
-      </div>
+<div id="seed-journal-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-journal-title" tabindex="-1">
+  <h3 id="seed-journal-title">Seed Journal</h3>
+  <button id="close-journal-btn" aria-label="close seed journal">✕</button>
 
+  <div id="seed-journal-card" tabindex="0" aria-live="polite" style="display:flex;justify-content:center;align-items:center;flex-direction:column;gap:12px;"></div>
+
+  <nav class="popup-nav" style="display:flex;justify-content:center;gap:16px;margin-top:12px;">
+    <button id="prev-seed-btn" aria-label="previous seed">←</button>
+    <button id="next-seed-btn" aria-label="next seed">→</button>
+  </nav>
+
+  <!-- Seed Zoom Popup -->
+  <div id="seed-zoom-popup" class="popup hidden" style="display:flex;justify-content:center;align-items:center;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:calc(100% - 40px);max-width:360px;height:auto;z-index:1500;background:rgba(255,255,255,0.95);border:2px dashed pink;border-radius:16px;padding:12px;box-shadow:0 8px 20px rgba(0,0,0,0.2);">
+    <img id="seed-zoom-img" src="" alt="seed" style="width:100%;height:auto;object-fit:contain;border-radius:12px;">
+    <button id="close-seed-zoom-btn" style="position:absolute;top:8px;right:8px;border:none;background:transparent;font-size:20px;cursor:pointer;">✖</button>
+  </div>
+</div>
       <!-- Buy Seeds Popup -->
       <div id="buy-seeds-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="buy-seeds-title" tabindex="-1">
         <h3 id="buy-seeds-title">Buy Seeds</h3>
