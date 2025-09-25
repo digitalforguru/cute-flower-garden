@@ -146,59 +146,6 @@ function updateLotusPoints() {
   if(lotusPointsEl) lotusPointsEl.textContent = ` ${state.lotusPoints} LP`; 
   saveState(); 
 }
-
-function openSeedZoom(fName) {
-  const f = flowers[fName];
-  if (!f) return;
-  const isLocked = !(state.seedInventory[fName] > 0 || state.harvestedFlowers.includes(fName));
-
-  seedZoomName.textContent = fName + (isLocked ? " 🔒" : "");
-
-  seedZoomImg.src = isLocked 
-      ? `assets/seedjournal/${f.img}-lockedseed.png` 
-      : `assets/seedjournal/${f.img}-seed.png`;
-
-  seedZoomPopup.classList.remove("hidden");
-
-  // --- ANIMATION START ---
-  const cardImg = document.querySelector(`.seed-item[data-seed="${fName}"] img`) || document.querySelector(".journal-img");
-  if (!cardImg) return;
-
-  const cardRect = cardImg.getBoundingClientRect();
-  const gardenRect = gardenWidget.getBoundingClientRect();
-
-  // start position = card image
-  seedZoomImg.style.top = `${cardRect.top}px`;
-  seedZoomImg.style.left = `${cardRect.left}px`;
-  seedZoomImg.style.width = `${cardRect.width}px`;
-  seedZoomImg.style.height = `${cardRect.height}px`;
-
-  // force reflow
-  seedZoomImg.getBoundingClientRect();
-
-  // end position = garden widget size
-  seedZoomImg.style.top = `${gardenRect.top}px`;
-  seedZoomImg.style.left = `${gardenRect.left}px`;
-  seedZoomImg.style.width = `${gardenRect.width}px`;
-  seedZoomImg.style.height = `${gardenRect.height}px`;
-}
-
-if(closeSeedZoomBtn) closeSeedZoomBtn.addEventListener("click", () => {
-  seedZoomPopup.classList.add("hidden");
-});
-
-  const cardRect = cardImg.getBoundingClientRect();
-
-  // animate back
-  seedZoomImg.style.top = `${cardRect.top}px`;
-  seedZoomImg.style.left = `${cardRect.left}px`;
-  seedZoomImg.style.width = `${cardRect.width}px`;
-  seedZoomImg.style.height = `${cardRect.height}px`;
-
-  // hide popup after animation
-  setTimeout(() => seedZoomPopup.classList.add("hidden"), 350);
-});
-
 // ====== WATER COUNT UI ======
 function updateWaterCount() {
   if(!waterCountEl) return;
@@ -317,7 +264,64 @@ function updateSeedJournalCard() {
       </div>
     </div>
   `;
+function openSeedZoom(fName) {
+  const f = flowers[fName];
+  if (!f || !seedZoomPopup || !seedZoomImg) return;
 
+  const isLocked = !(state.seedInventory[fName] > 0 || state.harvestedFlowers.includes(fName));
+
+  seedZoomName.textContent = fName + (isLocked ? " 🔒" : "");
+  seedZoomImg.src = isLocked
+    ? `assets/seedjournal/${f.img}-lockedseed.png`
+    : `assets/seedjournal/${f.img}-seed.png`;
+
+  // Get the seed card image position
+  const cardImg = document.querySelector(`.seed-item[data-seed="${fName}"] img`) 
+                  || document.querySelector(".journal-img");
+  if (!cardImg) return;
+
+  const cardRect = cardImg.getBoundingClientRect();
+  const gardenRect = gardenWidget.getBoundingClientRect();
+
+  // Start position = seed card
+  seedZoomPopup.style.top = `${cardRect.top}px`;
+  seedZoomPopup.style.left = `${cardRect.left}px`;
+  seedZoomPopup.style.width = `${cardRect.width}px`;
+  seedZoomPopup.style.height = `${cardRect.height}px`;
+  seedZoomPopup.style.transform = "scale(1)";
+  seedZoomPopup.classList.add("visible");
+
+  // Force reflow to enable transition
+  seedZoomPopup.getBoundingClientRect();
+
+  // Animate to center of garden widget
+  const centerTop = gardenRect.top + gardenRect.height/2 - cardRect.height/2;
+  const centerLeft = gardenRect.left + gardenRect.width/2 - cardRect.width/2;
+  seedZoomPopup.style.top = `${centerTop}px`;
+  seedZoomPopup.style.left = `${centerLeft}px`;
+  seedZoomPopup.style.width = `${cardRect.width}px`;
+  seedZoomPopup.style.height = `${cardRect.height}px`;
+}
+
+if (closeSeedZoomBtn) {
+  closeSeedZoomBtn.addEventListener("click", () => {
+    const fName = seedZoomName.textContent.replace(" 🔒","");
+    const cardImg = document.querySelector(`.seed-item[data-seed="${fName}"] img`) 
+                    || document.querySelector(".journal-img");
+    if (!cardImg || !seedZoomPopup) return;
+
+    const cardRect = cardImg.getBoundingClientRect();
+
+    // Animate back to seed card
+    seedZoomPopup.style.top = `${cardRect.top}px`;
+    seedZoomPopup.style.left = `${cardRect.left}px`;
+    seedZoomPopup.style.width = `${cardRect.width}px`;
+    seedZoomPopup.style.height = `${cardRect.height}px`;
+
+    // Hide after animation
+    setTimeout(() => seedZoomPopup.classList.remove("visible"), 350);
+  });
+}
   // --- Attach event listeners after HTML exists ---
 
   // Zoom on image click
