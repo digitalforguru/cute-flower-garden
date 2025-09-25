@@ -471,7 +471,12 @@ function checkDailyStreak() {
 
 // ====== POPUP BUTTONS (normal popups) ======
 [
-  { btn: seedJournalBtn, popup: seedJournalPopup, update: updateSeedJournalCard },
+  { btn: seedJournalBtn, popup: seedJournalPopup, update: () => {
+      // Always start on Daisy when opening journal
+      const daisyIndex = seeds.findIndex(f => f.toLowerCase() === "daisy");
+      state.seedJournalIndex = daisyIndex >= 0 ? daisyIndex : 0;
+      updateSeedJournalCard();
+    }},
   { btn: buySeedListBtn, popup: buySeedsPopup, update: renderBuySeedsList },
   { btn: buyWaterBtn, popup: buyWaterPopup, update: renderBuyWaterList }
 ].forEach(({btn, popup, update}) => {
