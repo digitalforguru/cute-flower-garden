@@ -231,7 +231,7 @@ function updateSeedInventory() {
   });
 }
 
-// ====== SEED JOURNAL ======
+// ====== SEED JOURNAL CARD UPDATE ======
 function updateSeedJournalCard() {
   if (!seedJournalCard) return;
 
@@ -245,16 +245,15 @@ function updateSeedJournalCard() {
     ? `assets/seedjournal/${f.img}-lockedseed.png`
     : `assets/seedjournal/${f.img}-seed.png`;
 
-  // --- Build card HTML ---
   seedJournalCard.innerHTML = `
     <div class="journal-container">
       <div class="journal-img-wrapper" style="display:flex;align-items:center;gap:6px;">
-        <button id="prev-seed-btn-small" class="nav-btn nav-left" aria-label="prev">◀</button>
+        <button class="nav-btn nav-left" id="prev-seed-btn-small" aria-label="prev">◀</button>
         <div style="border:2px dashed rgba(231,84,128,0.4); padding:6px; border-radius:10px;">
           <img src="${imgSrc}" alt="${fName}" class="journal-img"
                style="width:140px;height:140px;object-fit:contain;border-radius:8px;cursor:pointer;"/>
         </div>
-        <button id="next-seed-btn-small" class="nav-btn nav-right" aria-label="next">▶</button>
+        <button class="nav-btn nav-right" id="next-seed-btn-small" aria-label="next">▶</button>
       </div>
       <div class="journal-info" style="margin-top:8px;text-align:center;">
         <p class="journal-name">${fName}</p>
@@ -266,40 +265,38 @@ function updateSeedJournalCard() {
     </div>
   `;
 
-  // Attach zoom event
-  const journalImg = seedJournalCard.querySelector(".journal-img");
-  if (journalImg && !isLocked) {
-    journalImg.addEventListener("click", () => openSeedZoom(fName));
-  }
-
-  // Attach navigation
+  // --- NAVIGATION BUTTONS ---
   const prevSmall = document.getElementById("prev-seed-btn-small");
   const nextSmall = document.getElementById("next-seed-btn-small");
 
-  if (prevSmall) {
-    prevSmall.addEventListener("click", () => {
-      state.seedJournalIndex = (state.seedJournalIndex - 1 + seeds.length) % seeds.length;
-      updateSeedJournalCard();
-    });
-  }
-  if (nextSmall) {
-    nextSmall.addEventListener("click", () => {
-      state.seedJournalIndex = (state.seedJournalIndex + 1) % seeds.length;
-      updateSeedJournalCard();
-    });
-  }
+  if (prevSmall) prevSmall.onclick = () => {
+    state.seedJournalIndex = (state.seedJournalIndex - 1 + seeds.length) % seeds.length;
+    updateSeedJournalCard();
+  };
+  if (nextSmall) nextSmall.onclick = () => {
+    state.seedJournalIndex = (state.seedJournalIndex + 1) % seeds.length;
+    updateSeedJournalCard();
+  };
 }
 
-// ====== SEED ZOOM POPUP ======
-function openSeedZoom(fName) {
-  if (!seedZoomPopup || !seedZoomImg || !seedZoomName) return;
+// ====== SEED JOURNAL IMAGE ZOOM (Event Delegation) ======
+seedJournalCard.addEventListener("click", (e) => {
+  const img = e.target.closest(".journal-img");
+  if (!img) return;
 
-  seedZoomImg.src = `assets/seedjournal/${flowers[fName].img}-seed.png`;
-  seedZoomName.textContent = fName;
+  const idx = state.seedJournalIndex;
+  const fName = seeds[idx];
+  const f = flowers[fName];
+  const isLocked = !(state.seedInventory[fName] > 0 || state.harvestedFlowers.includes(fName));
 
-  seedZoomPopup.classList.add("show");
-}
+  if (!isLocked && seedZoomPopup && seedZoomImg && seedZoomName) {
+    seedZoomImg.src = `assets/seedjournal/${f.img}-seed.png`;
+    seedZoomName.textContent = fName;
+    seedZoomPopup.classList.add("show");
+  }
+});
 
+// ====== CLOSE SEED ZOOM POPUP ======
 if (closeSeedZoomBtn) {
   closeSeedZoomBtn.addEventListener("click", () => {
     seedZoomPopup.classList.remove("show");
