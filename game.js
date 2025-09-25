@@ -232,11 +232,9 @@ function updateSeedInventory() {
 }
 
 // ====== SEED JOURNAL CARD UPDATE ======
-// ====== UPDATE SEED JOURNAL CARD ======
 function updateSeedJournalCard() {
   if (!seedJournalCard) return;
 
-  seedJournalCard.innerHTML = ""; // Clear previous cards
   const idx = state.seedJournalIndex;
   const fName = seeds[idx];
   const f = flowers[fName];
@@ -247,47 +245,61 @@ function updateSeedJournalCard() {
     ? `assets/seedjournal/${f.img}-lockedseed.png`
     : `assets/seedjournal/${f.img}-seed.png`;
 
-  const card = document.createElement("div");
-  card.className = "journal-card";
-  card.style.cssText = `
-    width:80px;
-    height:80px;
-    border:2px dashed pink;
-    border-radius:8px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    cursor:pointer;
-    overflow:hidden;
+  seedJournalCard.innerHTML = `
+    <div class="journal-container">
+      <div class="journal-img-wrapper" style="display:flex;align-items:center;gap:6px;">
+        <button class="nav-btn nav-left" id="prev-seed-btn-small" aria-label="prev">◀</button>
+        <div style="border:2px dashed rgba(231,84,128,0.4); padding:6px; border-radius:10px;">
+          <img src="${imgSrc}" alt="${fName}" class="journal-img"
+               style="width:140px;height:140px;object-fit:contain;border-radius:8px;cursor:pointer;"/>
+        </div>
+        <button class="nav-btn nav-right" id="next-seed-btn-small" aria-label="next">▶</button>
+      </div>
+      <div class="journal-info" style="margin-top:8px;text-align:center;">
+        <p class="journal-name">${fName}</p>
+        <p class="journal-rarity" style="color:${getRarityColor(f.rarity)}">${f.rarity}</p>
+        <p class="journal-water">Water Needed: 💧 ${f.water}</p>
+        <p class="journal-cost">Cost: 🌸 ${f.cost}</p>
+        <p class="journal-status">${isLocked ? "🔒 Locked" : "✅ Unlocked"}</p>
+      </div>
+    </div>
   `;
-  const img = document.createElement("img");
-  img.src = imgSrc;
-  img.alt = fName;
-  img.style.cssText = `
-    width:100%;
-    height:100%;
-    object-fit:contain;
-  `;
-  card.appendChild(img);
-  seedJournalCard.appendChild(card);
 
-  if(!isLocked){
-    card.addEventListener("click", ()=>{
-      openSeedZoom(fName);
-    });
+  // --- NAVIGATION BUTTONS ---
+  const prevSmall = document.getElementById("prev-seed-btn-small");
+  const nextSmall = document.getElementById("next-seed-btn-small");
+
+  if (prevSmall) prevSmall.onclick = () => {
+    state.seedJournalIndex = (state.seedJournalIndex - 1 + seeds.length) % seeds.length;
+    updateSeedJournalCard();
+  };
+  if (nextSmall) nextSmall.onclick = () => {
+    state.seedJournalIndex = (state.seedJournalIndex + 1) % seeds.length;
+    updateSeedJournalCard();
+  };
+}
+
+// ====== SEED JOURNAL IMAGE ZOOM (Event Delegation) ======
+seedJournalCard.addEventListener("click", (e) => {
+  const img = e.target.closest(".journal-img");
+  if (!img) return;
+
+  const idx = state.seedJournalIndex;
+  const fName = seeds[idx];
+  const f = flowers[fName];
+  const isLocked = !(state.seedInventory[fName] > 0 || state.harvestedFlowers.includes(fName));
+
+  if (!isLocked && seedZoomPopup && seedZoomImg && seedZoomName) {
+    seedZoomImg.src = `assets/seedjournal/${f.img}-seed.png`;
+    seedZoomName.textContent = fName;
+    seedZoomPopup.classList.add("show");
   }
-}
+});
 
-// ====== SEED ZOOM POPUP ======
-function openSeedZoom(fName){
-  if(!seedZoomPopup || !seedZoomImg) return;
-  seedZoomImg.src = `assets/seedjournal/${flowers[fName].img}-seed.png`;
-  seedZoomPopup.classList.remove("hidden");
-}
-
-if(closeSeedZoomBtn){
-  closeSeedZoomBtn.addEventListener("click", ()=>{
-    seedZoomPopup.classList.add("hidden");
+// ====== CLOSE SEED ZOOM POPUP ======
+if (closeSeedZoomBtn) {
+  closeSeedZoomBtn.addEventListener("click", () => {
+    seedZoomPopup.classList.remove("show");
   });
 }
 
