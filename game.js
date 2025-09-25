@@ -241,17 +241,18 @@ function updateSeedJournalCard() {
   if (!f) return;
 
   const isLocked = !(state.seedInventory[fName] > 0 || state.harvestedFlowers.includes(fName));
-  const imgSrc = isLocked 
-    ? `assets/seedjournal/${f.img}-lockedseed.png` 
+  const imgSrc = isLocked
+    ? `assets/seedjournal/${f.img}-lockedseed.png`
     : `assets/seedjournal/${f.img}-seed.png`;
 
-  // --- Set the card HTML ---
+  // --- Build card HTML ---
   seedJournalCard.innerHTML = `
     <div class="journal-container">
       <div class="journal-img-wrapper" style="display:flex;align-items:center;gap:6px;">
         <button id="prev-seed-btn-small" class="nav-btn nav-left" aria-label="prev">◀</button>
         <div style="border:2px dashed rgba(231,84,128,0.4); padding:6px; border-radius:10px;">
-          <img src="${imgSrc}" alt="${fName}" class="journal-img" style="width:140px;height:140px;object-fit:contain;border-radius:8px;"/>
+          <img src="${imgSrc}" alt="${fName}" class="journal-img"
+               style="width:140px;height:140px;object-fit:contain;border-radius:8px;cursor:pointer;"/>
         </div>
         <button id="next-seed-btn-small" class="nav-btn nav-right" aria-label="next">▶</button>
       </div>
@@ -261,39 +262,17 @@ function updateSeedJournalCard() {
         <p class="journal-water">Water Needed: 💧 ${f.water}</p>
         <p class="journal-cost">Cost: 🌸 ${f.cost}</p>
         <p class="journal-status">${isLocked ? "🔒 Locked" : "✅ Unlocked"}</p>
-      `;
-  // Attach zoom click
+      </div>
+    </div>
+  `;
+
+  // Attach zoom event
   const journalImg = seedJournalCard.querySelector(".journal-img");
-  if (journalImg) {
-    journalImg.addEventListener("click", () => openSeedZoom(fname));
-  }
-}
-// Open seed zoom
-function openSeedZoom(fname) {
-  const popup = document.getElementById("seed-zoom-popup");
-  const img = document.getElementById("seed-zoom-img");
-  const name = document.getElementById("seed-zoom-name");
-
-  img.src = `assets/seedjournal/${fname}-seed.png`;
-  name.textContent = fname;
-
-  popup.classList.add("show");
-}
-
-// Close seed zoom
-document.getElementById("close-seed-zoom-btn").addEventListener("click", () => {
-  document.getElementById("seed-zoom-popup").classList.remove("show");
-});
-}
-  // --- Attach event listeners after HTML exists ---
-
-  // Zoom on image click
-  const journalImg = seedJournalCard.querySelector(".journal-img");
-  if (journalImg) {
+  if (journalImg && !isLocked) {
     journalImg.addEventListener("click", () => openSeedZoom(fName));
   }
 
-  // Small nav buttons
+  // Attach navigation
   const prevSmall = document.getElementById("prev-seed-btn-small");
   const nextSmall = document.getElementById("next-seed-btn-small");
 
@@ -303,13 +282,28 @@ document.getElementById("close-seed-zoom-btn").addEventListener("click", () => {
       updateSeedJournalCard();
     });
   }
-
   if (nextSmall) {
     nextSmall.addEventListener("click", () => {
       state.seedJournalIndex = (state.seedJournalIndex + 1) % seeds.length;
       updateSeedJournalCard();
     });
   }
+}
+
+// ====== SEED ZOOM POPUP ======
+function openSeedZoom(fName) {
+  if (!seedZoomPopup || !seedZoomImg || !seedZoomName) return;
+
+  seedZoomImg.src = `assets/seedjournal/${flowers[fName].img}-seed.png`;
+  seedZoomName.textContent = fName;
+
+  seedZoomPopup.classList.add("show");
+}
+
+if (closeSeedZoomBtn) {
+  closeSeedZoomBtn.addEventListener("click", () => {
+    seedZoomPopup.classList.remove("show");
+  });
 }
 
 // ====== PLANT/WATER/HARVEST ======
