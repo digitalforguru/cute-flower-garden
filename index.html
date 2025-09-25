@@ -55,22 +55,24 @@
         </div>
       </main>
 
-     <!-- Seed Journal Popup -->
-<div id="seed-journal-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-journal-title" tabindex="-1">
-  <h3 id="seed-journal-title">seed journal</h3>
-  <button id="close-journal-btn" aria-label="close seed journal">✕</button>
-  <div id="seed-journal-card" tabindex="0" aria-live="polite"></div>
-  <nav class="popup-nav">
-    <button id="prev-seed-btn" aria-label="previous seed">←</button>
-    <button id="next-seed-btn" aria-label="next seed">→</button>
-  </nav>
+      <!-- Seed Journal Popup -->
+      <div id="seed-journal-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-journal-title" tabindex="-1">
+        <h3 id="seed-journal-title">seed journal</h3>
+        <button id="close-journal-btn" aria-label="close seed journal">✕</button>
+        <div id="seed-journal-card" tabindex="0" aria-live="polite"></div>
+        <nav class="popup-nav">
+          <button id="prev-seed-btn" aria-label="previous seed">←</button>
+          <button id="next-seed-btn" aria-label="next seed">→</button>
+        </nav>
+      </div>
 
-  <!-- ✅ zoom popup is now nested inside the journal -->
-  <div id="seed-zoom-popup" class="hidden">
-    <img id="seed-zoom-img" src="" alt="seed"/>
-    <button id="close-seed-zoom-btn">✖</button>
-  </div>
-</div>
+      <!-- Seed Inventory Popup -->
+      <div id="seed-inventory-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-inventory-title" tabindex="-1">
+        <h3 id="seed-inventory-title">choose a seed to plant</h3>
+        <button id="close-seed-inventory-btn" aria-label="close seed inventory">✕</button>
+        <div id="seed-inventory" tabindex="0" role="list" aria-live="polite" aria-label="Available seeds" style="display: flex; flex-wrap: wrap; gap: 8px; min-height: 36px;"></div>
+        <div id="no-seeds-text" class="no-seeds">no seeds yet</div>
+      </div>
 
       <!-- Buy Seeds Popup -->
       <div id="buy-seeds-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="buy-seeds-title" tabindex="-1">
@@ -79,26 +81,11 @@
         <ul id="buy-seeds-list" role="listbox" tabindex="0" aria-live="polite"></ul>
       </div>
 
-      <!-- Seed Inventory Popup -->
-      <div id="seed-inventory-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-inventory-title" tabindex="-1">
-        <h3 id="seed-inventory-title">🌱 choose a seed to plant</h3>
-        <button id="close-seed-inventory-btn" aria-label="close seed inventory">✕</button>
-        <div id="seed-inventory-popup-list" tabindex="0" aria-live="polite"></div>
-      </div>
-
       <!-- Buy Water Popup -->
       <div id="buy-water-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="buy-water-title" tabindex="-1">
         <h3 id="buy-water-title">buy water 💧</h3>
         <button id="close-buy-water-btn" aria-label="close buy water popup">✕</button>
         <ul id="buy-water-list" role="listbox" tabindex="0" aria-live="polite"></ul>
-      </div>
-
-      <!-- Seed Inventory Popup (NEW instead of inline seeds) -->
-      <div id="seed-inventory-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="seed-inventory-title" tabindex="-1">
-        <h3 id="seed-inventory-title">choose a seed to plant</h3>
-        <button id="close-seed-inventory-btn" aria-label="close seed inventory">✕</button>
-        <div id="seed-inventory" tabindex="0" role="list" aria-live="polite" aria-label="Available seeds" style="display: flex; flex-wrap: wrap; gap: 8px; min-height: 36px;"></div>
-        <div id="no-seeds-text" class="no-seeds">no seeds yet</div>
       </div>
 
       <!-- Popup Message -->
@@ -121,6 +108,12 @@
     </section>
 
   </div>
+</div>
+
+<!-- Seed Zoom Popup (moved outside journal) -->
+<div id="seed-zoom-popup" class="hidden" role="dialog" aria-modal="true">
+  <img id="seed-zoom-img" src="" alt="seed"/>
+  <button id="close-seed-zoom-btn" aria-label="close zoom">✖</button>
 </div>
 
 <script src="game.js"></script>
