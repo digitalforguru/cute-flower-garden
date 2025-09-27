@@ -516,7 +516,7 @@ body, html {
 }
 
 /* ✅ Mini game option buttons use theme */
-.mini-game-option-btn {
+.mini-game-options-btn {
   border: 2px solid var(--primary-color);
   background: #fff0f3;
   color: var(--primary-color);
@@ -527,11 +527,29 @@ body, html {
   transition: all 0.25s ease;
 }
 
-.mini-game-option-btn:hover {
+.mini-game-options-btn:hover {
   background: var(--primary-color);
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 2px 6px rgba(231,84,128,0.4);
+}
+
+#close-click-flower-minigame-btn {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+#close-click-flower-minigame-btn:hover {
+  transform: scale(1.1);
+  color: white;
+  background: var(--primary-color);
+  border-radius: 50%;
 }
 
 #mini-game-menu-popup {
