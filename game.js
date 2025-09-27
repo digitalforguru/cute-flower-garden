@@ -162,16 +162,36 @@ if(btn1){
 
     miniGame1FlowersEl.innerHTML = "<p style='text-align:center;margin-bottom:8px;'>Choose one of your unlocked flowers to play 🌸</p>";
 
-    unlocked.forEach(fName => {
-      const img = document.createElement("img");
-      img.src = `assets/minigames/${flowers[fName].img}.png`;
-      img.alt = fName;
-      img.style.width = "80px";
-      img.style.cursor = "pointer";
-      img.style.margin = "4px";
-      img.addEventListener("click", () => startMiniGame1(fName));
-      miniGame1FlowersEl.appendChild(img);
-    });
+    miniGame1FlowersEl.innerHTML = "<p style='text-align:center;margin-bottom:8px;'>Choose one of your unlocked flowers to play 🌸</p>";
+
+unlocked.forEach(fName => {
+  const wrapper = document.createElement("div");
+  wrapper.style.display = "flex";
+  wrapper.style.flexDirection = "column";
+  wrapper.style.alignItems = "center";
+  wrapper.style.margin = "6px";
+  wrapper.style.cursor = "pointer";
+
+  const img = document.createElement("img");
+  img.src = `assets/minigames/${flowers[fName].img}.png`;
+  img.alt = fName;
+  img.style.width = "80px";
+  img.style.height = "80px";
+  img.style.objectFit = "contain";
+
+  const label = document.createElement("span");
+  label.textContent = fName;
+  label.style.fontSize = "12px";
+  label.style.marginTop = "4px";
+  label.style.color = "#555";
+  label.style.textTransform = "capitalize";
+
+  wrapper.appendChild(img);
+  wrapper.appendChild(label);
+  wrapper.addEventListener("click", () => startMiniGame1(fName));
+
+  miniGame1FlowersEl.appendChild(wrapper);
+});
   });
 }
 // ✅ Seed Journal Zoom Logic (Fixed)
