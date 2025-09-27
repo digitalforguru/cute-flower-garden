@@ -136,16 +136,33 @@ const state = {
   tutorialSeen: false
 };
 
+function showWateringGif() {
+  if(!gardenImage) return;
+
+  const gif = document.createElement("img");
+  gif.src = "https://i.pinimg.com/originals/22/36/cb/2236cb9f7ef3ac8a87b4f9af0680c83e.gif"; // replace with your GIF link
+  gif.style.position = "absolute";
+  gif.style.top = "0";
+  gif.style.left = "50%";
+  gif.style.transform = "translateX(-50%)";
+  gif.style.width = "120px"; 
+  gif.style.pointerEvents = "none";
+  gif.style.zIndex = "1000";
+
+  gardenImage.parentElement.appendChild(gif);
+
+  setTimeout(() => gif.remove(), 1000); // duration matches GIF length
+}
 // ====== INITIAL SEED ======
 function giveWelcomeSeed() {
-  // Only give starter seed if it hasn't been given AND user doesn't already own a daisy
-  if (!localStorage.getItem("starterSeedGiven") && (!state.seedInventory["daisy"] || state.seedInventory["daisy"] === 0)) {
+  const hasSeed = state.seedInventory["daisy"] > 0;
+  const given = localStorage.getItem("starterSeedGiven");
+
+  if (!given && !hasSeed) {
     state.seedInventory["daisy"] = 1;
     showPopupMessage("thank you for playing! 🌸 You got 1 free daisy seed to plant!");
-    saveState();
-
-    // Mark as given so it doesn't run again
     localStorage.setItem("starterSeedGiven", "true");
+    saveState();
   }
 }
 
@@ -412,7 +429,7 @@ function waterFlower() {
 
   updateGardenImage(); updateSeedInventory(); updateWaterCount(); saveState();
   if(waters>=total) showPopupMessage(`${fName} is ready to harvest! 🌸`);
-  else showPopupMessage(`Watered ${fName} 💧 (${waters}/${total})`);
+  else showWateringGif();
 }
 
 function harvestFlower() {
@@ -615,20 +632,20 @@ window.plantSeed = plantSeed;
 
 // ====== INITIALIZATION ======
 function initGame() {
-  loadState();
-  ensureTutorialElements();
+  loadState();                     // 1. Load saved state
+  ensureTutorialElements();        // 2. Make sure tutorial popup exists
 
-  if (!state.tutorialSeen) {
+  if (!state.tutorialSeen) {       // 3. Show tutorial once
     showTutorialPopup();
     state.tutorialSeen = true;
     saveState();
   }
 
-  giveWelcomeSeed();
-  giveStartingLotusPoints(); // ✅ Step 1 applied
+  giveWelcomeSeed();               // 4. Give starter seed if needed
+  giveStartingLotusPoints();       // 5. Give starting LP
+  resetDailyWaterIfNeeded();       // 6. Reset daily waters
 
-  resetDailyWaterIfNeeded();
-
+  // 7. UI updates
   updateLotusPoints();
   updateWaterCount();
   updateStreak();
@@ -641,7 +658,6 @@ function initGame() {
   checkDailyStreak();
   renderBuyWaterList();
 }
-
 // Prevent double initialization
 if(gardenWidget && !gardenWidget.dataset.initialized) {
   gardenWidget.dataset.initialized = "true";
