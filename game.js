@@ -162,15 +162,35 @@ function getRarityColor(rarity) {
 }
 
 // quick small toast popup (keeps your existing behavior)
-function showPopupMessage(msg) {
-  if (!popupMessage) return;
-  const textEl = document.getElementById("popup-text");
-  if (textEl) textEl.textContent = msg;
-  popupMessage.classList.add("visible");
-  // auto hide after 2.5s
-  setTimeout(() => popupMessage.classList.remove("visible"), 2500);
+// ====== POPUP QUEUE SYSTEM ======
+const popupQueue = [];
+let popupActive = false;
+
+function showPopupMessage(msg, duration = 2500) {
+  popupQueue.push({ msg, duration });
+  if (!popupActive) processPopupQueue();
 }
 
+function processPopupQueue() {
+  if (!popupQueue.length) {
+    popupActive = false;
+    return;
+  }
+  popupActive = true;
+  const { msg, duration } = popupQueue.shift();
+  if (!popupMessage) return;
+
+  const textEl = document.getElementById("popup-text");
+  if (textEl) textEl.textContent = msg;
+
+  popupMessage.classList.add("visible");
+
+  setTimeout(() => {
+    popupMessage.classList.remove("visible");
+    // slight delay before showing next popup
+    setTimeout(processPopupQueue, 300);
+  }, duration);
+}
 function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 function loadState() { const saved = localStorage.getItem(STORAGE_KEY); if(saved) Object.assign(state, JSON.parse(saved)); }
 function normalizeFlowerKey(name) { return seeds.find(f => f.toLowerCase() === name.toLowerCase()) || name; }
