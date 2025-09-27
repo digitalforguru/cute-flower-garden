@@ -184,7 +184,6 @@ unlocked.forEach(fName => {
   label.style.fontSize = "12px";
   label.style.marginTop = "4px";
   label.style.color = "#555";
-  label.style.textTransform = "capitalize";
 
   wrapper.appendChild(img);
   wrapper.appendChild(label);
