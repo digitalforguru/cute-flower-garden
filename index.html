@@ -44,6 +44,7 @@
               <button id="seed-journal-btn">📔 Journal</button>
               <button id="buy-seed-list-btn">🌱 Buy Seeds</button>
               <button id="buy-water-btn">💧 Buy Water</button>
+              <button id="mini-game-btn">🎮 Earn LP</button>
             </div>
           </div>
 
@@ -99,7 +100,17 @@
   <button id="close-buy-water-btn" aria-label="close buy water popup">✕</button>
   <ul id="buy-water-list" role="listbox" tabindex="0" aria-live="polite"></ul>
 </div>
+<!-- Mini Game Menu Popup -->
+<div id="mini-game-menu-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="mini-game-menu-title" tabindex="-1">
+  <h3 id="mini-game-menu-title">Mini Games</h3>
+  <button id="close-mini-game-menu-btn" aria-label="close mini game menu">✕</button>
 
+  <div id="mini-game-options" style="display:flex;flex-direction:column;gap:12px;margin-top:12px;">
+    <!-- Mini game buttons will go here -->
+    <button class="mini-game-option-btn" data-game="1">🌼 water counts</button>
+    <!-- Add more mini game options later -->
+  </div>
+</div>
       <!-- Popup Message -->
       <div id="popup-message" class="popup-message hidden" role="alert" aria-live="assertive">
   <p id="popup-text"></p>
