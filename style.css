@@ -473,7 +473,7 @@ body, html {
   background: var(--primary-color, #e75480);
   color: white;
 }
-.mini-game-option-btn {
+.mini-game-options-btn {
   background: #ffeef5;           /* soft blush background */
   border: 2px solid #e7a8c9;     /* pastel pink border */
   color: #5a4a4a;                /* warm brown text */
@@ -485,7 +485,7 @@ body, html {
   transition: transform 0.15s ease, background 0.2s ease;
 }
 
-.mini-game-option-btn:hover {
+.mini-game-options-btn:hover {
   background: #ffddeb;
   transform: scale(1.03);
 }
