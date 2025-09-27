@@ -160,12 +160,18 @@ function getRarityColor(rarity) {
 // quick small toast popup (keeps your existing behavior)
 function showPopupMessage(msg) {
   if (!popupMessage) return;
-  popupMessage.textContent = msg;
+  const textEl = document.getElementById("popup-text");
+  if (textEl) textEl.textContent = msg;
   popupMessage.classList.add("visible");
   // auto hide after 2.5s
   setTimeout(() => popupMessage.classList.remove("visible"), 2500);
 }
-
+const popupBtn = document.getElementById("popup-btn");
+if (popupBtn && popupMessage) {
+  popupBtn.addEventListener("click", () => {
+    popupMessage.classList.remove("visible");
+  });
+}
 function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 function loadState() { const saved = localStorage.getItem(STORAGE_KEY); if(saved) Object.assign(state, JSON.parse(saved)); }
 function normalizeFlowerKey(name) { return seeds.find(f => f.toLowerCase() === name.toLowerCase()) || name; }
