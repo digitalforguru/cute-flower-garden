@@ -473,35 +473,65 @@ body, html {
   background: var(--primary-color, #e75480);
   color: white;
 }
-.mini-game-options-btn {
-  background: #ffeef5;           /* soft blush background */
-  border: 2px solid #e7a8c9;     /* pastel pink border */
-  color: #5a4a4a;                /* warm brown text */
-  padding: 10px 14px;
+/* ✅ Mini Game Menu Popup - Themed */
+#mini-game-menu-popup {
+  background: var(--background-color);
+  border: 2px solid var(--primary-color);
   border-radius: 12px;
-  font-size: 14px;
-  font-family: 'Poppins', sans-serif;
-  cursor: pointer;
-  transition: transform 0.15s ease, background 0.2s ease;
-}
-
-.mini-game-options-btn:hover {
-  background: #ffddeb;
-  transform: scale(1.03);
-}
-
-#mini-game-options {
+  padding: 1rem;
+  box-shadow: 0 0 15px rgba(231, 84, 128, 0.8);
+  color: var(--primary-color);
+  font-weight: 300;
+  font-size: 12px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  align-items: center;
 }
 
 #mini-game-menu-popup h3 {
-  font-family: 'Poppins', sans-serif;
-  font-size: 18px;
-  color: #5a4a4a;
-  text-align: center;
-  margin-bottom: 10px;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+  text-transform: lowercase;
+}
+
+/* ✅ Close button inside mini game popup */
+#close-mini-game-menu-btn {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+#close-mini-game-menu-btn:hover {
+  transform: scale(1.1);
+  color: white;
+  background: var(--primary-color);
+  border-radius: 50%;
+}
+
+/* ✅ Mini game option buttons use theme */
+.mini-game-option-btn {
+  border: 2px solid var(--primary-color);
+  background: #fff0f3;
+  color: var(--primary-color);
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.mini-game-option-btn:hover {
+  background: var(--primary-color);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 6px rgba(231,84,128,0.4);
 }
 
 #mini-game-menu-popup {
