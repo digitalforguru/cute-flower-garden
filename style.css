@@ -61,58 +61,7 @@ body, html {
   overflow-y: auto;
 }
 
-/* Vase Title */
-#vase-widget h2 {
-  font-size: 0.5rem;
-  margin-bottom: 0.4rem;
-  text-align: center;
-}
-
-/* Vase Collection */
-#vase-collection {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  justify-content: center;
-  overflow-y: auto;
-}
-
-.vase-item {
-  width: 48px;
-  height: 64px;
-  object-fit: contain;
-  border-radius: 6px;
-}
-
-/* Widget Header & Points Display */
-.widget-header {
-  font-weight: 200;
-  font-size: 0.75rem;
-  margin-bottom: 0.2rem;
-}
-
-.points-display {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-weight: 400;
-  font-size: 11px;
-}
-
-.points-display span {
-  display: flex;
-  align-items: center;
-  gap: 0.2rem;
-}
-
-.icon-large {
-  width: 18px;
-  height: 18px;
-}
-
 /* ================= Garden Main Layout ================= */
-
-/* Main garden + buttons row */
 #garden-main-row {
   display: flex;
   justify-content: center;
@@ -120,7 +69,6 @@ body, html {
   gap: 0.8rem;
 }
 
-/* Garden image box with dotted border + glow */
 #garden-section {
   width: 180px;
   height: 180px;
@@ -136,84 +84,42 @@ body, html {
   animation: dash-glow 3s linear infinite;
 }
 
-#garden-image {
-  width: 90%;
-  height: 90%;
-  object-fit: contain;
-}
-
 @keyframes dash-glow {
   0%   { box-shadow: 0 0 6px rgba(231, 84, 128, 0.2); }
   50%  { box-shadow: 0 0 12px rgba(231, 84, 128, 0.5); }
   100% { box-shadow: 0 0 6px rgba(231, 84, 128, 0.2); }
 }
 
-/* Shop/Journal buttons to the right */
-#shop-buttons-col {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-
-#shop-buttons-col button {
-  width: 80px;
-  font-size: 11px;
-  padding: 0.4rem 0.6rem;
-  border-radius: 8px;
-}
-
-/* Action buttons (water + harvest) under garden */
-#garden-action-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 0.6rem;
-  margin-top: 0.6rem;
-}
-
-#garden-action-buttons button {
-  width: 90px;
-  font-size: 10px;
-  padding: 0.4rem 0.6rem;
-  border-radius: 8px;
-}
+/* ================= Buttons ================= */
 #shop-buttons-col button,
-#garden-action-buttons button {
-  border: 2px solid var(--primary-color, #e75480);
+#garden-action-buttons button,
+.mini-game-options-btn,
+#game-popup button,
+#close-mini-game-menu-btn {
+  border: 2px solid var(--primary-color);
   background: #fff0f3;
-  color: var(--primary-color, #e75480);
+  color: var(--primary-color);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 #shop-buttons-col button:hover,
-#garden-action-buttons button:hover {
-  background: var(--primary-color, #e75480);
+#garden-action-buttons button:hover,
+.mini-game-options-btn:hover,
+#game-popup button:hover,
+#close-mini-game-menu-btn:hover {
+  background: var(--primary-color);
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 2px 6px rgba(231, 84, 128, 0.4);
-}
-/* ================= Seed Inventory ================= */
-#seed-inventory-section {
-  width: 100%;
-  height: 70px;
-  background: #fff0f3;
-  border-radius: 10px;
-  padding: 0.3rem 0.6rem;
-  color: var(--primary-color, #e75480);
-  font-weight: 300;
-  font-size: 11px;
-  display: flex;
-  flex-direction: column;
-  overflow-x: auto;
-  margin-top: 1rem;
+  box-shadow: 0 2px 6px rgba(231,84,128,0.4);
 }
 
+/* ================= Seed Inventory ================= */
 #seed-inventory {
   display: flex;
   flex-wrap: nowrap;
   gap: 8px;
   overflow-x: auto;
-  min-height: 50px;
 }
 
 .seed-item {
@@ -238,246 +144,18 @@ body, html {
   color: white;
   transform: translateY(-2px);
 }
-#seed-journal-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;       /* center horizontally */
-  justify-content: center;   /* center vertically */
-  text-align: center;
-  width: 100%;
-  height: 100%;              /* fill popup space */
-  box-sizing: border-box;
-  padding: 10px;
-}
 
-.journal-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;   /* vertical center */
-  align-items: center;       /* horizontal center */
-  width: 100%;
-  height: 100%;              /* fill parent */
-  position: relative;
-}
-
-.journal-img-wrapper {
-  width: 90%;                /* almost full width */
-  max-width: 300px;
-  display: flex;
-  justify-content: center;   /* horizontal centering */
-  align-items: center;       /* vertical centering inside wrapper */
-}
-
-.journal-img {
-  width: 100%;
-  border-radius: 15px;
-  object-fit: contain;
-  display: block;
-  margin-bottom: 8px; /* keeps text below */
-}
-
-.nav-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: rgba(255,255,255,0.6);
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  padding: 5px 8px;
-  border-radius: 50%;
-}
-
-.nav-left { left: -10px; }
-.nav-right { right: -10px; }
-
-.journal-info {
-  text-align: center;
-  font-size: 0.8rem; /* small, clean text */
-  margin-top: 8px;
-}
-/* ================= Popups ================= */
-.popup {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 280px;
-  max-width: 90vw;
-  background: var(--background-color, #fff8f9);
-  border: 2px solid var(--primary-color, #e75480);
-  border-radius: 12px;
-  padding: 1rem;
-  box-shadow: 0 0 15px rgba(231, 84, 128, 0.8);
-  transform: translate(-50%, -50%);
-  z-index: 1100;
-  color: var(--primary-color, #e75480);
-  font-weight: 300;
-  font-size: 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.popup.hidden { display: none; }
-
-/* ✅ ADD THE NEW STYLES *RIGHT HERE* */
-.popup-message {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.9);
-  width: 220px;
-  max-width: 80%;
-  padding: 1rem;
-  text-align: center;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 2000;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-
-  /* 🎨 Theme-based styles */
-  background: var(--background-color, #fff8f9);
-  border: 2px solid var(--primary-color, #e75480);
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-  color: var(--primary-color, #e75480);
-}
-.popup-message.visible {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
-  pointer-events: auto;
-}
-
-.popup button#close-journal-btn,
-.popup button#close-buy-seeds-btn,
-#close-buy-water-btn {
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  background: transparent;
-  border: none;
-  font-size: 1.2rem;
-  color: var(--primary-color, #e75480);
-  cursor: pointer;
-}
-
-/* Popup lists */
-#buy-seeds-list, #buy-water-list {
-  list-style: none;
-  max-height: 180px;
-  overflow-y: auto;
-  padding: 0;
-  margin: 0;
-  font-weight: 300;
-  font-size: 12px;
-  color: var(--primary-color, #e75480);
-  width: 100%;
-}
-
-#buy-seeds-list li,
-#buy-water-list li {
-  padding: 0.4rem 0.6rem;
-  cursor: pointer;
-  border-bottom: 1px solid var(--primary-color, #e75480);
-}
-
-#buy-seeds-list li:hover,
-#buy-water-list li:hover {
-  background: var(--primary-color, #e75480);
-  color: white;
-}
-/* Seed Zoom Popup Fix */
-#seed-zoom-popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.8);
-  max-width: 600px;
-  max-height: 90%;
-  width: auto;
-  height: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 4px dashed var(--primary-color, #e75480); /* thinner + cuter */
-  border-radius: 14px;
-  background: #fff8f9;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-  z-index: 9999;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  flex-direction: column;
-  padding: 10px;
-}
-
-#seed-zoom-popup.show {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
-  pointer-events: auto;  /* enable interaction when visible */
-}
-
-#seed-zoom-popup img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  border-radius: 8px;
-}
-
-#seed-zoom-popup button {
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  align-self: flex-end;
-  margin-bottom: 8px;
-}
-.game-popup {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.9);
-  width: 220px;
-  max-width: 80%;
-  background: var(--background-color, #fff8f9);
-  border: 2px solid var(--primary-color, #e75480);
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
-  padding: 1rem;
-  text-align: center;
-  z-index: 999;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.game-popup.show {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
-  pointer-events: auto;
-}
-
-#game-popup button {
-  margin-top: 0.6rem;
-  padding: 0.4rem 0.8rem;
-  border-radius: 8px;
-  border: 2px solid var(--primary-color, #e75480);
-  background: #fff0f3;
-  color: var(--primary-color, #e75480);
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-#game-popup button:hover {
-  background: var(--primary-color, #e75480);
-  color: white;
-}
-/* ✅ Mini Game Menu Popup - Themed */
+/* ================= Mini Game Menu Popup ================= */
 #mini-game-menu-popup {
-  background: var(--background-color);
-  border: 2px solid var(--primary-color);
-  border-radius: 12px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  width: 240px;
+  max-width: 90%;
+  background: var(--background-color, #fff9f4);
+  border: 3px solid var(--primary-color, #e7a8c9);
+  border-radius: 16px;
   padding: 1rem;
   box-shadow: 0 0 15px rgba(231, 84, 128, 0.8);
   color: var(--primary-color);
@@ -486,6 +164,8 @@ body, html {
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 1000;
+  opacity: 1;
 }
 
 #mini-game-menu-popup h3 {
@@ -495,16 +175,17 @@ body, html {
   text-transform: lowercase;
 }
 
-/* ✅ Close button inside mini game popup */
+/* Close button for mini game popup */
 #close-mini-game-menu-btn {
   position: absolute;
   top: 8px;
   right: 12px;
-  background: transparent;
-  border: none;
   font-size: 1.2rem;
   color: var(--primary-color);
   cursor: pointer;
+  background: transparent;
+  border: none;
+  z-index: 1001;
   transition: all 0.25s ease;
 }
 
@@ -515,10 +196,10 @@ body, html {
   border-radius: 50%;
 }
 
-/* ✅ Mini game option buttons use theme */
+/* Mini game option buttons */
 .mini-game-options-btn {
   border: 2px solid var(--primary-color);
-  background: #fff0f3;
+  background: var(--background-color, #fff0f3);
   color: var(--primary-color);
   padding: 0.5rem 0.8rem;
   border-radius: 8px;
@@ -532,51 +213,6 @@ body, html {
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 2px 6px rgba(231,84,128,0.4);
-}
-
-#close-click-flower-minigame-btn {
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  background: transparent;
-  border: none;
-  font-size: 1.2rem;
-  color: var(--primary-color);
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-#close-click-flower-minigame-btn:hover {
-  transform: scale(1.1);
-  color: white;
-  background: var(--primary-color);
-  border-radius: 50%;
-}
-
-#mini-game-menu-popup {
-  background: #fff9f4;
-  border: 3px solid #e7a8c9;
-  border-radius: 16px;
-  padding: 16px;
-}
-/* ================= Theme Selector ================= */
-#theme-selector {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 1rem;
-}
-
-.theme-dot {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: 2px solid white;
-  cursor: pointer;
-  transition: box-shadow 0.3s ease;
-}
-
-.theme-dot.active {
-  box-shadow: 0 0 0 3px white;
 }
 
 /* ================= Themes ================= */
@@ -605,7 +241,7 @@ body, html {
   --background-color: #edf3e9;
 }
 
-/* ================= Accessibility & Scrollbar ================= */
+/* ================= Accessibility ================= */
 button:focus-visible,
 .seed-item:focus-visible,
 .theme-dot:focus-visible {
@@ -613,6 +249,7 @@ button:focus-visible,
   outline-offset: 3px;
 }
 
+/* ================= Scrollbars ================= */
 #seed-inventory::-webkit-scrollbar,
 #vase-collection::-webkit-scrollbar,
 #buy-seeds-list::-webkit-scrollbar,
@@ -625,7 +262,7 @@ button:focus-visible,
 #vase-collection::-webkit-scrollbar-thumb,
 #buy-seeds-list::-webkit-scrollbar-thumb,
 #buy-water-list::-webkit-scrollbar-thumb {
-  background-color: var(--primary-color, #e75480);
+  background-color: var(--primary-color);
   border-radius: 3px;
 }
 
