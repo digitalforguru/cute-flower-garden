@@ -126,38 +126,43 @@ if(closeClickFlowerMiniGameBtn) closeClickFlowerMiniGameBtn.addEventListener("cl
   if(clickFlowerMiniGamePopup) clickFlowerMiniGamePopup.classList.add("hidden");
   clickFlowerGameState.targetFlower = null;
 });
-if(miniGameOptions){
+if (miniGameOptions) {
   const btn1 = miniGameOptions.querySelector(`[data-game="1"]`);
-  if(btn1){
-   btn1.addEventListener("click", async () => {
-  if(miniGameMenuPopup) miniGameMenuPopup.classList.add("hidden");
+  if (btn1) {
+    btn1.addEventListener("click", async () => {
+      if (miniGameMenuPopup) miniGameMenuPopup.classList.add("hidden");
 
-  // Show loading
-  await showMiniGameLoading(1000);
+      await showMiniGameLoading(1000);
 
-  // ✅ Now show unlocked flowers dynamically
-  if (!miniGame1FlowersEl) return;
+      if (!miniGame1FlowersEl) return;
 
-  miniGame1FlowersEl.innerHTML = ""; 
-  miniGame1FlowersEl.classList.remove("hidden");
+      miniGame1FlowersEl.innerHTML = "";
+      miniGame1FlowersEl.classList.remove("hidden");
 
-  const unlocked = seeds.filter(f => state.seedInventory[f] > 0 || state.harvestedFlowers.includes(f));
+      const unlocked = seeds.filter(
+        f =>
+          state.seedInventory[f] > 0 ||
+          state.harvestedFlowers.includes(f)
+      );
 
-  if(!unlocked.length){
-    miniGame1FlowersEl.textContent = "No unlocked flowers!";
-    return;
+      if (!unlocked.length) {
+        miniGame1FlowersEl.textContent = "No unlocked flowers!";
+        return;
+      }
+
+      unlocked.forEach(fName => {
+        const img = document.createElement("img");
+        img.src = `assets/minigames/${flowers[fName].img}.png`;
+        img.alt = fName;
+        img.style.width = "80px";
+        img.style.cursor = "pointer";
+        img.addEventListener("click", () => startMiniGame1(fName));
+        miniGame1FlowersEl.appendChild(img);
+      });
+    });
   }
+}
 
-  unlocked.forEach(fName => {
-    const img = document.createElement("img");
-    img.src = `assets/minigames/${flowers[fName].img}.png`;
-    img.alt = fName;
-    img.style.width = "80px";
-    img.style.cursor = "pointer";
-    img.addEventListener("click", () => startMiniGame1(fName));
-    miniGame1FlowersEl.appendChild(img);
-  });
-});
 // ✅ Seed Journal Zoom Logic (Fixed)
 function enableSeedZoom() {
   if (!seedJournalCard) return;
