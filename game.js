@@ -46,7 +46,36 @@ const seedZoomPopup = getEl("seed-zoom-popup");
 const seedZoomImg = getEl("seed-zoom-img");
 const seedZoomName = getEl("seed-zoom-name");
 const closeSeedZoomBtn = getEl("close-seed-zoom-btn");
+// ✅ Seed Journal Zoom Logic (Fixed)
+function enableSeedZoom() {
+  if (!seedJournalCard) return;
 
+  seedJournalCard.addEventListener("click", (e) => {
+    const img = e.target.closest(".journal-img");
+    if (!img) return;
+
+    const idx = state.seedJournalIndex;
+    const fName = seeds[idx];
+    const f = flowers[fName];
+    const isLocked = !(state.seedInventory[fName] > 0 || state.harvestedFlowers.includes(fName));
+
+    if (!isLocked && seedZoomPopup && seedZoomImg) {
+      seedZoomImg.src = `assets/seedjournal/${f.img}-seed.png`;
+      seedZoomPopup.classList.remove("hidden");
+      seedZoomPopup.classList.add("show");
+    }
+  });
+}
+
+if (closeSeedZoomBtn) {
+  closeSeedZoomBtn.addEventListener("click", () => {
+    seedZoomPopup.classList.add("hidden");
+    seedZoomPopup.classList.remove("show");
+    seedZoomImg.src = "";
+  });
+}
+
+document.addEventListener("DOMContentLoaded", enableSeedZoom);
 // ====== STORAGE & CONSTANTS ======
 const STORAGE_KEY = "cuteGardenState";
 const DAILY_WATER_BY_RARITY = { common:10, uncommon:20, rare:25, epic:35, legendary:40 };
@@ -279,29 +308,6 @@ function updateSeedJournalCard() {
   };
 }
 
-// ====== SEED JOURNAL IMAGE ZOOM (Event Delegation) ======
-seedJournalCard.addEventListener("click", (e) => {
-  const img = e.target.closest(".journal-img");
-  if (!img) return;
-
-  const idx = state.seedJournalIndex;
-  const fName = seeds[idx];
-  const f = flowers[fName];
-  const isLocked = !(state.seedInventory[fName] > 0 || state.harvestedFlowers.includes(fName));
-
-  if (!isLocked && seedZoomPopup && seedZoomImg && seedZoomName) {
-    seedZoomImg.src = `assets/seedjournal/${f.img}-seed.png`;
-    seedZoomName.textContent = fName;
-    seedZoomPopup.classList.add("show");
-  }
-});
-
-// ====== CLOSE SEED ZOOM POPUP ======
-if (closeSeedZoomBtn) {
-  closeSeedZoomBtn.addEventListener("click", () => {
-    seedZoomPopup.classList.remove("show");
-  });
-}
 
 // ====== PLANT/WATER/HARVEST ======
 function plantSeed(fName){
