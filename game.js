@@ -149,6 +149,15 @@ function giveWelcomeSeed() {
   }
 }
 
+// ====== STEP 1: BUMP STARTING LOTUS POINTS ======
+function giveStartingLotusPoints() {
+  if (!localStorage.getItem("starterLPBonus")) {
+    state.lotusPoints = 50; // bump from default 20
+    showPopupMessage("✨ Welcome! You start with 50 LP to get planting!");
+    localStorage.setItem("starterLPBonus", "true");
+    saveState();
+  }
+}
 // ====== UTILITIES ======
 function getRarityColor(rarity) {
   switch(rarity) {
@@ -616,8 +625,8 @@ function initGame() {
   }
 
   giveWelcomeSeed();
+  giveStartingLotusPoints(); // ✅ Step 1 applied
 
-  // ✅ Reset daily waters at the very start
   resetDailyWaterIfNeeded();
 
   updateLotusPoints();
