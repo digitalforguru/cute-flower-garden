@@ -138,10 +138,14 @@ const state = {
 
 // ====== INITIAL SEED ======
 function giveWelcomeSeed() {
-  if (!state.seedInventory["daisy"]) {
+  // Only give starter seed if it hasn't been given AND user doesn't already own a daisy
+  if (!localStorage.getItem("starterSeedGiven") && (!state.seedInventory["daisy"] || state.seedInventory["daisy"] === 0)) {
     state.seedInventory["daisy"] = 1;
-    showPopupMessage("Welcome! 🌸 You got 1 free daisy seed!");
+    showPopupMessage("thank you for playing! 🌸 You got 1 free daisy seed to plant!");
     saveState();
+
+    // Mark as given so it doesn't run again
+    localStorage.setItem("starterSeedGiven", "true");
   }
 }
 
