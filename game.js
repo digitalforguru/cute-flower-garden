@@ -53,12 +53,7 @@ const closeMiniGameMenuBtn = getEl("close-mini-game-menu-btn");
 const miniGameOptions = getEl("mini-game-options");
 
 const miniGameLoading = getEl("mini-game-loading");
-const clickFlowerMiniGamePopup = getEl("click-flower-mini-game-popup");
-const clickFlowerTitle = getEl("click-flower-mini-game-title");
-const clickFlowerImg = getEl("click-flower-img");
-const clickFlowerCounter = getEl("click-flower-counter");
-const clickFlowerTarget = getEl("click-flower-target");
-const closeClickFlowerMiniGameBtn = getEl("close-click-flower-mini-game-btn");
+const miniGame1FlowersEl = getEl("mini-game-1-flowers");
 
 // Open menu
 if(miniGameBtn) miniGameBtn.addEventListener("click", () => {
@@ -134,21 +129,35 @@ if(closeClickFlowerMiniGameBtn) closeClickFlowerMiniGameBtn.addEventListener("cl
 if(miniGameOptions){
   const btn1 = miniGameOptions.querySelector(`[data-game="1"]`);
   if(btn1){
-    btn1.addEventListener("click", async () => {
-      if(miniGameMenuPopup) miniGameMenuPopup.classList.add("hidden");
+   btn1.addEventListener("click", async () => {
+  if(miniGameMenuPopup) miniGameMenuPopup.classList.add("hidden");
 
-      // Show loading
-      await showMiniGameLoading(1200);
+  // Show loading
+  await showMiniGameLoading(1000);
 
-      // Pick unlocked flower to start game
-      // For simplicity, default to first unlocked flower
-      const unlockedFlowers = seeds.filter(f => state.seedInventory[f] > 0 || state.harvestedFlowers.includes(f));
-      if(!unlockedFlowers.length) return showPopupMessage("No unlocked flowers for mini game!");
+  // ✅ Now show unlocked flowers dynamically
+  if (!miniGame1FlowersEl) return;
 
-      startMiniGame1(unlockedFlowers[0]);
-    });
+  miniGame1FlowersEl.innerHTML = ""; 
+  miniGame1FlowersEl.classList.remove("hidden");
+
+  const unlocked = seeds.filter(f => state.seedInventory[f] > 0 || state.harvestedFlowers.includes(f));
+
+  if(!unlocked.length){
+    miniGame1FlowersEl.textContent = "No unlocked flowers!";
+    return;
   }
-}
+
+  unlocked.forEach(fName => {
+    const img = document.createElement("img");
+    img.src = `assets/minigames/${flowers[fName].img}.png`;
+    img.alt = fName;
+    img.style.width = "80px";
+    img.style.cursor = "pointer";
+    img.addEventListener("click", () => startMiniGame1(fName));
+    miniGame1FlowersEl.appendChild(img);
+  });
+});
 // ✅ Seed Journal Zoom Logic (Fixed)
 function enableSeedZoom() {
   if (!seedJournalCard) return;
