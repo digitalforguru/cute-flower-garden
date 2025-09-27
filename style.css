@@ -320,6 +320,46 @@ body, html {
 
 .popup.hidden { display: none; }
 
+/* ✅ ADD THE NEW STYLES *RIGHT HERE* */
+.popup-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  width: 220px;
+  max-width: 80%;
+  background: rgba(255, 248, 252, 0.95);
+  border: 2px solid var(--primary-color, #e75480);
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  padding: 1rem;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2000;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.popup-message.visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: auto;
+}
+
+#popup-message button {
+  margin-top: 0.6rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  border: 2px solid var(--primary-color, #e75480);
+  background: #fff0f3;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+#popup-message button:hover {
+  background: var(--primary-color, #e75480);
+  color: white;
+}
 .popup button#close-journal-btn,
 .popup button#close-buy-seeds-btn,
 #close-buy-water-btn {
