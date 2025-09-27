@@ -475,7 +475,7 @@ body, html {
 }
 /* ================= Mini Game Menu Popup ================= */
 #mini-game-menu-popup {
-  position: fixed;               /* make sure it’s above other content */
+  position: absolute;            /* keep as absolute for JS to toggle easily */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0.9);
@@ -491,7 +491,7 @@ body, html {
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 5000;                /* ensures it’s above other popups */
+  z-index: 1100;                /* match other popups */
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s ease, transform 0.25s ease;
@@ -501,7 +501,7 @@ body, html {
 #mini-game-menu-popup.show {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
-  pointer-events: auto;          /* now clickable */
+  pointer-events: auto;
 }
 
 /* Header inside popup */
@@ -532,7 +532,7 @@ body, html {
   box-shadow: 0 2px 6px rgba(231,84,128,0.4);
 }
 
-/* Close button (change to “x”) */
+/* Close button */
 #close-mini-game-menu-btn {
   position: absolute;
   top: 8px;
