@@ -54,6 +54,13 @@ const miniGameOptions = getEl("mini-game-options");
 
 const miniGameLoading = getEl("mini-game-loading");
 const miniGame1FlowersEl = getEl("mini-game-1-flowers");
+// ----- CLICK FLOWER MINI GAME ELEMENTS -----
+const clickFlowerMiniGamePopup = getEl("click-flower-minigame-popup");
+const clickFlowerImg = getEl("click-flower-img");
+const clickFlowerTitle = getEl("click-flower-title");
+const clickFlowerCounter = getEl("click-flower-counter");
+const clickFlowerTarget = getEl("click-flower-target");
+const closeClickFlowerMiniGameBtn = getEl("close-click-flower-minigame-btn");
 
 // Open menu
 if(miniGameBtn) miniGameBtn.addEventListener("click", () => {
