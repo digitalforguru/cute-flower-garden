@@ -100,40 +100,23 @@
   <button id="close-buy-water-btn" aria-label="close buy water popup">✕</button>
   <ul id="buy-water-list" role="listbox" tabindex="0" aria-live="polite"></ul>
 </div>
-<!-- Mini Game Menu Popup -->
-<div id="mini-game-menu-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="mini-game-menu-title" tabindex="-1">
-  <h3 id="mini-game-menu-title">Mini Games</h3>
-  <button id="close-mini-game-menu-btn" aria-label="close mini game menu">✕</button>
-
-  <div id="mini-game-options" style="display:flex;flex-direction:column;gap:12px;margin-top:12px;">
-    <!-- Mini game buttons will go here -->
-    <button class="mini-game-option-btn" data-game="1">🌼 water counts</button>
-    <!-- Add more mini game options later -->
+<!-- Mini Game Menu -->
+<div id="mini-game-menu-popup" class="popup hidden">
+  <h3>Choose a Mini Game</h3>
+  <div id="mini-game-options">
+    <button data-game="1">Click Flower Game 🌸</button>
   </div>
+  <button id="close-mini-game-menu-btn">Close</button>
 </div>
 
-<!-- Mini Game #1 - Click Flower Popup -->
-<div id="click-flower-minigame-popup" class="popup hidden" role="dialog" aria-modal="true">
+<!-- Flower Selection for Mini Game 1 -->
+<div id="mini-game-1-flowers" class="popup hidden"></div>
+
+<!-- Click Flower Mini Game Popup -->
+<div id="click-flower-minigame-popup" class="popup hidden">
   <h3 id="click-flower-title"></h3>
-
-  <!-- Mini-game loading message -->
-  <div id="mini-game-loading-msg" class="hidden" style="text-align:center;margin:8px 0;">
-    Loading the mini-game...
-  </div>
-
-  <!-- FLOWER SELECTION INSIDE GAME -->
-  <div id="mini-game-1-flowers" class="mini-game-flowers-container">
-    <!-- Flower options will be rendered here dynamically -->
-  </div>
-  
-  <!-- Click Counter + Target -->
-  <img id="click-flower-img" src="" alt="flower to click" style="max-width:150px;cursor:pointer;">
-  <p>
-    Clicks:
-    <span id="click-flower-counter">0</span> /
-    <span id="click-flower-target">20</span>
-  </p>
-
+  <img id="click-flower-img" src="" alt="Flower to click" style="cursor:pointer;width:120px;height:120px;"/>
+  <p>Clicks: <span id="click-flower-counter">0</span> / <span id="click-flower-target">20</span></p>
   <button id="close-click-flower-minigame-btn">Close</button>
 </div>
       <!-- Popup Message -->
