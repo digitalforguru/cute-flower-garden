@@ -180,7 +180,7 @@ unlocked.forEach(fName => {
   img.style.objectFit = "contain";
 
   const label = document.createElement("span");
-  label.textContent = fName;
+  label.textContent = fName.toLowerCase();
   label.style.fontSize = "12px";
   label.style.marginTop = "4px";
   label.style.color = "#555";
