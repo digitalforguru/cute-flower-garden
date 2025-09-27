@@ -46,6 +46,109 @@ const seedZoomPopup = getEl("seed-zoom-popup");
 const seedZoomImg = getEl("seed-zoom-img");
 const seedZoomName = getEl("seed-zoom-name");
 const closeSeedZoomBtn = getEl("close-seed-zoom-btn");
+// ====== MINI GAME ELEMENTS ======
+const miniGameBtn = getEl("mini-game-btn");
+const miniGameMenuPopup = getEl("mini-game-menu-popup");
+const closeMiniGameMenuBtn = getEl("close-mini-game-menu-btn");
+const miniGameOptions = getEl("mini-game-options");
+
+const miniGameLoading = getEl("mini-game-loading");
+const clickFlowerMiniGamePopup = getEl("click-flower-mini-game-popup");
+const clickFlowerTitle = getEl("click-flower-mini-game-title");
+const clickFlowerImg = getEl("click-flower-img");
+const clickFlowerCounter = getEl("click-flower-counter");
+const clickFlowerTarget = getEl("click-flower-target");
+const closeClickFlowerMiniGameBtn = getEl("close-click-flower-mini-game-btn");
+
+// Open menu
+if(miniGameBtn) miniGameBtn.addEventListener("click", () => {
+  [seedJournalPopup, buySeedsPopup, buyWaterPopup].forEach(p => p.classList.add("hidden"));
+  if(miniGameMenuPopup) miniGameMenuPopup.classList.remove("hidden");
+});
+
+// Close menu
+if(closeMiniGameMenuBtn) closeMiniGameMenuBtn.addEventListener("click", () => {
+  if(miniGameMenuPopup) miniGameMenuPopup.classList.add("hidden");
+});
+function showMiniGameLoading(duration = 1000) {
+  if(!miniGameLoading) return Promise.resolve();
+  miniGameLoading.classList.remove("hidden");
+  return new Promise(resolve => {
+    setTimeout(() => {
+      miniGameLoading.classList.add("hidden");
+      resolve();
+    }, duration);
+  });
+}
+let clickFlowerGameState = {
+  targetFlower: null,
+  clicks: 0,
+  targetClicks: 0,
+  rewardLP: 0
+};
+
+function startMiniGame1(flowerName) {
+  const fName = normalizeFlowerKey(flowerName);
+
+  // Check if user owns or unlocked it
+  if(!state.seedInventory[fName] && !state.harvestedFlowers.includes(fName)) {
+    return showPopupMessage(`${fName} is locked!`);
+  }
+
+  clickFlowerGameState.targetFlower = fName;
+  clickFlowerGameState.clicks = 0;
+  clickFlowerGameState.targetClicks = 20;  // 20 clicks to complete
+  clickFlowerGameState.rewardLP = 5;       // LP reward per game
+
+  // Update UI
+  if(clickFlowerTitle) clickFlowerTitle.textContent = `Click the ${fName} 20 times!`;
+  if(clickFlowerImg) clickFlowerImg.src = `assets/minigames/${flowers[fName].img}.png`;
+  if(clickFlowerCounter) clickFlowerCounter.textContent = clickFlowerGameState.clicks;
+  if(clickFlowerTarget) clickFlowerTarget.textContent = clickFlowerGameState.targetClicks;
+
+  if(clickFlowerMiniGamePopup) clickFlowerMiniGamePopup.classList.remove("hidden");
+}
+if(clickFlowerImg){
+  clickFlowerImg.addEventListener("click", () => {
+    if(!clickFlowerGameState.targetFlower) return;
+
+    clickFlowerGameState.clicks++;
+    if(clickFlowerCounter) clickFlowerCounter.textContent = clickFlowerGameState.clicks;
+
+    if(clickFlowerGameState.clicks >= clickFlowerGameState.targetClicks){
+      showPopupMessage(`You earned ${clickFlowerGameState.rewardLP} LP!`);
+      state.lotusPoints += clickFlowerGameState.rewardLP;
+      updateLotusPoints();
+      saveState();
+
+      // Close mini game
+      if(clickFlowerMiniGamePopup) clickFlowerMiniGamePopup.classList.add("hidden");
+      clickFlowerGameState.targetFlower = null;
+    }
+  });
+}
+if(closeClickFlowerMiniGameBtn) closeClickFlowerMiniGameBtn.addEventListener("click", () => {
+  if(clickFlowerMiniGamePopup) clickFlowerMiniGamePopup.classList.add("hidden");
+  clickFlowerGameState.targetFlower = null;
+});
+if(miniGameOptions){
+  const btn1 = miniGameOptions.querySelector(`[data-game="1"]`);
+  if(btn1){
+    btn1.addEventListener("click", async () => {
+      if(miniGameMenuPopup) miniGameMenuPopup.classList.add("hidden");
+
+      // Show loading
+      await showMiniGameLoading(1200);
+
+      // Pick unlocked flower to start game
+      // For simplicity, default to first unlocked flower
+      const unlockedFlowers = seeds.filter(f => state.seedInventory[f] > 0 || state.harvestedFlowers.includes(f));
+      if(!unlockedFlowers.length) return showPopupMessage("No unlocked flowers for mini game!");
+
+      startMiniGame1(unlockedFlowers[0]);
+    });
+  }
+}
 // ✅ Seed Journal Zoom Logic (Fixed)
 function enableSeedZoom() {
   if (!seedJournalCard) return;
