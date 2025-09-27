@@ -73,31 +73,11 @@
 </div>
 
 <!-- Seed Zoom Popup -->
-<div id="seed-zoom-popup" class="popup hidden" 
-     style="
-        position:absolute;
-        top:50%;
-        left:50%;
-        transform:translate(-50%,-50%);
-        width:100%;
-        max-width:400px;
-        aspect-ratio:1/1;
-        background:rgba(255,255,255,0.95);
-        border:2px dashed pink;
-        border-radius:12px;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        z-index:1500;
-        padding:8px;
-        box-shadow:0 8px 20px rgba(0,0,0,0.2);
-      ">
-  <img id="seed-zoom-img" src="" alt="seed"
-       style="width:100%;height:100%;object-fit:contain;border-radius:8px;">
-  <button id="close-seed-zoom-btn" 
-          style="position:absolute;top:8px;right:8px;border:none;background:transparent;font-size:20px;cursor:pointer;">✖</button>
+<div id="seed-zoom-popup" class="popup hidden">
+  <img id="seed-zoom-img" src="" alt="seed">
+  <button id="close-seed-zoom-btn">✖</button>
 </div>
-
+      
 <!-- Buy Seeds Popup -->
 <div id="buy-seeds-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="buy-seeds-title" tabindex="-1">
   <h3 id="buy-seeds-title">Buy Seeds</h3>
