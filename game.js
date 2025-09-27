@@ -73,11 +73,13 @@ if(closeMiniGameMenuBtn) closeMiniGameMenuBtn.addEventListener("click", () => {
   if(miniGameMenuPopup) miniGameMenuPopup.classList.add("hidden");
 });
 function showMiniGameLoading(duration = 1000) {
-  if(!miniGameLoading) return Promise.resolve();
-  miniGameLoading.classList.remove("hidden");
+  const loadingMsg = getEl("mini-game-loading-msg");
+  if(!loadingMsg) return Promise.resolve();
+
+  loadingMsg.classList.remove("hidden");
   return new Promise(resolve => {
     setTimeout(() => {
-      miniGameLoading.classList.add("hidden");
+      loadingMsg.classList.add("hidden");
       resolve();
     }, duration);
   });
@@ -147,25 +149,27 @@ if (miniGameOptions) {
       miniGame1FlowersEl.classList.remove("hidden");
 
       const unlocked = seeds.filter(
-        f =>
-          state.seedInventory[f] > 0 ||
-          state.harvestedFlowers.includes(f)
-      );
+  f => state.seedInventory[f] > 0 || state.harvestedFlowers.includes(f)
+);
 
-      if (!unlocked.length) {
-        miniGame1FlowersEl.textContent = "No unlocked flowers!";
-        return;
-      }
+if (!unlocked.length) {
+  miniGame1FlowersEl.innerHTML = "<p>No unlocked flowers!</p>";
+  return;
+}
 
-      unlocked.forEach(fName => {
-        const img = document.createElement("img");
-        img.src = `assets/minigames/${flowers[fName].img}.png`;
-        img.alt = fName;
-        img.style.width = "80px";
-        img.style.cursor = "pointer";
-        img.addEventListener("click", () => startMiniGame1(fName));
-        miniGame1FlowersEl.appendChild(img);
-      });
+// Add instruction message
+miniGame1FlowersEl.innerHTML = "<p style='text-align:center;margin-bottom:8px;'>Choose one of your unlocked flowers to play 🌸</p>";
+
+unlocked.forEach(fName => {
+  const img = document.createElement("img");
+  img.src = `assets/minigames/${flowers[fName].img}.png`;
+  img.alt = fName;
+  img.style.width = "80px";
+  img.style.cursor = "pointer";
+  img.style.margin = "4px";
+  img.addEventListener("click", () => startMiniGame1(fName));
+  miniGame1FlowersEl.appendChild(img);
+});
     });
   }
 }
