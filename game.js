@@ -327,24 +327,29 @@ function plantSeed(fName){
 // ====== DAILY WATER LOGIC ======
 function resetDailyWaterIfNeeded() {
   const today = new Date().toDateString();
-  if(state.lastWaterDate !== today) {
+  if (state.lastWaterDate !== today) {
     state.lastWaterDate = today;
 
     // Determine highest rarity owned
-    const rarities=["common","uncommon","rare","epic","legendary"];
-    let highest="common";
-    seeds.forEach(fName=>{
-      if(state.seedInventory[fName]>0){
-        const r=flowers[fName].rarity;
-        if(rarities.indexOf(r)>rarities.indexOf(highest)) highest=r;
+    const rarities = ["common","uncommon","rare","epic","legendary"];
+    let highest = "common";
+    seeds.forEach(fName => {
+      if (state.seedInventory[fName] > 0) {
+        const r = flowers[fName].rarity;
+        if (rarities.indexOf(r) > rarities.indexOf(highest)) highest = r;
       }
     });
 
     const newDailyWater = DAILY_WATER_BY_RARITY[highest] || 10;
-    // add to leftover daily waters (so previously unused daily waters remain)
+
+    // Add to leftover daily waters (preserve previous)
     state.watersToday = (state.watersToday || 0) + newDailyWater;
-    showPopupMessage(`+${newDailyWater} daily waters for your ${highest} plants 💧`);
     saveState();
+
+    // ✅ Queue two popups
+    showPopupMessage(`You have gained ${newDailyWater} daily waters 💧`);
+    const totalWaters = (state.watersToday || 0) + (state.boughtWaters || 0);
+    showPopupMessage(`You now have ${totalWaters} total waters 💧`);
   }
 }
 
@@ -582,19 +587,19 @@ window.plantSeed = plantSeed;
 // ====== INITIALIZATION ======
 function initGame() {
   loadState();
-
-  // ensure tutorial/info button exists
   ensureTutorialElements();
 
-  // Intro tutorial on first run
-  if(!state.tutorialSeen) {
-    // mark seen so it doesn't spam on next load (optional: change behavior)
+  if (!state.tutorialSeen) {
     showTutorialPopup();
     state.tutorialSeen = true;
     saveState();
   }
 
   giveWelcomeSeed();
+
+  // ✅ Reset daily waters at the very start
+  resetDailyWaterIfNeeded();
+
   updateLotusPoints();
   updateWaterCount();
   updateStreak();
