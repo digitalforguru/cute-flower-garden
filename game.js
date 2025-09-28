@@ -187,7 +187,7 @@ function startMiniGame1(flowerName) {
   clickFlowerGameState.targetClicks = 20;
   clickFlowerGameState.rewardLP = 5;
 
-  clickFlowerTitle.textContent = `Click the ${fName} 20 times!`;
+  clickFlowerTitle.textContent = `⤷ rain on the ${fName} 20 times!ˎˊ˗`;
   clickFlowerImg.src = `assets/minigames/${flowers[fName].img}.png`;
   clickFlowerCounter.textContent = clickFlowerGameState.clicks;
   clickFlowerTarget.textContent = clickFlowerGameState.targetClicks;
