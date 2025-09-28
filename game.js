@@ -184,7 +184,7 @@ function startMiniGame1(flowerName) {
     return showPopupMessage(`${fName} is locked!`);
   }
   // Reset time
-clickFlowerGameState.timeLeft = 20;
+clickFlowerGameState.timeLeft = 8;
 const timerEl = document.getElementById("click-flower-timer");
 if(timerEl) timerEl.textContent = clickFlowerGameState.timeLeft;
 
@@ -199,7 +199,7 @@ clickFlowerGameState.timer = setInterval(() => {
   if(clickFlowerGameState.timeLeft <= 0){
     clearInterval(clickFlowerGameState.timer);
     clickFlowerGameState.targetFlower = null;
-    showPopupMessage("⏰ Time's up! You didn't finish in time.");
+    showPopupMessage("˙◠˙ Time's up! You didn't rain enough on time.. ˙◠˙");
     clickFlowerMiniGamePopup.classList.add("hidden");
   }
 }, 1000);
