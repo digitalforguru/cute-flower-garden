@@ -206,7 +206,7 @@ clickFlowerImg.addEventListener("click", () => {
 
   // 2️⃣ Add raining cloud GIF (follows window scroll)
   const cloudGif = document.createElement("img");
-  cloudGif.src = "https://i.pinimg.com/originals/64/e9/10/64e9100f230d44edb167694d1e2fb3c6.gif";
+  cloudGif.src = "https://i.pinimg.com/originals/dc/b7/44/dcb744a946c33d5c2e4adde1c6456c6d.gif";
   cloudGif.style.position = "absolute";
   cloudGif.style.width = "100px";
   cloudGif.style.pointerEvents = "none";
