@@ -158,16 +158,21 @@ let clickFlowerGameState = {
 };
 
 // ---- Open Mini Game Menu ----
-if(miniGameBtn) miniGameBtn.addEventListener("click", () => {
-  console.log("Mini-game button clicked"); // sanity check
-  [seedJournalPopup, buySeedsPopup, buyWaterPopup].forEach(p => p.classList.add("hidden"));
-  miniGameMenuPopup.classList.remove("hidden");
-});
+if (miniGameBtn) {
+  miniGameBtn.addEventListener("click", () => {
+    console.log("Mini-game button clicked");
+    [seedJournalPopup, buySeedsPopup, buyWaterPopup].forEach(p => p.classList.add("hidden"));
+    miniGameMenuPopup.classList.remove("hidden"); // leave this if your CSS still hides via `.hidden`
+    miniGameMenuPopup.classList.add("show");      // ✅ THIS is what actually makes it appear
+  });
+}
 
-// ---- Close Mini Game Menu ----
-if(closeMiniGameMenuBtn) closeMiniGameMenuBtn.addEventListener("click", () => {
-  miniGameMenuPopup.classList.add("hidden");
-});
+if (closeMiniGameMenuBtn) {
+  closeMiniGameMenuBtn.addEventListener("click", () => {
+    miniGameMenuPopup.classList.remove("show");   // ✅ hides it
+    miniGameMenuPopup.classList.add("hidden");    // optional if you want both
+  });
+}
 
 // ---- Start Click Flower Mini Game ----
 function startMiniGame1(flowerName) {
