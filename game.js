@@ -154,7 +154,9 @@ let clickFlowerGameState = {
   targetFlower: null,
   clicks: 0,
   targetClicks: 0,
-  rewardLP: 0
+  rewardLP: 0,
+  timer: null,        // <-- add this
+  timeLeft: 20        // <-- default 20 seconds
 };
 
 // ---- Open Mini Game Menu ----
@@ -181,13 +183,33 @@ function startMiniGame1(flowerName) {
   if(!state.seedInventory[fName] && !state.harvestedFlowers.includes(fName)) {
     return showPopupMessage(`${fName} is locked!`);
   }
+  // Reset time
+clickFlowerGameState.timeLeft = 20;
+const timerEl = document.getElementById("click-flower-timer");
+if(timerEl) timerEl.textContent = clickFlowerGameState.timeLeft;
+
+// Clear any previous interval
+if(clickFlowerGameState.timer) clearInterval(clickFlowerGameState.timer);
+
+// Start countdown
+clickFlowerGameState.timer = setInterval(() => {
+  clickFlowerGameState.timeLeft--;
+  if(timerEl) timerEl.textContent = clickFlowerGameState.timeLeft;
+
+  if(clickFlowerGameState.timeLeft <= 0){
+    clearInterval(clickFlowerGameState.timer);
+    clickFlowerGameState.targetFlower = null;
+    showPopupMessage("⏰ Time's up! You didn't finish in time.");
+    clickFlowerMiniGamePopup.classList.add("hidden");
+  }
+}, 1000);
 
   clickFlowerGameState.targetFlower = fName;
   clickFlowerGameState.clicks = 0;
   clickFlowerGameState.targetClicks = 20;
   clickFlowerGameState.rewardLP = 5;
 
-  clickFlowerTitle.textContent = `⤷ rain on the ${fName} 20 times!ˎˊ˗`;
+  clickFlowerTitle.textContent = `⤷ rain on the ${fName} 20 times before the timer runs out!ˎˊ˗`;
   clickFlowerImg.src = `assets/minigames/${flowers[fName].img}.png`;
   clickFlowerCounter.textContent = clickFlowerGameState.clicks;
   clickFlowerTarget.textContent = clickFlowerGameState.targetClicks;
@@ -224,6 +246,7 @@ clickFlowerImg.addEventListener("click", () => {
 
   // 3️⃣ Check for LP reward
   if(clickFlowerGameState.clicks >= clickFlowerGameState.targetClicks) {
+    clearInterval(clickFlowerGameState.timer);
     showPopupMessage(`You earned ${clickFlowerGameState.rewardLP} LP!`);
     state.lotusPoints += clickFlowerGameState.rewardLP;
     updateLotusPoints();
@@ -231,13 +254,14 @@ clickFlowerImg.addEventListener("click", () => {
 
     clickFlowerMiniGamePopup.classList.add("hidden");
     clickFlowerGameState.targetFlower = null;
-  }
+}
 });
 
 // ---- Close Click Flower Mini Game ----
 closeClickFlowerMiniGameBtn.addEventListener("click", () => {
-  clickFlowerMiniGamePopup.classList.add("hidden");
+  clearInterval(clickFlowerGameState.timer);  // stop timer
   clickFlowerGameState.targetFlower = null;
+  clickFlowerMiniGamePopup.classList.add("hidden");
 });
 
 // ---- Mini Game 1 Flower Selection ----
