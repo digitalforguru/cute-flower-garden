@@ -210,7 +210,7 @@ clickFlowerImg.addEventListener("click", () => {
   cloudGif.style.position = "absolute";
   cloudGif.style.width = "100px";
   cloudGif.style.pointerEvents = "none";
-  cloudGif.style.zIndex = 1000;
+  cloudGif.style.zIndex = 9999;  // make sure it appears above the popup
 
   // Position above flower, accounting for scroll
   const rect = clickFlowerImg.getBoundingClientRect();
