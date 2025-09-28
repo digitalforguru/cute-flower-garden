@@ -197,13 +197,32 @@ function startMiniGame1(flowerName) {
   miniGameMenuPopup.classList.add("hidden");
 }
 
-// ---- Click Flower Logic ----
 clickFlowerImg.addEventListener("click", () => {
   if(!clickFlowerGameState.targetFlower) return;
 
+  // 1️⃣ Increment clicks
   clickFlowerGameState.clicks++;
   clickFlowerCounter.textContent = clickFlowerGameState.clicks;
 
+  // 2️⃣ Add raining cloud GIF (follows window scroll)
+  const cloudGif = document.createElement("img");
+  cloudGif.src = "https://i.pinimg.com/originals/64/e9/10/64e9100f230d44edb167694d1e2fb3c6.gif";
+  cloudGif.style.position = "absolute";
+  cloudGif.style.width = "100px";
+  cloudGif.style.pointerEvents = "none";
+  cloudGif.style.zIndex = 1000;
+
+  // Position above flower, accounting for scroll
+  const rect = clickFlowerImg.getBoundingClientRect();
+  cloudGif.style.left = rect.left + rect.width/2 - 50 + window.scrollX + "px";
+  cloudGif.style.top = rect.top - rect.height/1.5 + window.scrollY + "px";
+
+  document.body.appendChild(cloudGif);
+
+  // Remove GIF after 800ms
+  setTimeout(() => cloudGif.remove(), 800);
+
+  // 3️⃣ Check for LP reward
   if(clickFlowerGameState.clicks >= clickFlowerGameState.targetClicks) {
     showPopupMessage(`You earned ${clickFlowerGameState.rewardLP} LP!`);
     state.lotusPoints += clickFlowerGameState.rewardLP;
