@@ -267,8 +267,8 @@ if(btn1){
       const img = document.createElement("img");
       img.src = `assets/minigames/${flowers[fName].img}.png`;
       img.alt = fName;
-      img.style.width = "80px";
-      img.style.height = "80px";
+      img.style.width = "60px";
+      img.style.height = "60px";
       img.style.objectFit = "contain";
 
       const label = document.createElement("span");
