@@ -348,7 +348,7 @@ let bugGameState = {
 const bugGifs = [
   "https://i.pinimg.com/originals/08/10/cd/0810cd0e3206191d4f4b6f6a0716ced4.gif",
   "https://i.pinimg.com/originals/f4/07/8e/f4078ea4d44000d1209e85684805aab0.gif",
-  "https://i.pinimg.com/originals/0c/e4/81/0ce4811b1f09b204958889e7a73980c1.gif"
+  "https://i.pinimg.com/originals/f5/69/dc/f569dcb4319811a2311efb9dd90a01bf.gif"
 ];
 
 // Open Mini Game 2
