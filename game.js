@@ -136,6 +136,110 @@ const state = {
   boughtWaters: 0,
   tutorialSeen: false
 };
+// ===== MINI GAME 2: CATCH BUGS =====
+
+// Elements
+const catchBugsPopup = document.getElementById("catch-bugs-popup");
+const bugsContainer = document.getElementById("bugs-container");
+const bugsScoreEl = document.getElementById("bugs-score");
+const bugsTimerEl = document.getElementById("bugs-timer");
+const closeCatchBugsBtn = document.getElementById("close-catch-bugs-btn");
+
+let bugGameState = {
+  score: 0,
+  timeLeft: 20,
+  timer: null,
+  spawnInterval: null
+};
+
+// Example GIF links (replace these later)
+const bugGifs = [
+  "https://i.pinimg.com/originals/08/10/cd/0810cd0e3206191d4f4b6f6a0716ced4.gif",
+  "https://i.pinimg.com/originals/f4/07/8e/f4078ea4d44000d1209e85684805aab0.gif",
+  "https://i.pinimg.com/originals/0c/e4/81/0ce4811b1f09b204958889e7a73980c1.gif"
+];
+
+// Open Mini Game 2
+const btn2 = miniGameOptions.querySelector(`[data-game="2"]`);
+if (btn2) {
+  btn2.addEventListener("click", () => {
+    miniGameMenuPopup.classList.add("hidden");
+    startBugGame();
+  });
+}
+
+// Start the game
+function startBugGame() {
+  bugGameState.score = 0;
+  bugGameState.timeLeft = 20;
+  bugsScoreEl.textContent = bugGameState.score;
+  bugsTimerEl.textContent = bugGameState.timeLeft;
+
+  bugsContainer.innerHTML = "";
+  catchBugsPopup.classList.remove("hidden");
+
+  // Timer
+  bugGameState.timer = setInterval(() => {
+    bugGameState.timeLeft--;
+    bugsTimerEl.textContent = bugGameState.timeLeft;
+    if (bugGameState.timeLeft <= 0) endBugGame();
+  }, 1000);
+
+  // Spawn bugs every 800ms
+  bugGameState.spawnInterval = setInterval(spawnBug, 800);
+}
+
+// Spawn a single bug
+function spawnBug() {
+  const bug = document.createElement("img");
+  bug.src = bugGifs[Math.floor(Math.random() * bugGifs.length)];
+  bug.classList.add("bug-sprite");
+  bug.style.position = "absolute";
+  bug.style.width = "50px";
+  bug.style.height = "50px";
+  bug.style.cursor = "pointer";
+
+  // Random position within container
+  const containerRect = bugsContainer.getBoundingClientRect();
+  const x = Math.random() * (containerRect.width - 60);
+  const y = Math.random() * (containerRect.height - 60);
+
+  bug.style.left = x + "px";
+  bug.style.top = y + "px";
+
+  bug.addEventListener("click", () => {
+    bug.remove();
+    bugGameState.score++;
+    bugsScoreEl.textContent = bugGameState.score;
+  });
+
+  bugsContainer.appendChild(bug);
+
+  // Auto-remove after 2s (so it doesn't pile up)
+  setTimeout(() => bug.remove(), 2000);
+}
+
+// End the game
+function endBugGame() {
+  clearInterval(bugGameState.timer);
+  clearInterval(bugGameState.spawnInterval);
+
+  const earned = bugGameState.score; // 1 LP per bug
+  state.lotusPoints += earned;
+  updateLotusPoints();
+  showPopupMessage(`You caught ${earned} bugs! +${earned} LP`);
+
+  catchBugsPopup.classList.add("hidden");
+}
+
+// Close button
+if (closeCatchBugsBtn) {
+  closeCatchBugsBtn.addEventListener("click", () => {
+    clearInterval(bugGameState.timer);
+    clearInterval(bugGameState.spawnInterval);
+    catchBugsPopup.classList.add("hidden");
+  });
+}
 // ====== MINI GAME ELEMENTS ======
 const miniGameBtn = document.getElementById("mini-game-btn");
 const miniGameMenuPopup = document.getElementById("mini-game-menu-popup");
