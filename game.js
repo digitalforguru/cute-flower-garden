@@ -699,7 +699,7 @@ function plantSeed(fName){
   state.currentFlower=fName;
   state.flowerStage="seedstage";
   state.seedInventory[fName]--;
-  updateGardenImage(); updateSeedInventory(); saveState();
+  updateGardenImage(); updateSeedInventory(); updateCurrentFlowerCard(); saveState();
   showPopupMessage(`Planted ${fName} 🌱`);
 }
 
@@ -955,6 +955,8 @@ function closeTutorialPopup() {
   if(!pop) return;
   pop.classList.add("hidden");
 }
+
+document.getElementById("garden-image").addEventListener("click", () => {
 
 // ====== BUTTON EVENTS ======
 if (waterBtn) waterBtn.addEventListener("click", waterFlower);
