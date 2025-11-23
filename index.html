@@ -32,6 +32,12 @@
               <div id="garden-section">
                 <img id="garden-image" src="assets/garden/vacant.png" alt="Garden Plot">
               </div>
+              <div id="current-flower-card" class="info-card hidden">
+  <p id="cf-name"></p>
+  <p id="cf-rarity"></p>
+  <p id="cf-stage"></p>
+</div>
+
               <!-- Water + Harvest -->
               <div id="garden-action-buttons">
                 <button id="water-btn">💦 Water</button>
@@ -134,6 +140,14 @@
       <div id="popup-message" class="popup-message hidden" role="alert" aria-live="assertive">
   <p id="popup-text"></p>
 </div>
+      <!-- About Flower Popup -->
+<div id="about-flower-popup" class="popup hidden" role="dialog" aria-modal="true">
+  <button id="close-about-flower-btn">✕</button>
+  <h3 id="about-flower-title"></h3>
+  <p id="about-flower-fact"></p>
+  <blockquote id="about-flower-quote"></blockquote>
+</div>
+
 
       <!-- Theme Selector -->
       <div id="theme-selector" aria-label="choose theme" role="radiogroup">
