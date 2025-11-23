@@ -360,6 +360,49 @@ body, html {
   color: var(--primary-color, #e75480);
   cursor: pointer;
 }
+/* Current Flower Card */
+#current-flower-card {
+  width: 180px;
+  margin: 0.5rem auto;
+  background: #fff0f5;
+  border: 2px solid var(--primary-color);
+  border-radius: 10px;
+  padding: 0.5rem;
+  text-align: center;
+  font-size: 10px;
+  color: var(--primary-color);
+  box-shadow: 0 0 8px rgba(231,84,128,0.3);
+  animation: sparkle-fade 3s linear infinite;
+}
+
+#current-flower-card.hidden { display: none; }
+/* About Flower Popup */
+#about-flower-popup {
+  width: 240px;
+  text-align: center;
+  position: absolute;
+}
+
+#about-flower-title {
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+
+#about-flower-fact {
+  font-size: 0.9rem;
+  margin: 6px 0;
+}
+
+#about-flower-quote {
+  font-style: italic;
+  opacity: 0.8;
+  font-size: 0.85rem;
+}
+@keyframes sparkle-fade {
+  0% { box-shadow: 0 0 4px rgba(231,84,128,0.2); }
+  50% { box-shadow: 0 0 10px rgba(255,168,210,0.6); }
+  100% { box-shadow: 0 0 4px rgba(231,84,128,0.2); }
+}
 
 /* Popup lists */
 #buy-seeds-list, #buy-water-list {
