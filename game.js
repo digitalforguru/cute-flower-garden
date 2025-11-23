@@ -956,8 +956,6 @@ function closeTutorialPopup() {
   pop.classList.add("hidden");
 }
 
-document.getElementById("garden-image").addEventListener("click", () => {
-
 // ====== BUTTON EVENTS ======
 if (waterBtn) waterBtn.addEventListener("click", waterFlower);
 if (harvestBtn) harvestBtn.addEventListener("click", harvestFlower);
