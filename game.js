@@ -118,6 +118,25 @@ const flowers = {
   "tacca bat flower x halloween": { rarity: "legendary", water: 350, cost: 6000, img: "taccabathalloween" },
 };
 const seeds = Object.keys(flowers);
+const flowerLore = {
+  rose: {
+    fact: "roses have been symbols of love for thousands of years.",
+    quote: "“a rose does not bloom without a little patience.”"
+  },
+  tulip: {
+    fact: "tulips were once more valuable than gold in the netherlands.",
+    quote: "“bloom where you are planted.”"
+  },
+  sunflower: {
+    fact: "sunflowers follow the sun in a process called heliotropism.",
+    quote: "“keep your face to the sunshine and you cannot see the shadow.”"
+  },
+  lily: {
+    fact: "lilies symbolize purity and renewal.",
+    quote: "“like the lily, rise from the mud and bloom beautifully.”"
+  }
+};
+
 
 // ====== GAME STATE ======
 const state = {
@@ -432,6 +451,7 @@ if (closeCatchBugsBtn) {
     catchBugsPopup.classList.add("hidden");
   });
 }
+
 // ====== INITIAL SEED ======
 function giveWelcomeSeed() {
   const hasSeed = state.seedInventory["daisy"] > 0;
@@ -531,6 +551,40 @@ function updateGardenImage() {
     gardenImage.alt = `${state.flowerStage}`;
   }
 }
+function updateCurrentFlowerCard() {
+  const card = document.getElementById("current-flower-card");
+
+  if (!state.currentFlower) {
+    card.classList.add("hidden");
+    return;
+  }
+
+  const seed = state.currentFlower;
+  const flower = seeds[seed];
+
+  document.getElementById("cf-name").textContent = flower.name;
+  document.getElementById("cf-rarity").textContent = "rarity: " + flower.rarity;
+  document.getElementById("cf-stage").textContent = "stage: " + state.flowerStage;
+
+  card.classList.remove("hidden");
+}
+function showAboutFlowerPopup() {
+  if (!state.currentFlower) return;
+
+  const flowerKey = state.currentFlower;
+  const lore = flowerLore[flowerKey];
+  const flower = seeds[flowerKey];
+
+  document.getElementById("about-flower-title").textContent = flower.name;
+  document.getElementById("about-flower-fact").textContent = lore.fact;
+  document.getElementById("about-flower-quote").textContent = lore.quote;
+
+  document.getElementById("about-flower-popup").classList.remove("hidden");
+}
+document.getElementById("close-about-flower-btn").addEventListener("click", () => {
+  document.getElementById("about-flower-popup").classList.add("hidden");
+});
+
 
 function updateVaseCollection() {
   if(!vaseCollectionEl) return;
